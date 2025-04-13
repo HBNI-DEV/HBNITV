@@ -1,0 +1,27 @@
+{
+  "name": "hbni-itv",
+  "version": "1.0.0",
+  "description": "HBNI ITV",
+  "main": "main.py",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecodingjsoftware/hbni-itv.git"
+  },
+  "keywords": [
+    "hbni",
+    "itv"
+  ],
+  "author": "Jared Gross",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/thecodingjsoftware/hbni-itv/issues"
+  },
+  "homepage": "https://github.com/thecodingjsoftware/hbni-itv#readme",
+  "dependencies": {
+    "beercss": "^3.10.5",
+    "typescript": "^5.8.3"
+  }
+}
