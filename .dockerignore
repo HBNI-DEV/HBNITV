@@ -1,0 +1,15 @@
+.venv
+.vscode
+.git
+node_modules
+src
+templates
+*.pyc
+*.pyo
+__pycache__
+*.pyd
+*.so
+*.dll
+*.egg-info
+build
+dist

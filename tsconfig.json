@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "module": "ESNext",
+        "target": "ES6",
+        "moduleResolution": "node",
+        "outDir": "./public/dist",
+        "rootDir": "./src",
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "sourceMap": true
+    },
+    "include": ["./src/**/*", "serviceWorker.js"],
+    "exclude": ["./public"]
+}
