@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en">
+    <head>
+        <title>HBNI ITV</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta name="author" content="Jared Gross">
+        <meta name="description" content="HBNI ITV is a website to find the latest news, classes, and more.">
+        <meta name="keywords" content="hutterite, itv, hbni, classes, news, calendar, contact">
+        <link rel="icon" href="/static/icons/favicon.png">
+        {% if not is_logged_in %}
+        <script
+            src="https://accounts.google.com/gsi/client"
+            async
+            defer
+        ></script>
+        {% endif %}
+    </head>
+    <header>
+    </header>
+    <body class="light">
+        <main class="responsive">
+            <div id="calendar">
+            </div>
+        </main>
+    </body>
+    {% if is_logged_in %}
+    <script>
+        window.USER = {
+            username: "{{ username }}",
+            email: "{{ email }}",
+            role: "{{ role }}",
+            profile_picture: "{{ profile_picture }}",
+            email_verified: "{{ email_verified }}",
+            hd: "{{ hd }}",
+            given_name: "{{ given_name }}",
+            family_name: "{{ family_name }}",
+            is_logged_in: "{{ is_logged_in }}",
+        };
+    </script>
+    {% endif %}
+</html>

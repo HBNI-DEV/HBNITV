@@ -8,7 +8,9 @@ from app.urls import url_patterns
 
 class TornadoApp(Application):
     def __init__(self):
-        Application.__init__(self, url_patterns)
+        Application.__init__(
+            self, url_patterns, cookie_secret="hbni-itv-secret", static_hash_cache=True
+        )
 
 
 def main():

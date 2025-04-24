@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en">
+    <head>
+        <title>HBNI ITV</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <meta name="author" content="Jared Gross" />
+        <meta
+            name="description"
+            content="HBNI ITV is a website to find the latest news, classes, and more."
+        />
+        <meta
+            name="keywords"
+            content="hutterite, itv, hbni, classes, news, calendar, contact"
+        />
+        <link rel="icon" href="/static/icons/favicon.png" />
+        {% if not is_logged_in %}
+        <script
+            src="https://accounts.google.com/gsi/client"
+            async
+            defer
+        ></script>
+        {% endif %}
+    </head>
+    <header></header>
+    <body class="light">
+        <main class="responsive">
+            <article>
+                <h4>Apperance</h4>
+                <div class="grid">
+                <div class="s12 row wrap padding border small-round">
+                    <button
+                        class="circle small red"
+                        data-color="#f44336"
+                        id="theme-button"
+                    ></button>
+                    <button
+                        class="circle small pink"
+                        data-color="#e91e63"
+                        id="theme-button"
+                    ></button>
+                    <button
+                        class="circle small purple"
+                        data-color="#9c27b0"
+                        id="theme-button"
+                    ></button>
+                    <button
+                        class="circle small deep-purple"
+                        data-color="#673ab7"
+                        id="theme-button"
+                    ></button>
+                    <button
+                        class="circle small indigo"
+                        data-color="#3f51b5"
+                        id="theme-button"
+                    ></button>
+                    <button
+                        class="circle small blue"
+                        data-color="#2196f3"
+                        id="theme-button"
+                    ></button>
+                    <button
+                        class="circle small light-blue"
+                        data-color="#03a9f4"
+                        id="theme-button"
+                    ></button>
+                    <button
+                        class="circle small cyan"
+                        data-color="#00bcd4"
+                        id="theme-button"
+                    ></button>
+                    <button
+                        class="circle small teal"
+                        data-color="#009688"
+                        id="theme-button"
+                    ></button>
+                    <button
+                        class="circle small green"
+                        data-color="#4caf50"
+                        id="theme-button"
+                    ></button>
+                    <button
+                        class="circle small light-green"
+                        data-color="#8bc34a"
+                        id="theme-button"
+                    ></button>
+                    <button
+                        class="circle small lime"
+                        data-color="#cddc39"
+                        id="theme-button"
+                    ></button>
+                    <button
+                        class="circle small yellow"
+                        data-color="#ffeb3b"
+                        id="theme-button"
+                    ></button>
+                    <button
+                        class="circle small amber"
+                        data-color="#ffc107"
+                        id="theme-button"
+                    ></button>
+                    <button
+                        class="circle small orange"
+                        data-color="#ff9800"
+                        id="theme-button"
+                    ></button>
+                    <button
+                        class="circle small deep-orange"
+                        data-color="#ff5722"
+                        id="theme-button"
+                    ></button>
+                    <button class="l4 m4 s6 circle small">
+                        <i>palette</i>
+                        <input type="color" id="select-color" />
+                    </button>
+                </div>
+                <label class="s12 m6 l4 radio vertical padding border small-round">
+                    <img src="https://www.gstatic.com/pantheon/images/user_preferences/light-illustration.svg" width="200px"/>
+                    <input type="radio" name="radio-mode" id="light-theme" />
+                    <span>Light</span>
+                </label>
+                <label class="s12 m6 l4 radio vertical padding border small-round">
+                    <img src="https://www.gstatic.com/pantheon/images/user_preferences/dark-illustration.svg" width="200px"/>
+                    <input type="radio" name="radio-mode" id="dark-theme" />
+                    <span>Dark</span>
+                </label>
+                <label class="s12 m6 l4 radio vertical padding border small-round">
+                    <img src="https://www.gstatic.com/pantheon/images/user_preferences/auto-illustration.svg" width="200px"/>
+                    <input type="radio" name="radio-mode" id="same-as-device" />
+                    <span>Automatic</span>
+                </label>
+            </article>
+        </main>
+    </body>
+    {% if is_logged_in %}
+    <script>
+        window.USER = {
+            username: "{{ username }}",
+            email: "{{ email }}",
+            role: "{{ role }}",
+            profile_picture: "{{ profile_picture }}",
+            email_verified: "{{ email_verified }}",
+            hd: "{{ hd }}",
+            given_name: "{{ given_name }}",
+            family_name: "{{ family_name }}",
+            is_logged_in: "{{ is_logged_in }}",
+        };
+    </script>
+    {% endif %}
+</html>

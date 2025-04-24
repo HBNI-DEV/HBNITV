@@ -1,8 +1,8 @@
 from app.handlers.base import BaseHandler
 
 
-class IndexHandler(BaseHandler):
+class SettingsHandler(BaseHandler):
     def get(self):
         self.render_template(
-            "index.html",
+            "settings.html",
         )

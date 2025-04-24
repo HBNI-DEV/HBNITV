@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en">
+    <head>
+        <title>HBNI ITV</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <meta name="author" content="Jared Gross" />
+        <meta
+            name="description"
+            content="HBNI ITV is a website to find the latest news, classes, and more."
+        />
+        <meta
+            name="keywords"
+            content="hutterite, itv, hbni, classes, news, calendar, contact"
+        />
+        <link rel="icon" href="/static/icons/favicon.png" />
+        {% if not is_logged_in %}
+        <script
+            src="https://accounts.google.com/gsi/client"
+            async
+            defer
+        ></script>
+        {% endif %}
+    </head>
+    <header></header>
+    <body class="light">
+        <main class="responsive">
+            <article
+                class="absolute center middle round large-width large-padding"
+                style="overflow: hidden"
+            >
+                {% if is_logged_in %} {% if "admin" in role %}
+                <h5>Register</h5>
+                <form class="grid small-space" action="/register" method="POST">
+                    <div class="s12 m6 l6 small-round field label border">
+                        <input
+                            type="text"
+                            id="first_name"
+                            name="first_name"
+                            autocapitalize="words"
+                            required
+                        />
+                        <label>First Name</label>
+                    </div>
+                    <div class="s12 m6 l6 small-round field label border">
+                        <input
+                            type="text"
+                            id="last_name"
+                            name="last_name"
+                            autocapitalize="words"
+                            required
+                        />
+                        <label>Last Name</label>
+                    </div>
+                    <div
+                        class="s12 m12 l12 small-round field label suffix border"
+                    >
+                        <select name="colony" id="colony" required>
+                            {% for name, code in colony_names.items() %}
+                            <option value="{{ code }}">{{ name }}</option>
+                            {% endfor %}
+                        </select>
+                        <label>Colony Name</label>
+                        <i>arrow_drop_down</i>
+                    </div>
+                    <nav class="s12 right-align">
+                        <button type="submit">
+                            <i>check_circle</i>
+                            <span>Submit</span>
+                        </button>
+                    </nav>
+                </form>
+                {% else %}
+                <h5>Unauthorized</h5>
+                <p>You are not authorized to register.</p>
+                {% endif %} {% else %}
+                <h5>Login</h5>
+                <p>To register, please login first.</p>
+                {% endif %}
+            </article>
+        </main>
+    </body>
+    {% if is_logged_in %}
+    <script>
+        window.USER = {
+            username: "{{ username }}",
+            email: "{{ email }}",
+            role: "{{ role }}",
+            profile_picture: "{{ profile_picture }}",
+            email_verified: "{{ email_verified }}",
+            hd: "{{ hd }}",
+            given_name: "{{ given_name }}",
+            family_name: "{{ family_name }}",
+            is_logged_in: "{{ is_logged_in }}",
+        };
+    </script>
+    {% endif %}
+</html>
