@@ -1,7 +1,7 @@
 from app.handlers.core.base import BaseHandler
 
 
-class NewsHandler(BaseHandler):
+class NewsPageHandler(BaseHandler):
     def get(self):
         self.render_template(
             "news.html",

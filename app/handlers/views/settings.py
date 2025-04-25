@@ -1,7 +1,7 @@
 from app.handlers.core.base import BaseHandler
 
 
-class SettingsHandler(BaseHandler):
+class SettingsPageHandler(BaseHandler):
     def get(self):
         self.render_template(
             "settings.html",

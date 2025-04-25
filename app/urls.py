@@ -3,16 +3,17 @@ from tornado.web import StaticFileHandler
 
 from app.handlers.api.login import LoginAPIHandler
 from app.handlers.api.logout import LogoutAPIHandler
+from app.handlers.api.news import NewsAPIHandler
 from app.handlers.api.register import RegisterAPIHandler
 from app.handlers.special.service_worker import ServiceWorkerHandler
 from app.handlers.views.admin import AdminPageHandler
-from app.handlers.views.calendar import CalendarHandler
-from app.handlers.views.classes import ClassesHandler
-from app.handlers.views.contact import ContactHandler
-from app.handlers.views.index import IndexHandler
-from app.handlers.views.news import NewsHandler
-from app.handlers.views.register import RegisterViewHandler
-from app.handlers.views.settings import SettingsHandler
+from app.handlers.views.calendar import CalendarPageHandler
+from app.handlers.views.classes import ClassesPageHandler
+from app.handlers.views.contact import ContactPageHandler
+from app.handlers.views.index import IndexPageHandler
+from app.handlers.views.news import NewsPageHandler
+from app.handlers.views.register import RegisterPageHandler
+from app.handlers.views.settings import SettingsPageHandler
 
 
 def route(pattern, handler, name=None, **kwargs):
@@ -20,21 +21,22 @@ def route(pattern, handler, name=None, **kwargs):
 
 
 api_routes = [
+    route(r"/api/news", NewsAPIHandler, name="api_news"),
     route(r"/api/login", LoginAPIHandler, name="api_login"),
     route(r"/api/logout", LogoutAPIHandler, name="api_logout"),
     route(r"/api/register", RegisterAPIHandler, name="api_register"),
 ]
 
 view_routes = [
-    route(r"/", IndexHandler, name="index"),
+    route(r"/", IndexPageHandler, name="index"),
     route(r"/admin", AdminPageHandler, name="admin"),
-    route(r"/admin/", AdminPageHandler),
-    route(r"/settings", SettingsHandler),
-    route(r"/register", RegisterViewHandler),
-    route(r"/calendar", CalendarHandler),
-    route(r"/classes", ClassesHandler),
-    route(r"/news", NewsHandler),
-    route(r"/contact", ContactHandler),
+    route(r"/admin/register", RegisterPageHandler, name="admin_register"),
+    route(r"/settings", SettingsPageHandler),
+    route(r"/register", RegisterPageHandler),
+    route(r"/calendar", CalendarPageHandler),
+    route(r"/classes", ClassesPageHandler),
+    route(r"/news", NewsPageHandler),
+    route(r"/contact", ContactPageHandler),
 ]
 
 static_routes = [

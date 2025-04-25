@@ -3,7 +3,7 @@ from app.handlers.core.require_role import require_role
 from app.utils.colony_names import COLONY_NAMES
 
 
-class RegisterViewHandler(BaseHandler):
+class RegisterPageHandler(BaseHandler):
     def prepare(self):
         role = self.current_role
         if not role:
