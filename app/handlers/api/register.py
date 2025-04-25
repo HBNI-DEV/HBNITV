@@ -43,8 +43,7 @@ class RegisterAPIHandler(BaseHandler):
                     "success": True,
                     "created": result["created"],
                     "message": result["message"],
-                    "user_info": user_info
-
+                    "user_info": user_info,
                 }
             )
         except Exception as e:

@@ -1,4 +1,3 @@
-import "beercss";
 import "@utils/register-service-worker";
 
 import { loadTheme, loadAnimationStyleSheet } from "@utils/theme";
