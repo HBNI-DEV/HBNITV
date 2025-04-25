@@ -1,5 +1,5 @@
-from app.handlers.base import BaseHandler
-from app.handlers.require_role import require_role
+from app.handlers.core.base import BaseHandler
+from app.handlers.core.require_role import require_role
 
 
 class AdminPageHandler(BaseHandler):

@@ -1,5 +1,5 @@
-import '/static/css/maintheme.css?v=1';
-import '/static/css/style.css?v=1';
+import '@styles/maintheme.css';
+import '@styles/style.css';
 import "material-dynamic-colors";
 
 import { SettingsManager } from "./settings-manager";

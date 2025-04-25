@@ -1,6 +1,6 @@
-import { UserData } from "../utils/user";
+import { UserData } from "@utils/user";
 import { Snackbar } from "./snackbar";
-import { CookieManager } from "../utils/cookie-manager";
+import { CookieManager } from "@utils/cookie-manager";
 
 export class ProfileMenu {
     htmlElement: HTMLElement;
@@ -67,7 +67,7 @@ export class ProfileMenu {
                         }
 
                         // Perform logout request
-                        await fetch("/logout", { method: "GET", credentials: "same-origin" });
+                        await fetch("/api/logout", { method: "GET", credentials: "same-origin" });
 
                         window.location.reload();
                     } catch (error) {

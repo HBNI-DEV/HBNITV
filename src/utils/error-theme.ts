@@ -1,2 +1,2 @@
-import '/static/css/errortheme.css';
-import '/static/css/style.css';
+import '@styles/errortheme.css';
+import '@styles/style.css';

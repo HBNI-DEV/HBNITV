@@ -310,5 +310,5 @@ dist
 .pnp.*
 
 test.py
-hbni-itv.json
+hbni-itv-service-account.json
 client_secret.json

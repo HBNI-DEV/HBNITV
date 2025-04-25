@@ -2,10 +2,10 @@ from google.auth.transport import requests
 from google.oauth2 import id_token
 
 from app.config.environments import Environment
-from app.handlers.base import BaseHandler
+from app.handlers.core.base import BaseHandler
 
 
-class LoginHandler(BaseHandler):
+class LoginAPIHandler(BaseHandler):
     def post(self):
         token = self.get_argument("token", None)
         if not token:

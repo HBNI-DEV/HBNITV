@@ -1,4 +1,4 @@
-import { UserData } from "../utils/user";
+import { UserData } from "@utils/user";
 
 export class SnackbarLogin {
     htmlElement: HTMLElement;
@@ -12,7 +12,7 @@ export class SnackbarLogin {
                     data-client_id="453511062592-hcnq2v5956hpktbgmi9605o09q007fo6.apps.googleusercontent.com"
                     data-callback="handleGoogleLogin"
                     data-auto_select="false"
-                    data-login_uri="/login"
+                    data-login_uri="/api/login"
                     data-context="signin"
                     data-ux_mode="popup"
                     data-itp_support="true">

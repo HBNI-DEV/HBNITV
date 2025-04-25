@@ -1,7 +1,7 @@
-from app.handlers.base import BaseHandler
+from app.handlers.core.base import BaseHandler
 
 
-class LogoutHandler(BaseHandler):
+class LogoutAPIHandler(BaseHandler):
     def get(self):
         self.clear_cookie("username")
         self.clear_cookie("role")

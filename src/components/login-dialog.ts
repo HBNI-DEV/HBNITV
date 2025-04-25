@@ -1,7 +1,7 @@
 import "beercss";
-import "../utils/theme";
-import "../utils/service-worker";
-import { UserData } from "../utils/user";
+import "@utils/theme";
+import "@utils/register-service-worker";
+import { UserData } from "@utils/user";
 
 export class LoginDialog  {
     scriptElement: HTMLScriptElement;
@@ -31,7 +31,7 @@ export class LoginDialog  {
                     data-client_id="453511062592-hcnq2v5956hpktbgmi9605o09q007fo6.apps.googleusercontent.com"
                     data-callback="handleGoogleLogin"
                     data-auto_select="false"
-                    data-login_uri="/login"
+                    data-login_uri="/api/login"
                     data-context="signin"
                     data-ux_mode="popup"
                     data-itp_support="true">
@@ -47,7 +47,7 @@ export class LoginDialog  {
             function handleGoogleLogin(response) {
                 const token = response.credential;
 
-                fetch("/login", {
+                fetch("/api/login", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded",

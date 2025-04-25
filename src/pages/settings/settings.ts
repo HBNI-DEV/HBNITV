@@ -1,5 +1,5 @@
-import "./base";
-import { setTheme, setMode, appSettings, savedMode } from '../utils/theme';
+import "../base";
+import { setTheme, setMode, appSettings, savedMode } from '@utils/theme';
 
 document.addEventListener("DOMContentLoaded", () => {
     const themeButtons = document.querySelectorAll("#theme-button") as NodeListOf<HTMLButtonElement>;

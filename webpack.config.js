@@ -1,47 +1,61 @@
 const path = require('path');
 const fs = require('fs');
-const { GenerateSW } = require("workbox-webpack-plugin");
+const glob = require('glob');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { register } = require('module');
-const entries = {
-    index: './src/pages/index.ts',
-    settings: './src/pages/settings.ts',
-    register: './src/pages/register.ts',
-    calendar: './src/pages/calendar.ts',
-    classes: './src/pages/classes.ts',
-    news: './src/pages/news.ts',
-    contact: './src/pages/contact.ts',
-    error: './src/pages/error.ts',
-    offline: './src/pages/offline.ts',
-};
+const { GenerateSW } = require('workbox-webpack-plugin');
 
-const htmlPlugins = Object.keys(entries).map(entryName => {
-    const templatePath = path.resolve(__dirname, `./templates/${entryName}.html`);
+const entries = {};
+const pagesDir = path.join(__dirname, 'src/pages');
+const pageFolders = fs.readdirSync(pagesDir);
+
+pageFolders.forEach(folder => {
+    const entryFile = path.join(pagesDir, folder, `${folder}.ts`);
+    if (fs.existsSync(entryFile)) {
+        entries[folder] = entryFile;
+    } else {
+        console.warn(`⚠️ No entry file found for: ${folder}`);
+    }
+});
+
+console.log("📦 Webpack entries:", entries);
+
+// Dynamically create HTML plugins for each entry
+const htmlPlugins = Object.keys(entries).map(name => {
+    const templatePath = path.join(pagesDir, name, `${name}.html`);
     if (fs.existsSync(templatePath)) {
         return new HtmlWebpackPlugin({
             template: templatePath,
-            filename: `html/${entryName}.html`,
-            chunks: [entryName],
+            filename: `html/${name}.html`,
+            chunks: [name],
+            minify: true,
         });
     } else {
-        console.warn(`Warning: Template for ${entryName} does not exist. Skipping...`);
+        console.warn(`⚠️ No HTML template found for: ${name}`);
         return null;
     }
 }).filter(Boolean);
 
+
 module.exports = {
-    resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
-    },
+    mode: 'production', // or 'development' if needed
     entry: entries,
     output: {
         filename: 'js/[name].bundle.js',
         path: path.resolve(__dirname, 'public/dist'),
         publicPath: '/public/dist/',
+        clean: true, // ✅ Cleans output dir before each build (no need to manually delete old files)
     },
-    mode: 'production',
+    resolve: {
+        extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
+        alias: {
+            '@components': path.resolve(__dirname, 'src/components'),
+            '@pages': path.resolve(__dirname, 'src/pages'),
+            '@utils': path.resolve(__dirname, 'src/utils'),
+            '@styles': path.resolve(__dirname, 'src/styles'),
+        },
+    },
     module: {
         rules: [
             {
@@ -59,35 +73,31 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: 'css/[name].bundle.css',
         }),
-        ...htmlPlugins, // Include all the dynamically generated HtmlWebpackPlugin instances
+        ...htmlPlugins,
         new GenerateSW({
-            swDest: "service-worker.js",
+            swDest: 'service-worker.js',
             clientsClaim: true,
             skipWaiting: true,
-            // navigateFallback: "/public/dist/html/offline.html", // fallback when offline
             runtimeCaching: [
                 {
-                    // Catch navigational HTML documents
-                    urlPattern: ({ request }) => request.mode === "navigate",
-                    handler: "NetworkFirst",
+                    urlPattern: ({ request }) => request.mode === 'navigate',
+                    handler: 'NetworkFirst',
                     options: {
-                        cacheName: "html-pages",
+                        cacheName: 'html-pages',
                     },
                 },
                 {
-                    // Static assets like JS, CSS, images
-                    urlPattern: /\.(?:js|css|png|jpg|svg|woff2?)$/,
-                    handler: "StaleWhileRevalidate",
+                    urlPattern: /\.(?:js|css|png|jpg|jpeg|svg|woff2?)$/,
+                    handler: 'StaleWhileRevalidate',
                     options: {
-                        cacheName: "static-assets",
+                        cacheName: 'static-assets',
                     },
                 },
                 {
-                    // ❌ EXCLUDE Google Identity Services scripts from caching
                     urlPattern: ({ url }) =>
-                        url.hostname === "accounts.google.com" ||
-                        url.href.startsWith("https://accounts.google.com/gsi/"),
-                    handler: "NetworkOnly", // always fetch fresh
+                        url.hostname === 'accounts.google.com' ||
+                        url.href.startsWith('https://accounts.google.com/gsi/'),
+                    handler: 'NetworkOnly',
                 },
             ],
         }),

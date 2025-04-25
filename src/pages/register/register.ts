@@ -1,7 +1,8 @@
-import "./base";
-import { Snackbar } from "../components/snackbar";
-import { SnackbarError } from "../components/snackbar-error";
-import { AccountRegisteredDialog } from "../components/account-registered-dialog";
+import "../base";
+import { Snackbar } from "@components/snackbar";
+import { SnackbarError } from "@components/snackbar-error";
+import { AccountRegisteredDialog } from "@components/account-registered-dialog";
+
 
 document.addEventListener("DOMContentLoaded", () => {
     const colonyNameInput = document.querySelector("#colony") as HTMLInputElement;
@@ -17,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
         const formData = new FormData(form);
-        await fetch("/register", {
+        await fetch("/api/register", {
             method: "POST",
             body: formData,
         })

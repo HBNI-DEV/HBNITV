@@ -1,4 +1,4 @@
-import { UserData } from "../utils/user";
+import { UserData } from "@utils/user";
 
 export class Header {
     htmlElement: HTMLElement;

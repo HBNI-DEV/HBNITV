@@ -1,12 +1,12 @@
 import "beercss";
-import "../utils/service-worker";
-import { LoginDialog } from "../components/login-dialog";
-import { NavigationDialog } from "../components/navigation-dialog";
-import { Tabs } from "../components/tabs";
-import { ProfileMenu } from "../components/profile-dialog";
-import { Header } from "../components/header";
-import { loadAnimationStyleSheet, loadTheme } from "../utils/theme";
-import { SnackbarLogin } from "../components/snackbar-login";
+import "@utils/register-service-worker";
+import { LoginDialog } from "@components/login-dialog";
+import { NavigationDialog } from "@components/navigation-dialog";
+import { Tabs } from "@components/tabs";
+import { ProfileMenu } from "@components/profile-dialog";
+import { Header } from "@components/header";
+import { loadAnimationStyleSheet, loadTheme } from "@utils/theme";
+import { SnackbarLogin } from "@components/snackbar-login";
 
 document.addEventListener("DOMContentLoaded", async () => {
     loadTheme()

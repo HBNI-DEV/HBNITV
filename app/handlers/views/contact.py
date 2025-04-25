@@ -1,4 +1,4 @@
-from app.handlers.base import BaseHandler
+from app.handlers.core.base import BaseHandler
 
 
 class ContactHandler(BaseHandler):
