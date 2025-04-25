@@ -6,7 +6,7 @@ import { SettingsManager } from "./settings-manager";
 
 export const appSettings = new SettingsManager();
 export let savedTheme: string = "#006493";
-export let savedMode: string = "light";
+export let savedMode: string = "auto";
 
 
 function hexToRgb(hex: string): [number, number, number] {
@@ -68,7 +68,7 @@ export async function loadTheme() {
 
     const [theme, mode] = await Promise.all([
         appSettings.getSetting("theme", "#006493"),
-        appSettings.getSetting("mode", "light"),
+        appSettings.getSetting("mode", "auto"),
     ]);
 
     savedMode = mode as string;

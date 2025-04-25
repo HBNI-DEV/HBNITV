@@ -8,58 +8,61 @@ interface UserInfo {
 }
 
 export class AccountRegisteredDialog {
-    htmlElement: HTMLElement;
-    tagName: string;
+    htmlElement: HTMLDialogElement;
+    tagName = "account-registered-html";
     userInfo: UserInfo;
-    copyButton: HTMLButtonElement;
 
     constructor(userInfo: UserInfo) {
-        const template = document.createElement("template");
-        template.innerHTML = `
-        <dialog class="bottom modal" id="account-registered-dialog">
-            <h6 class="max">Account registered successfully for, <span class="bold">${userInfo.given_name}</span>!</h6>
-            <div class="row">
-                <div class="max">
-                    <p class="no-line">Email: <code class="small-round">${userInfo.email}</code></p>
-                    <p class="no-line">Password: <code class="small-round">${userInfo.password}</code></p>
-                </div>
-            </div>
-            <nav class="right-align">
-                <button class="transparent link" onclick="ui('#account-registered-dialog')">
-                    <span>Close</span>
-                </button>
-                <button class="transparent link" id="copy-button">
-                    <span>Copy</span>
-                </button>
-            </nav>
-        </dialog>
-        `;
         this.userInfo = userInfo;
-        this.tagName = "account-registered-html";
-        this.htmlElement = template.content.firstElementChild as HTMLElement;
-        this.copyButton = this.htmlElement.querySelector("#copy-button") as HTMLButtonElement;
+        this.htmlElement = this.createElement();
         this.init();
     }
 
-    init() {
-        window.addEventListener("resize", () => {
-            this.resize();
-        });
-        this.copyButton.addEventListener("click", () => {
-            navigator.clipboard.writeText(this.getCredentials())
-            const snackbar = new Snackbar("register-snackbar", "Credentials copied to clipboard!");
-            snackbar.show(2000);
-        });
-
-        document.body.appendChild(this.htmlElement);
-        this.resize();
+    private createElement(): HTMLDialogElement {
+        const dialog = document.createElement("dialog");
+        dialog.className = "modal";
+        dialog.id = "account-registered-dialog";
+        dialog.innerHTML = `
+            <h6 class="max">Account registered successfully for, <span class="bold">${this.userInfo.given_name}</span>!</h6>
+            <div class="row">
+                <div class="max">
+                    <p class="no-line">Email: <code class="small-round">${this.userInfo.email}</code></p>
+                    <p class="no-line">Password: <code class="small-round">${this.userInfo.password}</code></p>
+                </div>
+            </div>
+            <nav class="right-align">
+                <button class="transparent link" data-action="close">
+                    <span>Close</span>
+                </button>
+                <button class="transparent link" data-action="copy">
+                    <span>Copy</span>
+                </button>
+            </nav>
+        `;
+        return dialog;
     }
 
-    show() {
+    private init(): void {
+        document.body.appendChild(this.htmlElement);
+        this.resize();
+
+        window.addEventListener("resize", this.resize.bind(this));
+
+        this.htmlElement.querySelector('[data-action="copy"]')?.addEventListener("click", () => {
+            navigator.clipboard.writeText(this.getCredentials());
+            new Snackbar("register-snackbar", "Credentials copied to clipboard!").show(2000);
+        });
+
+        this.htmlElement.querySelector('[data-action="close"]')?.addEventListener("click", () => {
+            ui("#account-registered-dialog");
+        });
+    }
+
+    public show(): void {
         ui("#account-registered-dialog");
     }
 
-    resize() {
+    private resize(): void {
         if (window.innerWidth < 600) {
             this.htmlElement.classList.add("bottom");
         } else {
@@ -67,7 +70,7 @@ export class AccountRegisteredDialog {
         }
     }
 
-    getCredentials(): string {
+    private getCredentials(): string {
         return `Email: ${this.userInfo.email}\nPassword: ${this.userInfo.password}`;
     }
 }

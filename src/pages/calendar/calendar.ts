@@ -1,4 +1,4 @@
-import "../base";
+import { initializeCoreUI } from "@utils/ui-core";
 
 class StudentCalendarElement {
     htmlElement: HTMLElement;
@@ -35,10 +35,14 @@ class StudentCalendarElement {
     }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+    await initializeCoreUI();
+
     const calenderDiv = document.querySelector("#calendar") as HTMLDivElement;
     if (calenderDiv) {
         const calendarElement = new StudentCalendarElement();
         calenderDiv.appendChild(calendarElement.htmlElement);
+    } else {
+        console.warn("⚠️ calendar.ts: #calendar container not found.");
     }
 });

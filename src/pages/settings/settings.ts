@@ -1,7 +1,9 @@
-import "../base";
 import { setTheme, setMode, appSettings, savedMode } from '@utils/theme';
+import { initializeCoreUI } from "@utils/ui-core";
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+    await initializeCoreUI();
+
     const themeButtons = document.querySelectorAll("#theme-button") as NodeListOf<HTMLButtonElement>;
     themeButtons.forEach(button => {
         button.addEventListener("click", () => {
@@ -32,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     Promise.all([
-        appSettings.getSetting("mode", "light"),
+        appSettings.getSetting("mode", "auto"),
         appSettings.getSetting("theme", "#006493")
     ]).then(([savedMode, savedTheme]) => {
         if (savedMode === "auto") {

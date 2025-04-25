@@ -3,23 +3,22 @@ import "@utils/theme";
 import "@utils/register-service-worker";
 import { UserData } from "@utils/user";
 
-export class LoginDialog  {
-    scriptElement: HTMLScriptElement;
-    loginDialog: HTMLDialogElement;
-    tagName: string;
+export class LoginDialog {
+    tagName = "login-html";
+    htmlElement?: HTMLDialogElement;
 
     constructor() {
-        this.scriptElement = document.createElement("script");
-        this.loginDialog = document.createElement("dialog");
         if (!UserData.is_logged_in) {
-            this.createLoginScript();
-            this.createLoginDialog();
+            this.htmlElement = this.createDialog();
+            document.body.appendChild(this.htmlElement);
+            this.appendLoginScript();
         }
-        this.tagName = "login-html";
     }
-    createLoginDialog() {
-        this.loginDialog.id = "login-modal";
-        this.loginDialog.innerHTML = `
+
+    private createDialog(): HTMLDialogElement {
+        const dialog = document.createElement("dialog");
+        dialog.id = "login-modal";
+        dialog.innerHTML = `
             <nav>
                 <button class="circle transparent" onclick="ui('#login-modal')">
                     <i>close</i>
@@ -39,14 +38,14 @@ export class LoginDialog  {
                 <div class="g_id_signin" data-type="standard"></div>
             </div>
         `;
-        document.body.appendChild(this.loginDialog);
+        return dialog;
     }
 
-    createLoginScript() {
-        this.scriptElement.innerHTML = `
+    private appendLoginScript(): void {
+        const script = document.createElement("script");
+        script.textContent = `
             function handleGoogleLogin(response) {
                 const token = response.credential;
-
                 fetch("/api/login", {
                     method: "POST",
                     headers: {
@@ -56,20 +55,17 @@ export class LoginDialog  {
                         token: token,
                     }),
                 })
-                    .then((res) => res.json())
-                    .then((data) => {
-                        if (data.success) {
-                            window.location.reload();
-                        } else {
-                            alert(data.message);
-                        }
-                    })
-                    .catch((err) => {
-                        console.error("❌ Login failed:", err);
-                        alert("Login failed");
-                    });
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) window.location.reload();
+                    else alert(data.message);
+                })
+                .catch(err => {
+                    console.error("❌ Login failed:", err);
+                    alert("Login failed");
+                });
             }
         `;
-        document.body.appendChild(this.scriptElement);
+        document.body.appendChild(script);
     }
 }

@@ -1,2 +1,2 @@
-import "../base";
+import 'beercss';
 import "@utils/error-theme";

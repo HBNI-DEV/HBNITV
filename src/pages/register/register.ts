@@ -1,10 +1,11 @@
-import "../base";
 import { Snackbar } from "@components/snackbar";
 import { SnackbarError } from "@components/snackbar-error";
 import { AccountRegisteredDialog } from "@components/account-registered-dialog";
+import { initializeCoreUI } from "@utils/ui-core";
 
+document.addEventListener("DOMContentLoaded", async () => {
+    await initializeCoreUI();
 
-document.addEventListener("DOMContentLoaded", () => {
     const colonyNameInput = document.querySelector("#colony") as HTMLInputElement;
     if (localStorage.getItem("colony")) {
         colonyNameInput.value = localStorage.getItem("colony") || "";

@@ -1,8 +1,9 @@
-import { UserData } from "@utils/user";
+import { UserData } from "../utils/user";
 
 export class SnackbarLogin {
     htmlElement: HTMLElement;
-    tagName: string;
+    tagName = "login-snackbar";
+
     constructor() {
         const template = document.createElement("template");
         template.innerHTML = `
@@ -20,7 +21,6 @@ export class SnackbarLogin {
                 <div class="g_id_signin" data-type="standard"></div>
         </div>
         `;
-        this.tagName = "login-snackbar-html";
         this.htmlElement = template.content.firstElementChild as HTMLElement;
         this.init();
     }

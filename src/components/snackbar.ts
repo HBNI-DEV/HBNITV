@@ -1,31 +1,33 @@
 export class Snackbar {
     htmlElement: HTMLElement;
     tagName: string;
-    constructor(tagName: string, text: string, position: string="bottom") {
-        const template = document.createElement("template");
-        template.innerHTML = `
-        <div class="snackbar ${position}" id="${tagName}">
-            <div class="max">${text}</div>
-        </div>
-        `;
+
+    constructor(tagName: string, text: string, position: "top" | "bottom" = "bottom") {
         this.tagName = tagName;
-        this.htmlElement = template.content.firstElementChild as HTMLElement;
+        this.htmlElement = this.createElement(tagName, text, position);
         this.init();
     }
 
-    init() {
+    private createElement(id: string, text: string, position: string): HTMLElement {
+        document.getElementById(id)?.remove();
+        const el = document.createElement("div");
+        el.className = `snackbar ${position}`;
+        el.id = id;
+        const content = document.createElement("div");
+        content.className = "max";
+        content.textContent = text;
+        el.appendChild(content);
+        return el;
+    }
+
+    private init(): void {
         document.body.appendChild(this.htmlElement);
     }
 
-    show(millisecondsToHide?: number) {
-        if (!millisecondsToHide) {
-            millisecondsToHide = 6000;
+    public show(duration: number = 6000): void {
+        if (typeof ui === "function") {
+            ui(`#${this.tagName}`, duration);
         }
-
-        ui(`#${this.tagName}`, millisecondsToHide);
-
-        setTimeout(() => {
-            this.htmlElement.remove();
-        }, millisecondsToHide * 2);
+        setTimeout(() => this.htmlElement.remove(), duration * 2);
     }
 }
