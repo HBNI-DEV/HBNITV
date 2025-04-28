@@ -1,11 +1,12 @@
 export class NavigationDialog {
     navMedium: HTMLElement;
-    dialogElement: HTMLDialogElement;
+    navSmall: HTMLElement;
+    tabs: Record<string, HTMLAnchorElement[]> = {};
 
     constructor() {
-        const navMedium = this.createNavs();
+        const { navMedium, navSmall } = this.createNavs();
         this.navMedium = navMedium;
-        this.dialogElement = this.createDialog();
+        this.navSmall = navSmall;
         this.init();
     }
 
@@ -14,12 +15,23 @@ export class NavigationDialog {
         navMedium.className = "left m l surface-container";
         navMedium.innerHTML = `
             <header class="surface-container">
-                <img src="/static/icons/icon-192.png" class="circle">
+                <a href="/">
+                    <img src="/static/icons/icon-192.png">
+                </a>
             </header>
             ${this.links()}
         `;
 
-        return navMedium;
+        const navSmall = document.createElement("nav");
+        navSmall.className = "bottom s surface-container";
+        navSmall.innerHTML = `
+            ${this.link("news", "news", "News")}
+            ${this.link("calendar", "calendar_today", "Calendar")}
+            ${this.link("classes", "video_library", "Classes")}
+            ${this.link("contact", "contact_mail", "Contact")}
+        `;
+
+        return { navMedium, navSmall };
     }
 
     private createDialog(): HTMLDialogElement {
@@ -62,7 +74,7 @@ export class NavigationDialog {
 
     private link(href: string, icon: string, label: string): string {
         return `
-            <a href="/${href}">
+            <a id="${href}" href="/${href}">
                 <i>${icon}</i>
                 <span>${label}</span>
             </a>
@@ -71,13 +83,45 @@ export class NavigationDialog {
 
     private init(): void {
         document.body.appendChild(this.navMedium);
-        document.body.appendChild(this.dialogElement);
+        document.body.appendChild(this.navSmall);
 
-        const closeBtn = this.dialogElement.querySelector("#close-dialog-btn");
-        if (closeBtn) {
-            closeBtn.addEventListener("click", () => {
-                ui("#navigation-dialog");
-            });
+        this.cacheTabs();
+        this.setCurrentTab();
+    }
+
+    private cacheTabs(): void {
+        const anchors = [
+            ...this.navMedium.querySelectorAll("a"),
+            ...this.navSmall.querySelectorAll("a"),
+        ];
+
+        anchors.forEach((anchor) => {
+            const href = anchor.getAttribute("href");
+            if (href) {
+                if (!this.tabs[href]) {
+                    this.tabs[href] = [];
+                }
+                this.tabs[href].push(anchor as HTMLAnchorElement);
+            }
+        });
+    }
+
+    private setActiveTab(tabs: HTMLAnchorElement[]): void {
+        // First, clear active on all tabs
+        Object.values(this.tabs).flat().forEach((t) => t.classList.remove("active"));
+
+        // Then activate all tabs matching the current href
+        tabs.forEach((tab) => tab.classList.add("active"));
+    }
+
+    private setCurrentTab(): void {
+        const header = document.querySelector("#header") as HTMLElement;
+        // make first letter uppercase
+        header.innerText = window.location.pathname.replace(/^\//, "").replace(/\//g, " ").replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+        const path = window.location.pathname;
+        const currentTabs = this.tabs[path];
+        if (currentTabs) {
+            this.setActiveTab(currentTabs);
         }
     }
 }

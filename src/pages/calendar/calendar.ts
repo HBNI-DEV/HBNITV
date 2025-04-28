@@ -28,10 +28,23 @@ class StudentCalendarElement {
     }
 
     resize() {
+        const isMobile = window.innerWidth <= 600;
+
+        const padding = 16;
+        const headerHeight = 80; // Footer height for mobile
+        const footerHeight = 80; // Footer height for mobile
+        const navWidth = 80;     // Side nav width for desktop
+
+        if (isMobile) {
+            this.htmlElement.style.width = `calc(100vw - ${padding}px)`;
+            this.htmlElement.style.height = `calc(100vh - ${footerHeight}px - ${headerHeight}px)`;
+        } else {
+            this.htmlElement.style.width = `calc(100vw - ${navWidth}px - ${padding}px)`;
+            this.htmlElement.style.height = `calc(100vh - ${footerHeight}px)`;
+        }
+
         this.htmlElement.style.maxWidth = `1200px`;
         this.htmlElement.style.maxInlineSize = `75rem`;
-        this.htmlElement.style.height = `calc(100vh - 80px)`;
-        this.htmlElement.style.width = `calc(100vw - 20px)`;
     }
 }
 

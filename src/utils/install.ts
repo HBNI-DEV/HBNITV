@@ -86,3 +86,13 @@ export function initInstall() {
         installSnackbarButton.addEventListener("click", handleInstallClick);
     }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    const installSnackBar = document.createElement("div");
+    installSnackBar.innerHTML = `
+        <div id="install-snackbar" class="snackbar">
+            <div class="max">Install this app for a better experience!</div>
+            <a id="install-snackbar-btn" class="inverse-link">Install</a>
+        </div>`;
+    document.body.appendChild(installSnackBar);
+});

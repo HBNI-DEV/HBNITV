@@ -32,16 +32,21 @@ export class ProfileDialog {
                 <div class="padding">
                     <div class="row">
                         <div>
-                            <img class="responsive circle" src="${User.profile_picture}" alt="Profile Picture" />
+                            <img class="responsive circle" width="96px" height="96px" src="${User.profile_picture}" alt="Profile Picture" />
                         </div>
                         <div>
                             <p class="no-margin bold">${User.username}</p>
                             <p class="no-margin">${User.email}</p>
-                            <div class="badge none tiny small-round no-margin">
-                                <i>${icon}</i>
-                                <span>${roleLabel}</span>
-                            </div>
-                            <div class="badge none tiny green" id="internet-status-badge"><i class="tiny">wifi</i><span>Online</span></div>
+                            <nav class="vertical wrap no-space">
+                                <div class="chip round tiny tiny-margin">
+                                    <i>${icon}</i>
+                                    <span>${roleLabel}</span>
+                                </div>
+                                <div class="chip round tiny green tiny-margin" id="internet-status-badge">
+                                    <i>wifi</i>
+                                    <span>Online</span>
+                                </div>
+                            </nav>
                         </div>
                     </div>
                     <hr class="margin">
@@ -101,11 +106,11 @@ export class ProfileDialog {
             if (navigator.onLine) {
                 badge.classList.remove("error");
                 badge.classList.add("green");
-                badge.innerHTML = `<i class="tiny" style="color: black;">wifi</i><span style="color: black;">Online</span>`;
+                badge.innerHTML = `<i style="color: black;">wifi</i><span style="color: black;">Online</span>`;
             } else {
                 badge.classList.remove("green");
                 badge.classList.add("error");
-                badge.innerHTML = `<i class="tiny" style="color: black;">wifi_off</i><span style="color: black;">Offline</span>`;
+                badge.innerHTML = `<i style="color: black;">wifi_off</i><span style="color: black;">Offline</span>`;
             }
         };
 

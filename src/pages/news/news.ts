@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const settings = new SettingsManager();
 
     if (!User.role.includes("student")) {
-        let editorTheme = await settings.getSetting("editor_theme", "dark");
+        let editorTheme = await settings.getSetting("mode", "dark");
         if (editorTheme === "auto") {
             editorTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
         }

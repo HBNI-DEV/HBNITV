@@ -13,18 +13,13 @@ export class Header {
         const nav = document.createElement("nav");
         nav.className = "no-space";
         nav.innerHTML = `
-            <button class="circle transparent s" id="menu-button" onclick="ui('#navigation-dialog')">
-                <i>menu</i>
-            </button>
-            <a class="fill border tiny-padding tiny-margin small-round center-align middle-align" id="header-link" href="/">
-                <h6><span class="bold">HBNI</span> <span>ITV</span></h6>
-            </a>
+            <h5 id="header"></h5>
             <div class="max"></div>
             <button class="circle transparent">
                 <i>more_vert</i>
                 <menu class="left border no-wrap">
                     <li onclick="window.location.href='/settings'">
-                        <i>settings</i><span>Preferences</span>
+                        <i>settings</i><span>Settings</span>
                     </li>
                     <li onclick="window.location.href='/contact'">
                         <i>contact_mail</i><span>Contact</span>
