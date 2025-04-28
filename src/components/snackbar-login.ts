@@ -1,4 +1,4 @@
-import { UserData } from "../utils/user";
+import { User } from "@models/user";
 
 export class SnackbarLogin {
     htmlElement: HTMLElement;
@@ -27,7 +27,7 @@ export class SnackbarLogin {
 
     init() {
         document.body.appendChild(this.htmlElement);
-        if (!UserData.is_logged_in) {
+        if (!User.is_logged_in) {
             ui("#login-snackbar", -1);
         }
     }

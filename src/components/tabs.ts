@@ -2,6 +2,20 @@ export class Tabs {
     htmlElement: HTMLElement;
     tagName = "tabs-html";
     private tabs: Record<string, HTMLAnchorElement> = {};
+    private tabDefinitions: Record<
+        string,
+        { href: string; icon: string; label: string }[]
+    > = {
+        normal: [
+            { href: "/news", icon: "news", label: "News" },
+            { href: "/calendar", icon: "calendar_today", label: "Calendar" },
+            { href: "/classes", icon: "video_library", label: "Classes" },
+        ],
+        admin: [
+            { href: "/admin/assignments", icon: "folder_open", label: "Assignments" },
+            { href: "/admin/register", icon: "person_add", label: "Register" },
+        ],
+    };
 
     constructor() {
         this.htmlElement = this.createElement();
@@ -9,29 +23,42 @@ export class Tabs {
         this.init();
     }
 
+    private getCurrentMode(): "normal" | "admin" {
+        return window.location.pathname.includes("/admin/")
+            ? "admin"
+            : "normal";
+    }
+
     private createElement(): HTMLElement {
         const el = document.createElement("div");
         el.className = "tabs left-align scroll no-border";
-        el.innerHTML = `
-            <a class="small-round" href="/news" id="news-tab">
-                <i>news</i><span>News</span>
+
+        const mode = this.getCurrentMode();
+        const tabs = this.tabDefinitions[mode];
+
+        el.innerHTML = tabs
+            .map(
+                (tab) => `
+            <a class="small-round" href="${tab.href}" id="${this.getTabId(tab.href)}">
+                <i>${tab.icon}</i><span>${tab.label}</span>
             </a>
-            <a class="small-round" href="/calendar" id="calendar-tab">
-                <i>calendar_today</i><span>Calendar</span>
-            </a>
-            <a class="small-round" href="/classes" id="classes-tab">
-                <i>video_library</i><span>Classes</span>
-            </a>
-        `;
+        `,
+            )
+            .join("");
+
         return el;
     }
 
+    private getTabId(href: string): string {
+        return href.replace(/[\/]/g, "-") + "-tab";
+    }
+
     private cacheTabs(): void {
-        this.tabs = {
-            "/news": this.htmlElement.querySelector("#news-tab") as HTMLAnchorElement,
-            "/calendar": this.htmlElement.querySelector("#calendar-tab") as HTMLAnchorElement,
-            "/classes": this.htmlElement.querySelector("#classes-tab") as HTMLAnchorElement,
-        };
+        const anchors = this.htmlElement.querySelectorAll("a");
+        anchors.forEach((anchor) => {
+            const href = anchor.getAttribute("href")!;
+            this.tabs[href] = anchor as HTMLAnchorElement;
+        });
     }
 
     private init(): void {
@@ -50,7 +77,7 @@ export class Tabs {
     }
 
     private setActiveTab(tab: HTMLAnchorElement): void {
-        Object.values(this.tabs).forEach(t => t.classList.remove("active"));
+        Object.values(this.tabs).forEach((t) => t.classList.remove("active"));
         tab.classList.add("active");
     }
 

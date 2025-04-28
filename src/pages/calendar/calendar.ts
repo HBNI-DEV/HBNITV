@@ -9,7 +9,7 @@ class StudentCalendarElement {
         template.innerHTML = `
         <iframe
             class="absolute center round"
-            src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FWinnipeg&mode=WEEK&title=ITV%20Classes&showCalendars=0&src=Y180ZThmMTI2Yzc5ZTNmOWY5YWQ1YmVjNjY5OGI4YTI5ZGE0ZDhhNTRiOGNiZjZhZTJiZTM0YjU3MTQ0MjI1ZDQxQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=ZW4uY2FuYWRpYW4jaG9saWRheUBncm91cC52LmNhbGVuZGFyLmdvb2dsZS5jb20"
+            src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FWinnipeg&mode=MONTH&title=ITV%20Classes&showCalendars=0&src=Y180ZThmMTI2Yzc5ZTNmOWY5YWQ1YmVjNjY5OGI4YTI5ZGE0ZDhhNTRiOGNiZjZhZTJiZTM0YjU3MTQ0MjI1ZDQxQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=ZW4uY2FuYWRpYW4jaG9saWRheUBncm91cC52LmNhbGVuZGFyLmdvb2dsZS5jb20"
             style="border: 0"
             width="800"
             height="600"

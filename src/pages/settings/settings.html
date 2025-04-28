@@ -14,7 +14,10 @@
             name="keywords"
             content="hutterite, itv, hbni, classes, news, calendar, contact"
         />
-        <link rel="icon" href="/static/icons/favicon.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png">
+        <link rel="icon" type="image/png" href="/static/icons/favicon.png" />
         {% if not is_logged_in %}
         <script
             src="https://accounts.google.com/gsi/client"
@@ -26,10 +29,9 @@
     <header></header>
     <body class="light">
         <main class="responsive">
-            <article>
+            <article class="round">
                 <h4>Apperance</h4>
-                <div class="grid">
-                <div class="s12 row wrap padding border small-round">
+                <div class="row wrap padding border round">
                     <button
                         class="circle small red"
                         data-color="#f44336"
@@ -115,21 +117,23 @@
                         <input type="color" id="select-color" />
                     </button>
                 </div>
-                <label class="s12 m6 l4 radio vertical padding border small-round">
-                    <img src="https://www.gstatic.com/pantheon/images/user_preferences/light-illustration.svg" width="200px"/>
-                    <input type="radio" name="radio-mode" id="light-theme" />
-                    <span>Light</span>
-                </label>
-                <label class="s12 m6 l4 radio vertical padding border small-round">
-                    <img src="https://www.gstatic.com/pantheon/images/user_preferences/dark-illustration.svg" width="200px"/>
-                    <input type="radio" name="radio-mode" id="dark-theme" />
-                    <span>Dark</span>
-                </label>
-                <label class="s12 m6 l4 radio vertical padding border small-round">
-                    <img src="https://www.gstatic.com/pantheon/images/user_preferences/auto-illustration.svg" width="200px"/>
-                    <input type="radio" name="radio-mode" id="same-as-device" />
-                    <span>Automatic</span>
-                </label>
+                <div class="grid">
+                    <label class="s12 m6 l4 radio vertical padding border round">
+                        <img src="https://www.gstatic.com/pantheon/images/user_preferences/light-illustration.svg" width="200px"/>
+                        <input type="radio" name="radio-mode" id="light-theme" />
+                        <span>Light</span>
+                    </label>
+                    <label class="s12 m6 l4 radio vertical padding border round">
+                        <img src="https://www.gstatic.com/pantheon/images/user_preferences/dark-illustration.svg" width="200px"/>
+                        <input type="radio" name="radio-mode" id="dark-theme" />
+                        <span>Dark</span>
+                    </label>
+                    <label class="s12 m6 l4 radio vertical padding border round">
+                        <img src="https://www.gstatic.com/pantheon/images/user_preferences/auto-illustration.svg" width="200px"/>
+                        <input type="radio" name="radio-mode" id="same-as-device" />
+                        <span>Automatic</span>
+                    </label>
+                </div>
             </article>
         </main>
     </body>

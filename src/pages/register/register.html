@@ -14,7 +14,10 @@
             name="keywords"
             content="hutterite, itv, hbni, classes, news, calendar, contact"
         />
-        <link rel="icon" href="/static/icons/favicon.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png">
+        <link rel="icon" type="image/png" href="/static/icons/favicon.png" />
         {% if not is_logged_in %}
         <script
             src="https://accounts.google.com/gsi/client"
@@ -41,7 +44,7 @@
                             autocapitalize="words"
                             required
                         />
-                        <label>First Name</label>
+                        <label for="first_name">First Name</label>
                     </div>
                     <div class="s12 m6 l6 small-round field label border">
                         <input
@@ -51,7 +54,7 @@
                             autocapitalize="words"
                             required
                         />
-                        <label>Last Name</label>
+                        <label for="last_name">Last Name</label>
                     </div>
                     <div
                         class="s12 m12 l12 small-round field label suffix border"
@@ -61,10 +64,21 @@
                             <option value="{{ code }}">{{ name }}</option>
                             {% endfor %}
                         </select>
-                        <label>Colony Name</label>
+                        <label for="colony">Colony Name</label>
                         <i>arrow_drop_down</i>
                     </div>
-                    <nav class="s12 right-align">
+                    <div class="s12 m12 l12 small-round field label border">
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            value="@hbitv.net"
+                            disabled
+                        />
+                        <label for="email">Email</label>
+                        <span class="helper no-line">This will be the email address that will be generated for you.</span>
+                    </div>
+                    <nav class="s12 top-margin right-align">
                         <button type="submit">
                             <i>check_circle</i>
                             <span>Submit</span>

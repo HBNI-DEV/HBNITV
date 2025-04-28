@@ -8,19 +8,20 @@
         <meta name="author" content="Jared Gross" />
         <meta
             name="description"
-            content="HBNI ITV is a website to find the latest news, classes, and more."
-        />
+            content="HBNI ITV is a website to find the latest news, classes, and more." />
         <meta
             name="keywords"
-            content="hutterite, itv, hbni, classes, news, calendar, contact"
-        />
-        <link rel="icon" href="/static/icons/favicon.png" />
+            content="hutterite, itv, hbni, classes, news, calendar, contact" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png">
+        <link rel="icon" type="image/png" href="/static/icons/favicon.png" />
+        <link rel="manifest" href="/manifest.json" />
         {% if not is_logged_in %}
         <script
             src="https://accounts.google.com/gsi/client"
             async
-            defer
-        ></script>
+            defer></script>
         {% endif %}
     </head>
     <header>
@@ -29,18 +30,27 @@
         <main class="responsive">
             <article class="absolute center middle round no-padding medium-width">
                 <div class="center-align">
-                    <img class="responsive center-align fill round padding" src="/static/images/hbnilogo.png" alt="HBNI Logo"/>
+                    <img class="responsive center-align fill round padding" src="/static/images/hbnilogo.png"
+                        alt="HBNI Logo" />
                 </div>
                 <div class="padding">
                     <p class="center-align">
-                        Welcome to the HBNI ITV website. Here you can find all the latest <a class="link underline" href="/news">news</a>, <a class="link underline" href="/classes">classes</a>, and more.
+                        Welcome to the HBNI ITV website. Here you can find all the latest <a class="link underline"
+                            href="/news">news</a>, <a class="link underline" href="/classes">classes</a>, and more.
                     </p>
                     <p class="center-align">
-                        Developed with <button id="love-button" class="chip circle ripple no-border transparent no-margin"><i style="color: var(--error)">favorite</i><div class="tooltip top">love</div></button> by <a class="link underline" href="https://thecodingjsoftware.github.io">TheCodingJ's</a>.
+                        Developed with <button id="love-button"
+                            class="chip circle ripple no-border transparent no-margin"><i
+                                style="color: var(--error)">favorite</i><div class="tooltip top">love</div></button> by
+                        <a class="link underline" href="https://thecodingjsoftware.github.io">TheCodingJ's</a>.
                     </p>
                 </div>
             </article>
         </main>
+        <div id="install-snackbar" class="snackbar">
+            <div class="max">Install this app for a better experience!</div>
+            <a id="install-snackbar-btn" class="inverse-link">Install</a>
+        </div>
     </body>
     {% if is_logged_in %}
     <script>

@@ -14,7 +14,10 @@
             name="keywords"
             content="hutterite, itv, hbni, classes, news, calendar, contact"
         />
-        <link rel="icon" href="/static/icons/favicon.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png">
+        <link rel="icon" type="image/png" href="/static/icons/favicon.png" />
         {% if not is_logged_in %}
         <script
             src="https://accounts.google.com/gsi/client"
@@ -27,11 +30,27 @@
     </header>
     <body class="light">
         <main class="responsive">
-            <article id="news">
-                <p class="center-align">
-                    Welcome to the HBNI ITV website. Here you can find all the latest news, classes, and more.
-                </p>
+            {% if role == "admin"  or role == "super_admin" %}
+            <article class="round">
+                <details open>
+                    <summary class="padding row">
+                        <h5 class="max">Create a New Article</h5>
+                        <i>expand_more</i>
+                    </summary>
+                    <div id="editor"></div>
+                    <nav class="right-align">
+                        <button class="border" id="clear-editor">
+                            <i>delete</i>
+                            <span>Clear</span>
+                        </button>
+                        <button id="post-button">
+                            <i>send</i>
+                            <span>Post</span>
+                        </button>
+                    </nav>
+                </details>
             </article>
+            {% endif %}
         </main>
     </body>
     {% if is_logged_in %}

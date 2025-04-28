@@ -1,19 +1,34 @@
 export class NavigationDialog {
-    htmlElement: HTMLDialogElement;
-    tagName = "navigation-dialog";
+    navMedium: HTMLElement;
+    dialogElement: HTMLDialogElement;
 
     constructor() {
-        this.htmlElement = this.createElement();
+        const navMedium = this.createNavs();
+        this.navMedium = navMedium;
+        this.dialogElement = this.createDialog();
         this.init();
     }
 
-    private createElement(): HTMLDialogElement {
+    private createNavs() {
+        const navMedium = document.createElement("nav");
+        navMedium.className = "left m l surface-container";
+        navMedium.innerHTML = `
+            <header class="surface-container">
+                <img src="/static/icons/icon-192.png" class="circle">
+            </header>
+            ${this.links()}
+        `;
+
+        return navMedium;
+    }
+
+    private createDialog(): HTMLDialogElement {
         const dialog = document.createElement("dialog");
-        dialog.id = this.tagName;
-        dialog.className = "left medium-width no-padding";
+        dialog.id = "navigation-dialog";
+        dialog.className = "left medium-width no-padding s";
         dialog.innerHTML = `
             <nav class="row no-space small-margin">
-                <button class="circle transparent" type="button">
+                <button id="close-dialog-btn" class="circle transparent" type="button">
                     <i>close</i>
                 </button>
                 <a class="fill border tiny-padding tiny-margin small-round center-align middle-align" href="/">
@@ -22,12 +37,8 @@ export class NavigationDialog {
             </nav>
             <hr class="tiny-margin">
             <div class="padding">
-                <nav class="vertical tabs no-space no-border">
-                    ${this.link("news", "news", "News")}
-                    ${this.link("calendar", "calendar_today", "Calendar")}
-                    ${this.link("classes", "video_library", "Classes")}
-                    ${this.link("contact", "contact_mail", "Contact")}
-                    ${this.link("settings", "settings", "Preferences")}
+                <nav class="drawer">
+                    ${this.links()}
                 </nav>
             </div>
             <hr class="tiny-margin">
@@ -35,31 +46,38 @@ export class NavigationDialog {
         return dialog;
     }
 
+    private links(): string {
+        return `
+            ${this.link("news", "news", "News")}
+            ${this.link("calendar", "calendar_today", "Calendar")}
+            ${this.link("classes", "video_library", "Classes")}
+            ${this.link("contact", "contact_mail", "Contact")}
+            ${this.link("settings", "settings", "Settings")}
+            <a id="install">
+                <i>download</i>
+                <span>Install</span>
+            </a>
+        `;
+    }
+
     private link(href: string, icon: string, label: string): string {
         return `
-            <a class="round left-align" href="/${href}">
+            <a href="/${href}">
                 <i>${icon}</i>
                 <span>${label}</span>
             </a>
         `;
     }
 
-    private init() {
-        document.body.appendChild(this.htmlElement);
+    private init(): void {
+        document.body.appendChild(this.navMedium);
+        document.body.appendChild(this.dialogElement);
 
-        const closeBtn = this.htmlElement.querySelector("button");
+        const closeBtn = this.dialogElement.querySelector("#close-dialog-btn");
         if (closeBtn) {
             closeBtn.addEventListener("click", () => {
-                ui(`#${this.tagName}`);
+                ui("#navigation-dialog");
             });
         }
-    }
-
-    public show() {
-        this.htmlElement.showModal();
-    }
-
-    public hide() {
-        this.htmlElement.close();
     }
 }

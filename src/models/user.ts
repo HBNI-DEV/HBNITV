@@ -1,3 +1,5 @@
+import { UserData } from "@models/user-data";
+
 declare global {
     interface Window {
         USER?: {
@@ -14,20 +16,9 @@ declare global {
     }
 }
 
-interface UserData {
-    profile_picture: string;
-    username: string;
-    email: string;
-    role: string;
-    email_verified: boolean;
-    hd: string;
-    given_name: string;
-    family_name: string;
-    is_logged_in: boolean;
-}
 
 // Safe fallback default user
-const defaultUser: UserData = {
+export const defaultUser: UserData = {
     profile_picture: "/static/icons/default-profile.png",
     username: "Guest",
     email: "",
@@ -40,7 +31,7 @@ const defaultUser: UserData = {
 };
 
 // Merge default with actual USER (if it exists)
-export const UserData: UserData = {
+export const User: UserData = {
     ...defaultUser,
     ...(window.USER || {}),
 };

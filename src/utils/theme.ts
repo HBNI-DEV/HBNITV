@@ -3,7 +3,7 @@ import '@styles/maintheme.css';
 import '@styles/style.css';
 import "material-dynamic-colors";
 
-import { SettingsManager } from "./settings-manager";
+import { SettingsManager } from "@managers/settings-manager";
 
 export const appSettings = new SettingsManager();
 export let savedTheme: string = "#006493";
@@ -101,11 +101,13 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e =
     const newTheme = e.matches ? 'dark' : 'light';
     ui("mode", newTheme);
 });
+
 export function loadAnimationStyleSheet() {
     const style = document.createElement("style");
     style.textContent = `
     html,
     body,
+    nav,
     div,
     article,
     p,

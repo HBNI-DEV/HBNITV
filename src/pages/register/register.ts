@@ -3,17 +3,44 @@ import { SnackbarError } from "@components/snackbar-error";
 import { AccountRegisteredDialog } from "@components/account-registered-dialog";
 import { initializeCoreUI } from "@utils/ui-core";
 
+const DOMAIN_NAME: string = "hbnitv.net";
+
+function getColonyCodeName(colony: string): string {
+    const parts = colony.split("-");
+    return parts[parts.length - 1];
+}
+
+function updateEmailElement(firstName: string, lastName: string, colony: string) {
+    const email = `${getColonyCodeName(colony)}-${firstName.toLowerCase()}@${DOMAIN_NAME}`;
+    const emailElement = document.querySelector("#email") as HTMLInputElement;
+    emailElement.value = email;
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
     await initializeCoreUI();
 
     const colonyNameInput = document.querySelector("#colony") as HTMLInputElement;
+    const firstNameInput = document.querySelector("#first_name") as HTMLInputElement;
+    const lastNameInput = document.querySelector("#last_name") as HTMLInputElement;
+
+    firstNameInput.addEventListener("input", () => {
+        updateEmailElement(firstNameInput.value, lastNameInput.value, colonyNameInput.value);
+    });
+
+    lastNameInput.addEventListener("input", () => {
+        updateEmailElement(firstNameInput.value, lastNameInput.value, colonyNameInput.value);
+    });
+
     if (localStorage.getItem("colony")) {
         colonyNameInput.value = localStorage.getItem("colony") || "";
-
     }
+
     colonyNameInput.addEventListener("change", () => {
         localStorage.setItem("colony", colonyNameInput.value);
+        updateEmailElement(firstNameInput.value, lastNameInput.value, colonyNameInput.value);
     });
+
+    updateEmailElement(firstNameInput.value, lastNameInput.value, colonyNameInput.value);
 
     const form = document.querySelector("form") as HTMLFormElement;
     form.addEventListener("submit", async (event) => {

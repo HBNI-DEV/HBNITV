@@ -1,43 +1,51 @@
 {
-  "name": "hbni-itv",
-  "version": "1.0.0",
-  "description": "HBNI ITV",
-  "main": "main.py",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/thecodingjsoftware/hbni-itv.git"
-  },
-  "keywords": [
-    "hbni",
-    "itv"
-  ],
-  "author": "Jared Gross",
-  "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/thecodingjsoftware/hbni-itv/issues"
-  },
-  "homepage": "https://github.com/thecodingjsoftware/hbni-itv#readme",
-  "dependencies": {
-    "beercss": "^3.10.5",
-    "typescript": "^5.8.3"
-  },
-  "devDependencies": {
-    "copy-webpack-plugin": "^12.0.2",
-    "css-loader": "^7.1.2",
-    "glob": "^11.0.2",
-    "html-webpack-plugin": "^5.6.0",
-    "material-dynamic-colors": "^1.1.2",
-    "mini-css-extract-plugin": "^2.9.1",
-    "style-loader": "^4.0.0",
-    "ts-loader": "^9.5.1",
-    "typescript": "^5.5.4",
-    "webpack": "^5.94.0",
-    "webpack-bundle-analyzer": "^4.10.2",
-    "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.0.4",
-    "workbox-webpack-plugin": "^7.3.0"
-  }
+    "name": "hbni-itv",
+    "version": "1.0.0",
+    "description": "HBNI ITV",
+    "main": "main.py",
+    "scripts": {
+        "dev": "cross-env NODE_ENV=development webpack serve",
+        "build": "cross-env NODE_ENV=production webpack",
+        "run": "main.py"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/thecodingjsoftware/hbni-itv.git"
+    },
+    "keywords": [
+        "hbni",
+        "itv"
+    ],
+    "author": "Jared Gross",
+    "license": "GPL-3.0",
+    "bugs": {
+        "url": "https://github.com/thecodingjsoftware/hbni-itv/issues"
+    },
+    "homepage": "https://github.com/thecodingjsoftware/hbni-itv#readme",
+    "dependencies": {
+        "@toast-ui/editor": "^3.2.2",
+        "beercss": "^3.10.5",
+        "katex": "^0.16.22",
+        "typescript": "^5.8.3"
+    },
+    "devDependencies": {
+        "copy-webpack-plugin": "^12.0.2",
+        "cross-env": "^7.0.3",
+        "css-loader": "^7.1.2",
+        "esbuild": "^0.25.3",
+        "esbuild-loader": "^4.3.0",
+        "fork-ts-checker-webpack-plugin": "^9.1.0",
+        "glob": "^11.0.2",
+        "html-webpack-plugin": "^5.6.0",
+        "material-dynamic-colors": "^1.1.2",
+        "mini-css-extract-plugin": "^2.9.1",
+        "style-loader": "^4.0.0",
+        "ts-loader": "^9.5.1",
+        "typescript": "^5.5.4",
+        "webpack": "^5.94.0",
+        "webpack-bundle-analyzer": "^4.10.2",
+        "webpack-cli": "^5.1.4",
+        "webpack-dev-server": "^5.0.4",
+        "workbox-webpack-plugin": "^7.3.0"
+    }
 }

@@ -1,14 +1,14 @@
 import "beercss";
 import "@utils/theme";
 import "@utils/register-service-worker";
-import { UserData } from "@utils/user";
+import { User } from "@models/user";
 
 export class LoginDialog {
     tagName = "login-html";
     htmlElement?: HTMLDialogElement;
 
     constructor() {
-        if (!UserData.is_logged_in) {
+        if (!User.is_logged_in) {
             this.htmlElement = this.createDialog();
             document.body.appendChild(this.htmlElement);
             this.appendLoginScript();

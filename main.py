@@ -3,7 +3,7 @@ from tornado.ioloop import IOLoop
 from tornado.web import Application
 
 from app.config.environments import Environment
-from app.urls import url_patterns
+from app.routes import url_patterns
 
 
 class TornadoApp(Application):

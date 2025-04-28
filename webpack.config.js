@@ -5,12 +5,16 @@ const glob = require('glob');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { GenerateSW } = require('workbox-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
+const webpack = require('webpack');
+
+const isProduction = process.env.NODE_ENV === 'production';
 const entries = {};
 const pagesDir = path.join(__dirname, 'src/pages');
-const pageFolders = fs.readdirSync(pagesDir);
 
-pageFolders.forEach(folder => {
+// Dynamically find page entries
+fs.readdirSync(pagesDir).forEach(folder => {
     const entryFile = path.join(pagesDir, folder, `${folder}.ts`);
     if (fs.existsSync(entryFile)) {
         entries[folder] = entryFile;
@@ -19,9 +23,7 @@ pageFolders.forEach(folder => {
     }
 });
 
-console.log("📦 Webpack entries:", entries);
-
-// Dynamically create HTML plugins for each entry
+// Create HtmlWebpackPlugins dynamically
 const htmlPlugins = Object.keys(entries).map(name => {
     const templatePath = path.join(pagesDir, name, `${name}.html`);
     if (fs.existsSync(templatePath)) {
@@ -29,24 +31,43 @@ const htmlPlugins = Object.keys(entries).map(name => {
             template: templatePath,
             filename: `html/${name}.html`,
             chunks: [name],
-            minify: true,
+            minify: isProduction,
         });
-    } else {
-        console.warn(`⚠️ No HTML template found for: ${name}`);
-        return null;
     }
+    console.warn(`⚠️ No HTML template found for: ${name}`);
+    return null;
 }).filter(Boolean);
 
-
 module.exports = {
-    mode: 'production', // or 'development' if needed
+    mode: isProduction ? 'production' : 'development',
+
     entry: entries,
+
     output: {
-        filename: 'js/[name].bundle.js',
-        path: path.resolve(__dirname, 'public/dist'),
-        publicPath: '/public/dist/',
-        clean: true, // ✅ Cleans output dir before each build (no need to manually delete old files)
+        filename: isProduction ? 'js/[name].[contenthash].js' : 'js/[name].bundle.js',
+        path: path.resolve(__dirname, 'public'),
+        publicPath: '/public/',
+        clean: true,
     },
+
+    devtool: isProduction ? 'source-map' : 'eval-cheap-module-source-map',
+
+    devServer: {
+        static: { directory: path.join(__dirname, 'public') },
+        compress: true,
+        hot: true,
+        open: true,
+        historyApiFallback: true,
+        client: {
+            overlay: true,
+        }
+    },
+
+    cache: {
+        type: 'filesystem',
+        compression: 'gzip',
+    },
+
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
         alias: {
@@ -54,30 +75,80 @@ module.exports = {
             '@pages': path.resolve(__dirname, 'src/pages'),
             '@utils': path.resolve(__dirname, 'src/utils'),
             '@styles': path.resolve(__dirname, 'src/styles'),
+            '@models': path.resolve(__dirname, 'src/models'),
+            '@managers': path.resolve(__dirname, 'src/managers'),
+            '@api': path.resolve(__dirname, 'src/api'),
+            '@elements': path.resolve(__dirname, 'src/elements'),
+        },
+        fallback: {
+            fs: false,
+            path: false,
+            buffer: false,
         },
     },
+
     module: {
         rules: [
             {
                 test: /\.ts$/,
-                use: 'ts-loader',
-                exclude: /node_modules/,
+                loader: 'esbuild-loader',
+                options: {
+                    loader: 'ts',
+                    target: 'es2017'
+                },
             },
             {
-                test: /\.css$/,
+                test: /\.js$/,
+                loader: 'esbuild-loader',
+                options: {
+                    loader: 'js',
+                    target: 'es2017',
+                },
+            },
+            {
+                test: /\.css$/i,
                 use: [MiniCssExtractPlugin.loader, 'css-loader'],
             },
         ],
     },
+
+    optimization: {
+        splitChunks: {
+            chunks: 'all',
+            cacheGroups: {
+                vendors: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'vendors',
+                    chunks: 'all',
+                },
+            },
+        },
+        runtimeChunk: 'single',
+    },
+
     plugins: [
         new MiniCssExtractPlugin({
-            filename: 'css/[name].bundle.css',
+            filename: isProduction ? 'css/[name].[contenthash].css' : 'css/[name].bundle.css',
+        }),
+
+        new ForkTsCheckerWebpackPlugin({
+            async: true,
+            typescript: {
+                configFile: path.resolve(__dirname, 'tsconfig.json'),
+                diagnosticOptions: {
+                    semantic: true,
+                    syntactic: true,
+                },
+                mode: 'write-references', // optional, for faster large builds
+            },
         }),
         ...htmlPlugins,
+
         new GenerateSW({
             swDest: 'service-worker.js',
             clientsClaim: true,
             skipWaiting: true,
+            maximumFileSizeToCacheInBytes: 12 * 1024 * 1024, // allow bigger caching
             runtimeCaching: [
                 {
                     urlPattern: ({ request }) => request.mode === 'navigate',

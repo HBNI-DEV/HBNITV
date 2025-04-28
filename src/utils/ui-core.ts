@@ -1,15 +1,14 @@
 import "@utils/register-service-worker";
-
+import { initInstall } from "@utils/install";
 import { loadTheme, loadAnimationStyleSheet } from "@utils/theme";
-
 import { Header } from "@components/header";
-import { Tabs } from "@components/tabs";
 import { LoginDialog } from "@components/login-dialog";
 import { NavigationDialog } from "@components/navigation-dialog";
 import { ProfileDialog } from "@components/profile-dialog";
 import { SnackbarLogin } from "@components/snackbar-login";
 
 export async function initializeCoreUI() {
+    document.body.classList.add("hidden");
     try {
         await Promise.all([
             loadTheme(),
@@ -20,11 +19,12 @@ export async function initializeCoreUI() {
     }
 
     mount(Header, "header");
-    mount(Tabs, "#tabs");
 
     new SnackbarLogin();
 
     initDialogs([ProfileDialog, NavigationDialog, LoginDialog]);
+    initInstall();
+    document.body.classList.remove("hidden");
 }
 
 function mount(
@@ -48,3 +48,15 @@ function initDialogs(Components: (new () => any)[]) {
 function delay(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+window.addEventListener("pagehide", (event) => {
+    if (event.persisted) {
+        console.log("Saving state because we might go into bfcache...");
+    }
+});
+
+window.addEventListener("pageshow", (event) => {
+    if (event.persisted) {
+        console.log("Page was restored from bfcache instantly!");
+    }
+});

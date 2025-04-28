@@ -1,6 +1,6 @@
-import { UserData } from "@utils/user";
+import { User } from "@models/user";
 import { Snackbar } from "./snackbar";
-import { CookieManager } from "@utils/cookie-manager";
+import { CookieManager } from "@managers/cookie-manager";
 
 export class ProfileDialog {
     htmlElement: HTMLDialogElement;
@@ -12,8 +12,8 @@ export class ProfileDialog {
     }
 
     private createElement(): HTMLDialogElement {
-        const isStudent = UserData.role.includes("student");
-        const roleLabel = this.formatRole(UserData.role);
+        const isStudent = User.role.includes("student");
+        const roleLabel = this.formatRole(User.role);
         const icon = isStudent ? "person" : "security";
 
         const dialog = document.createElement("dialog");
@@ -32,15 +32,16 @@ export class ProfileDialog {
                 <div class="padding">
                     <div class="row">
                         <div>
-                            <img class="responsive circle" src="${UserData.profile_picture}" alt="Profile Picture" />
+                            <img class="responsive circle" src="${User.profile_picture}" alt="Profile Picture" />
                         </div>
                         <div>
-                            <p class="no-margin bold">${UserData.username}</p>
-                            <p class="no-margin">${UserData.email}</p>
+                            <p class="no-margin bold">${User.username}</p>
+                            <p class="no-margin">${User.email}</p>
                             <div class="badge none tiny small-round no-margin">
                                 <i>${icon}</i>
                                 <span>${roleLabel}</span>
                             </div>
+                            <div class="badge none tiny green" id="internet-status-badge"><i class="tiny">wifi</i><span>Online</span></div>
                         </div>
                     </div>
                     <hr class="margin">
@@ -61,12 +62,13 @@ export class ProfileDialog {
     }
 
     private async init() {
-        if (!UserData.is_logged_in) return;
+        if (!User.is_logged_in) return;
 
         document.body.appendChild(this.htmlElement);
 
         this.bindLogout();
         this.showWelcomeSnackbar();
+        this.setupNetworkStatusBadge();
     }
 
     private bindLogout() {
@@ -91,6 +93,28 @@ export class ProfileDialog {
         });
     }
 
+    private setupNetworkStatusBadge(): void {
+        const badge = this.htmlElement.querySelector("#internet-status-badge") as HTMLElement;
+        if (!badge) return;
+
+        const updateBadge = () => {
+            if (navigator.onLine) {
+                badge.classList.remove("error");
+                badge.classList.add("green");
+                badge.innerHTML = `<i class="tiny" style="color: black;">wifi</i><span style="color: black;">Online</span>`;
+            } else {
+                badge.classList.remove("green");
+                badge.classList.add("error");
+                badge.innerHTML = `<i class="tiny" style="color: black;">wifi_off</i><span style="color: black;">Offline</span>`;
+            }
+        };
+
+        updateBadge();
+
+        window.addEventListener("online", updateBadge);
+        window.addEventListener("offline", updateBadge);
+    }
+
     private showWelcomeSnackbar() {
         const key = "welcome_snackbar_last_shown";
         const lastShown = parseInt(CookieManager.getCookie(key) || "0", 10);
@@ -98,7 +122,7 @@ export class ProfileDialog {
         const twelveHours = 12 * 60 * 60 * 1000;
 
         if (now - lastShown > twelveHours) {
-            new Snackbar("welcome-snackbar", `Welcome back, ${UserData.given_name}!`).show(2000);
+            new Snackbar("welcome-snackbar", `Welcome back, ${User.given_name}!`).show(2000);
             CookieManager.setCookie(key, String(now), 0.5); // 0.5 days = 12 hours
         }
     }
