@@ -56,7 +56,7 @@
                     </nav>
                 </div>
                 {% endif %}
-                <div class="page padding {{ 'active'  if role != 'admin' or role != 'super_admin' else ''}}" id="news-page">
+                <div class="page padding {{ 'active'  if role != 'admin' and role != 'super_admin' else ''}}" id="news-page">
                     <h5>News</h5>
                 </div>
             </div>
