@@ -20,7 +20,11 @@ function isAppInstalled(): boolean {
 }
 
 function hideInstallUI() {
+    console.log("Hiding install UI");
+
     document.querySelectorAll("#install").forEach((btn) => {
+        console.log("Hiding install button:", btn);
+
         btn.classList.add("hidden");
     });
 

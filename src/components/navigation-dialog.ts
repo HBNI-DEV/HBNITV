@@ -16,7 +16,7 @@ export class NavigationDialog {
         navMedium.innerHTML = `
             <header class="surface-container">
                 <a href="/">
-                    <img src="/static/icons/icon-192.png">
+                    <img src="/static/icons/icon-192.png" class="square">
                 </a>
             </header>
             ${this.links()}
@@ -28,7 +28,6 @@ export class NavigationDialog {
             ${this.link("news", "news", "News")}
             ${this.link("calendar", "calendar_today", "Calendar")}
             ${this.link("classes", "video_library", "Classes")}
-            ${this.link("contact", "contact_mail", "Contact")}
         `;
 
         return { navMedium, navSmall };
@@ -63,7 +62,6 @@ export class NavigationDialog {
             ${this.link("news", "news", "News")}
             ${this.link("calendar", "calendar_today", "Calendar")}
             ${this.link("classes", "video_library", "Classes")}
-            ${this.link("contact", "contact_mail", "Contact")}
             ${this.link("settings", "settings", "Settings")}
             <a id="install">
                 <i>download</i>

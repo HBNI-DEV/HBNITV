@@ -8,12 +8,10 @@
         <meta name="author" content="Jared Gross" />
         <meta
             name="description"
-            content="HBNI ITV is a website to find the latest news, classes, and more."
-        />
+            content="HBNI ITV is a website to find the latest news, classes, and more." />
         <meta
             name="keywords"
-            content="hutterite, itv, hbni, classes, news, calendar, contact"
-        />
+            content="hutterite, itv, hbni, classes, news, calendar, contact" />
         <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png">
@@ -23,21 +21,28 @@
         <script
             src="https://accounts.google.com/gsi/client"
             async
-            defer
-        ></script>
+            defer></script>
         {% endif %}
     </head>
     <header>
     </header>
     <body class="light">
         <main class="responsive">
-            {% if role == "admin"  or role == "super_admin" %}
-            <article class="round">
-                <details open>
-                    <summary class="padding row">
-                        <h5 class="max">Create a New Article</h5>
-                        <i>expand_more</i>
-                    </summary>
+            <div>
+                {% if role == "admin" or role == "super_admin" %}
+                <div class="tabs">
+                    <a data-ui="#create-news-page" class="active">
+                        <i>add_notes</i>
+                        <span>Create a New Article</span>
+                    </a>
+                    <a data-ui="#news-page">
+                        <i>news</i>
+                        <span>News</span>
+                    </a>
+                </div>
+                {% endif %}
+                {% if role == "admin" or role == "super_admin" %}
+                <div class="page padding active" id="create-news-page">
                     <div id="editor"></div>
                     <nav class="right-align">
                         <button class="border" id="clear-editor">
@@ -49,9 +54,12 @@
                             <span>Post</span>
                         </button>
                     </nav>
-                </details>
-            </article>
-            {% endif %}
+                </div>
+                {% endif %}
+                <div class="page padding {{ 'active'  if role != 'admin' or role != 'super_admin' else ''}}" id="news-page">
+                    <h5>News</h5>
+                </div>
+            </div>
         </main>
     </body>
     {% if is_logged_in %}
