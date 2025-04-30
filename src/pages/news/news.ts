@@ -277,14 +277,17 @@ class CreateNewsPostPage {
     }
 
     async init() {
-        let [savedContent, editorTheme] = await Promise.all([
+        let [savedContent, savedTitle, editorTheme] = await Promise.all([
             this.settings.getSetting("toast_editor_content", "# Hello, World!"),
+            this.settings.getSetting("toast_editor_title", "Hello, World!"),
             this.settings.getSetting("mode", "dark") as Promise<string>
         ]);
 
         if (editorTheme === "auto") {
             editorTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
         }
+
+        this.titleElement.value = savedTitle as string;
 
         this.editor = new Editor({
             el: document.querySelector("#editor") as HTMLElement,
@@ -301,7 +304,9 @@ class CreateNewsPostPage {
     private bindEvents() {
         this.postButtonElement.addEventListener("click", () => this.postNews());
         this.clearButtonElement.addEventListener("click", () => this.clearEditor());
-
+        this.titleElement.addEventListener("input", async () => {
+            await this.settings.saveSetting("toast_editor_title", this.titleElement.value);
+        });
         this.editor.on("change", async () => {
             const markdown = this.editor.getMarkdown();
             await this.settings.saveSetting("toast_editor_content", markdown);
@@ -327,10 +332,14 @@ class CreateNewsPostPage {
                 snackbar.show(2000);
             });
     }
-    private clearEditor() {
-        this.editorElement.innerHTML = "";
-        this.titleElement.value = "";
-        this.editor.setMarkdown("");
+    private async clearEditor() {
+        const areYouSure = confirm("Are you sure you want to clear the editor?");
+        if (areYouSure) {
+            this.titleElement.value = "";
+            this.editor.setMarkdown("");
+            await this.settings.saveSetting("toast_editor_title", "");
+            await this.settings.saveSetting("toast_editor_content", "");
+        }
     }
 }
 
