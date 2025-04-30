@@ -43,6 +43,10 @@
                 {% endif %}
                 {% if role == "admin" or role == "super_admin" %}
                 <div class="page padding active" id="create-news-page">
+                    <div class="field label border small-round">
+                        <input type="text" id="news-title" name="news-title" autocapitalize="words" required />
+                        <label for="news-title">Title</label>
+                    </div>
                     <div id="editor"></div>
                     <nav class="right-align">
                         <button class="border" id="clear-editor">
@@ -57,7 +61,19 @@
                 </div>
                 {% endif %}
                 <div class="page padding {{ 'active'  if role != 'admin' and role != 'super_admin' else ''}}" id="news-page">
-                    <h5>News</h5>
+                    <article class="round fade-in" id="latest-news"></article>
+                    <article class="round border">
+                        <div class="grid" id="list-news"></div>
+                        <div id="pagination-controls" class="row bottom-align">
+                            <button id="prev-page-btn" class="chip border no-margin round" disabled>
+                                <i>chevron_left</i>
+                            </button>
+                            <nav id="page-numbers" class="max row left-align tiny-space scroll"></nav>
+                            <button id="next-page-btn" class="chip border no-margin round" disabled>
+                                <i>chevron_right</i>
+                            </button>
+                        </div>
+                    </article>
                 </div>
             </div>
         </main>

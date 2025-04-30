@@ -2,6 +2,10 @@
     display: none !important;
 }
 
+.clickable {
+    cursor: pointer !important;
+}
+
 #latex-preview .text {
     display: inline;
 }
@@ -18,10 +22,34 @@
 #internet-status-badge {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
+
 .page-break-inside{
     page-break-inside: avoid !important;
 }
 
 .field.min > textarea {
     max-block-size: 100rem !important;
+}
+
+.fade-in {
+    opacity: 0;
+    transition: opacity 0.4s ease-in;
+}
+
+.fade-in.show {
+    opacity: 1;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+::view-transition-new(root) {
+    animation: 0.4s ease-out both fade-in;
 }

@@ -6,6 +6,7 @@ export class News implements NewsData {
     private _data: {
         id: string;
         userData: UserData;
+        title: string;
         content: string;
         createdAt: string;
         updatedAt: string;
@@ -15,11 +16,12 @@ export class News implements NewsData {
 
     private eventTarget = new EventTarget();
 
-    constructor(data?: Partial<NewsData & { user_info?: UserData }>) {
+    constructor(data?: Partial<NewsData>) {
         const now = new Date().toISOString();
         this._data = {
             id: data?.id ?? "",
-            userData: data?.user_info ?? defaultUser,
+            title: data?.title ?? "",
+            userData: data?.userData ?? defaultUser,
             content: data?.content ?? "",
             createdAt: data?.createdAt ?? now,
             updatedAt: data?.updatedAt ?? now,
@@ -35,6 +37,9 @@ export class News implements NewsData {
         this._data.updatedAt = new Date().toISOString();
         this.eventTarget.dispatchEvent(new Event("change"));
     }
+
+    get title() { return this._data.title; }
+    set title(value: string) { this._data.title = value; this.emitChange(); }
 
     get id() { return this._data.id; }
     set id(value: string) { this._data.id = value; this.emitChange(); }

@@ -16,7 +16,7 @@ export class NavigationDialog {
         navMedium.innerHTML = `
             <header class="surface-container">
                 <a href="/">
-                    <img src="/static/icons/icon-192.png" class="square">
+                    <img src="/static/icons/icon-192.png" width="96px" height="96px" class="square" alt="HBNI Logo">
                 </a>
             </header>
             ${this.links()}
