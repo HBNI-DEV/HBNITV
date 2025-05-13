@@ -2,7 +2,7 @@ import { Question } from "@models/question";
 const katex = require('katex');
 
 export class QuestionElement {
-    htmlElement: HTMLElement;
+    htmlElement: HTMLDetailsElement;
     question: Question;
     questionNumber: number;
 
@@ -13,9 +13,9 @@ export class QuestionElement {
     latexPreviewElement: HTMLElement;
     answerElement: HTMLTextAreaElement;
 
-    constructor(questionNumber: number = 1) {
+    constructor(questionNumber: number = 1, question: Question) {
         this.questionNumber = questionNumber;
-        this.question = new Question();
+        this.question = question;
         this.question.questionNumber = questionNumber;
 
         this.htmlElement = this.createElement();
@@ -29,12 +29,13 @@ export class QuestionElement {
 
         this.bindEvents();
         this.bindQuestionChange();
+        this.updateLaTeXQuestionPreview();
     }
 
-    private createElement(): HTMLElement {
+    private createElement(): HTMLDetailsElement {
         const template = document.createElement("template");
         template.innerHTML = `
-        <details class="question" open>
+        <details class="question fade-in top-margin" open>
             <summary>
                 <article class="round primary no-elevate">
                     <nav>
@@ -45,11 +46,11 @@ export class QuestionElement {
             </summary>
             <article class="grid round border">
                 <div class="s12 m6 l6 small-round field label border">
-                    <input type="number" id="worth" name="worth" value="5" />
+                    <input type="number" id="worth" name="worth" value="${this.question.worth}" />
                     <label for="worth">Worth</label>
                 </div>
                 <div class="s12 m6 l6 small-round field label suffix border">
-                    <select name="pageSpace" id="pageSpace">
+                    <select name="pageSpace" id="pageSpace" value="${this.question.questionSpace}">
                         <option value="0.3">Third of Page</option>
                         <option value="0.5" selected>Half Page</option>
                         <option value="1">Full Page</option>
@@ -58,11 +59,11 @@ export class QuestionElement {
                     <i>arrow_drop_down</i>
                 </div>
                 <div class="s12 m12 l12 small-round field min textarea label border">
-                    <textarea id="question" name="question" autocapitalize="words"></textarea>
+                    <textarea id="question" name="question" autocapitalize="words">${this.question.question}</textarea>
                     <label for="question">Question</label>
                     <span class="helper no-line">LaTeX is supported. See supported <a class="link underline" href="https://katex.org/docs/supported" target="_blank">functions</a> and table of <a class="link underline" href="https://katex.org/docs/support_table" target="_blank">symbols</a>.</span>
                 </div>
-                <details class="s12 m12 l12" open>
+                <details class="s12 m12 l12 top-margin" open>
                     <summary>
                         <i>arrow_drop_down</i>
                         <span>Preview</span>
@@ -70,13 +71,13 @@ export class QuestionElement {
                     <div class="padding border small-round KaTeX-display" id="latex-preview"></div>
                 </details>
                 <div class="s12 m12 l12 small-round field textarea label border">
-                    <textarea id="answer" name="answer" autocapitalize="words"></textarea>
+                    <textarea id="answer" name="answer" autocapitalize="words">${this.question.answer}</textarea>
                     <label for="answer">Answer</label>
                 </div>
             </article>
         </details>
         `;
-        return template.content.firstElementChild as HTMLElement;
+        return template.content.firstElementChild as HTMLDetailsElement;
     }
 
     private bindEvents() {
@@ -88,14 +89,14 @@ export class QuestionElement {
         });
         this.questionElement.addEventListener("input", () => {
             this.question.question = this.questionElement.value;
-            this.updateLatexPreview();
+            this.updateLaTeXQuestionPreview();
         });
         this.answerElement.addEventListener("input", () => {
             this.question.answer = this.answerElement.value;
         });
     }
 
-    private updateLatexPreview() {
+    private updateLaTeXQuestionPreview() {
         const input = this.questionElement.value.trim();
         if (!input) {
             this.latexPreviewElement.innerHTML = "";
@@ -128,9 +129,9 @@ export class QuestionElement {
                 });
 
                 if (isBlock) {
-                    output += `<span class="math block fade-in">${rendered}</span>`;
+                    output += `<span class="math block">${rendered}</span>`;
                 } else {
-                    output += `<span class="math inline fade-in">${rendered}</span>`;
+                    output += `<span class="math inline">${rendered}</span>`;
                 }
 
                 cursor = end;
@@ -149,7 +150,6 @@ export class QuestionElement {
             this.latexPreviewElement.classList.add("error-preview");
         }
     }
-
 
     private escapeHtml(text: string): string {
         const div = document.createElement("div");

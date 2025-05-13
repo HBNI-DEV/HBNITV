@@ -29,13 +29,33 @@
     </head>
     <header>
     </header>
-    <body class="light">
+    <body onload="document.body.classList.add('loaded')" class="light">
         <main class="responsive">
             <div class="padding grid" id="assignment">
+                <div class="s12 field label border small-round">
+                    <input type="text" id="assignment-title" name="assignment-title" autocapitalize="words" required />
+                    <label>Title</label>
+                </div>
                 <div class="s12" id="question-elements"></div>
             </div>
         </main>
     </body>
+    <footer class="fixed surface-container">
+        <nav>
+            <div class="max"></div>
+            <button class="chip" id="sync-status-button">
+                <progress class="circle small hidden" id="sync-progress"></progress>
+                <i id="sync-status-icon">check_circle</i>
+                <span id="sync-status-text">Synced</span>
+                <div class="tooltip top">
+                    <span id="sync-last-updated"></span>
+                </div>
+            </button>
+            <button class="square round extra primary" id="add-question-button">
+                <i>add</i>
+            </button>
+        </nav>
+    </footer>
     {% if is_logged_in %}
     <script>
         window.USER = {

@@ -1,8 +1,11 @@
 import json
+
 import psycopg2
+
 from app.config.environments import Environment
 from app.handlers.core.base import BaseHandler
 from app.handlers.core.require_role import require_role
+
 
 class NewsAPIHandler(BaseHandler):
     _db_checked = False
@@ -51,9 +54,7 @@ class NewsAPIHandler(BaseHandler):
             news_id = self.get_argument("id", None)
 
             if news_id:
-                self.cur.execute(
-                    "SELECT data FROM news WHERE id = %s", (news_id,)
-                )
+                self.cur.execute("SELECT data FROM news WHERE id = %s", (news_id,))
                 result = self.cur.fetchone()
                 if result:
                     self.write({"status": "success", "data": result[0]})
@@ -63,9 +64,12 @@ class NewsAPIHandler(BaseHandler):
             else:
                 self.cur.execute("SELECT id, data FROM news")
                 results = self.cur.fetchall()
-                self.write({"status": "success", "data": [
-                    {"id": row[0], "data": row[1]} for row in results
-                ]})
+                self.write(
+                    {
+                        "status": "success",
+                        "data": [{"id": row[0], "data": row[1]} for row in results],
+                    }
+                )
         except Exception as e:
             self.write_error_response(e)
 
@@ -79,11 +83,14 @@ class NewsAPIHandler(BaseHandler):
                 self.write_error_message(400, "Missing News ID")
                 return
 
-            self.cur.execute("""
+            self.cur.execute(
+                """
                 INSERT INTO news (id, data)
                 VALUES (%s, %s)
                 ON CONFLICT (id) DO UPDATE SET data = EXCLUDED.data
-            """, (news_id, json.dumps(payload)))
+            """,
+                (news_id, json.dumps(payload)),
+            )
 
             self.write({"status": "success", "id": news_id})
         except json.JSONDecodeError:

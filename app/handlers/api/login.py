@@ -1,3 +1,4 @@
+import psycopg2
 from google.auth.transport import requests
 from google.oauth2 import id_token
 
@@ -37,6 +38,48 @@ class LoginAPIHandler(BaseHandler):
             if email in ["jared@hbni.net"]:
                 role = "super_admin"
 
+            """
+            CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+            CREATE TABLE IF NOT EXISTS users (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                email TEXT UNIQUE NOT NULL,
+                role TEXT NOT NULL,
+                name TEXT,
+                profile_picture TEXT
+            );
+            """
+
+            conn = psycopg2.connect(
+                dbname=Environment.POSTGRES_DB,
+                user=Environment.POSTGRES_USER,
+                password=Environment.POSTGRES_PASSWORD,
+                host=Environment.POSTGRES_HOST,
+                port=Environment.POSTGRES_PORT,
+            )
+            conn.autocommit = True
+            cur = conn.cursor()
+
+            cur.execute("SELECT id FROM users WHERE email = %s", (email,))
+            user = cur.fetchone()
+
+            if user:
+                user_id = str(user[0])
+            else:
+                cur.execute(
+                    """
+                    INSERT INTO users (email, role, name, profile_picture)
+                    VALUES (%s, %s, %s, %s)
+                    RETURNING id
+                """,
+                    (email, role, username, picture),
+                )
+                user_id = str(cur.fetchone()[0])
+
+            cur.close()
+            conn.close()
+
+            # 🍪 Store cookies
             self.set_secure_cookie("email", email)
             self.set_secure_cookie("role", role)
             self.set_secure_cookie("profile_picture", picture)
@@ -45,8 +88,17 @@ class LoginAPIHandler(BaseHandler):
             self.set_secure_cookie("family_name", family_name)
             self.set_secure_cookie("hd", hd)
             self.set_secure_cookie("email_verified", str(email_verified))
+            self.set_secure_cookie("user_id", user_id)
 
-            self.write({"success": True, "message": "Login successful", "role": role})
+            self.write(
+                {
+                    "success": True,
+                    "message": "Login successful",
+                    "role": role,
+                    "user_id": user_id,
+                }
+            )
+
         except ValueError as e:
             print("TOKEN VERIFICATION ERROR:", e)
             self.set_status(401)

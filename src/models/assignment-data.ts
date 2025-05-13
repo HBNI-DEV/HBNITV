@@ -1,4 +1,4 @@
-import { QuestionData } from "./question-data";
+import { Question } from "./question";
 import { UserData } from "./user-data";
 
 export interface AssignmentData {
@@ -10,6 +10,7 @@ export interface AssignmentData {
     createdAt: string;     // ISO format
     updatedAt: string;    // Optional, when assignment was last edited
     tags: string[];       // Optional, for categorization (e.g., ['math', 'grade-4'])
-    questions: QuestionData[];
+    questions: Question[];
+    lastSyncedAt: Date | null;
     synced?: boolean;
 }

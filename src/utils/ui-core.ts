@@ -8,7 +8,7 @@ import { ProfileDialog } from "@components/profile-dialog";
 import { SnackbarLogin } from "@components/snackbar-login";
 
 export async function initializeCoreUI() {
-    document.body.classList.add("hidden");
+    // document.body.classList.add("hidden");
     try {
         await Promise.all([
             loadTheme(),
@@ -24,7 +24,7 @@ export async function initializeCoreUI() {
 
     initDialogs([ProfileDialog, NavigationDialog, LoginDialog]);
     initInstall();
-    document.body.classList.remove("hidden");
+    // document.body.classList.remove("hidden");
 }
 
 function mount(

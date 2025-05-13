@@ -31,9 +31,7 @@ export class Header {
                         <li onclick="window.location.href='/admin/register'">
                             <i>person_add</i><span>Register</span>
                         </li>
-                        <li onclick="window.location.href='/admin/assignments'">
-                            <i>folder_open</i><span>Assignments</span>
-                        </li>`
+                        `
                             : ""
                     }
                 </menu>

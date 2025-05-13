@@ -36,6 +36,11 @@ class BaseHandler(RequestHandler):
         self.write(rendered_template)
 
     @property
+    def current_user_id(self):
+        user_id = self.get_secure_cookie("user_id")
+        return user_id.decode("utf-8") if user_id else None
+
+    @property
     def current_role(self):
         role = self.get_secure_cookie("role")
         return role.decode("utf-8") if role else None

@@ -12,3 +12,4 @@ class LogoutAPIHandler(BaseHandler):
         self.clear_cookie("hd")
         self.clear_cookie("email_verified")
         self.clear_cookie("email")
+        self.clear_cookie("user_id")

@@ -1,3 +1,5 @@
+import { User } from "@models/user";
+
 export class NavigationDialog {
     navMedium: HTMLElement;
     navSmall: HTMLElement;
@@ -28,6 +30,7 @@ export class NavigationDialog {
             ${this.link("news", "news", "News")}
             ${this.link("calendar", "calendar_today", "Calendar")}
             ${this.link("classes", "video_library", "Classes")}
+            ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/assignments", "folder_open", "Assign...") : ""}
         `;
 
         return { navMedium, navSmall };
@@ -63,10 +66,7 @@ export class NavigationDialog {
             ${this.link("calendar", "calendar_today", "Calendar")}
             ${this.link("classes", "video_library", "Classes")}
             ${this.link("settings", "settings", "Settings")}
-            <a id="install">
-                <i>download</i>
-                <span>Install</span>
-            </a>
+            ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/assignments", "folder_open", "Assign...") : ""}
         `;
     }
 
@@ -115,7 +115,7 @@ export class NavigationDialog {
     private setCurrentTab(): void {
         const header = document.querySelector("#header") as HTMLElement;
         // make first letter uppercase
-        header.innerText = window.location.pathname.replace(/^\//, "").replace(/\//g, " ").replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+        header.innerText = window.location.pathname.replace(/^\//, "").replace(/\//g, " ").replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase()).replace("Admin ", "");
         const path = window.location.pathname;
         const currentTabs = this.tabs[path];
         if (currentTabs) {

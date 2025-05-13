@@ -1,4 +1,5 @@
 import json
+
 from app.handlers.generic_page import GenericPageHandler
 from app.routes.helpers import route
 

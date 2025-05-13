@@ -2,6 +2,7 @@ import { AssignmentData } from "./assignment-data";
 import { Question } from "./question";
 import { UserData } from "./user-data";
 import { defaultUser, User } from './user';
+import { QuestionData } from "./question-data";
 
 export class Assignment implements AssignmentData {
     private _data: AssignmentData;
@@ -20,7 +21,12 @@ export class Assignment implements AssignmentData {
             updatedAt: data?.updatedAt ?? "",
             tags: data?.tags ?? [],
             questions: data?.questions?.map(q => new Question(q)) ?? [],
+            lastSyncedAt: data?.lastSyncedAt ? new Date(data.lastSyncedAt) : null,
         };
+        console.log("Raw data:", data);
+        console.log("Raw questions:", data?.questions);
+        console.log("Mapped questions:", data?.questions?.map(q => new Question(q)));
+
         this.synced = (data as any)?.synced ?? false;
     }
 
@@ -54,7 +60,10 @@ export class Assignment implements AssignmentData {
     get tags() { return this._data.tags; }
     set tags(value: string[]) { this._data.tags = value; this.emitChange(); }
 
-    get questions() { return this._data.questions.map(q => new Question(q)); }
+    get lastSyncedAt() { return this._data.lastSyncedAt; }
+    set lastSyncedAt(value: Date | null) { this._data.lastSyncedAt = value; this.emitChange(); }
+
+    get questions() { return this._data.questions }
     set questions(value: Question[]) { this._data.questions = value; this.emitChange(); }
 
     addQuestion(question: Question): void {
@@ -69,9 +78,36 @@ export class Assignment implements AssignmentData {
         }
     }
 
-    toJSON(): AssignmentData {
+    getSmartTimeAgo(): string {
+        if (!this.lastSyncedAt) return "Synced";
+
+        const now = new Date();
+        const seconds = Math.floor((now.getTime() - this.lastSyncedAt.getTime()) / 1000);
+
+        if (seconds < 5) return "Synced just now";
+        if (seconds < 60) return `Synced ${seconds} seconds ago`;
+
+        const minutes = Math.floor(seconds / 60);
+        if (minutes < 60) return `Synced ${minutes} minute${minutes > 1 ? "s" : ""} ago`;
+
+        const hours = Math.floor(minutes / 60);
+        if (hours < 24) return `Synced ${hours} hour${hours > 1 ? "s" : ""} ago`;
+
+        const days = Math.floor(hours / 24);
+        if (days === 1) return `Synced yesterday`;
+        if (days < 365) return `Synced ${days} day${days > 1 ? "s" : ""} ago`;
+
+        return `Synced on ${this.lastSyncedAt.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}`;
+    }
+
+    getPoints(): number {
+        return this.questions.reduce((total, question) => total + question.worth, 0);
+    }
+
+    toJSON(): Omit<AssignmentData, "questions"> & { questions: QuestionData[] } {
         return {
-            ...this._data
+            ...this._data,
+            questions: this._data.questions.map(q => q.toJSON()),
         };
     }
 }

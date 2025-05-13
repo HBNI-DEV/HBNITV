@@ -21,21 +21,8 @@ function isAppInstalled(): boolean {
 
 function hideInstallUI() {
     console.log("Hiding install UI");
-
-    document.querySelectorAll("#install").forEach((btn) => {
-        console.log("Hiding install button:", btn);
-
-        btn.classList.add("hidden");
-    });
-
     const snackbar = document.querySelector("#install-snackbar");
     if (snackbar) snackbar.classList.add("hidden");
-}
-
-function showInstallButton() {
-    document.querySelectorAll("#install").forEach((btn) => {
-        btn.classList.remove("hidden");
-    });
 }
 
 function showInstallSnackbar() {
@@ -62,7 +49,6 @@ window.addEventListener("beforeinstallprompt", (event) => {
 
     if (!isAppInstalled()) {
         showInstallSnackbar();
-        showInstallButton();
     } else {
         hideInstallUI();
     }
@@ -76,12 +62,7 @@ window.addEventListener("appinstalled", () => {
 export function initInstall() {
     if (isAppInstalled()) {
         hideInstallUI();
-    } else {
-        showInstallButton();
     }
-    document.querySelectorAll("#install").forEach((btn) => {
-        btn.addEventListener("click", handleInstallClick);
-    });
 
     const installSnackbarButton = document.getElementById(
         "install-snackbar-btn",

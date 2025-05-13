@@ -29,18 +29,18 @@
     </head>
     <header>
     </header>
-    <body class="light">
+    <body onload="document.body.classList.add('loaded')" class="light">
         <main class="responsive">
-            <article class="padding grid">
-                <h5>Assignments</h5>
-                <div id="assignments-list" class="grid"></div>
-                <button class ="s12 m6 l3 padding primary small-round" id="create-assignment">
-                    <i>assignment</i>
-                    <span>Create Assignment</span>
-                </button>
-            </article>
+            <div id="assignments-list" class="grid"></div>
         </main>
     </body>
+    <footer class="transparent">
+        <nav class="right-align">
+            <button class="square round extra primary" id="create-assignment">
+                <i>add</i>
+            </button>
+        </nav>
+    </footer>
     {% if is_logged_in %}
     <script>
         window.USER = {

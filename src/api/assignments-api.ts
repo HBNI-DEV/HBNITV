@@ -24,7 +24,9 @@ export class AssignmentsAPI {
         }
 
         const result = await response.json();
-        return new Assignment(result.data);
+        const assignment = new Assignment(result.data);
+
+        return assignment;
     }
 
     static async getAllAssignments(): Promise<Assignment[]> {

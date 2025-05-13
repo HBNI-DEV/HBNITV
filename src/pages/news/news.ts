@@ -5,6 +5,7 @@ import { News } from "@models/news";
 import { NewsAPI } from "@api/news-api";
 import { Snackbar } from "@components/snackbar";
 import { SnackbarError } from "@components/snackbar-error";
+import { PreviewStyle } from "@toast-ui/editor";
 
 let Editor: typeof import('@toast-ui/editor').Editor;
 let Viewer: typeof import('@toast-ui/editor/dist/toastui-editor-viewer').default;
@@ -265,6 +266,8 @@ class CreateNewsPostPage {
     settings = new SettingsManager();
     editor!: InstanceType<typeof Editor>;
     newsPage: ViewNewsPage;
+    isMobile: boolean = false;
+    previewStyle: PreviewStyle = "vertical";
 
     constructor(newsPage: ViewNewsPage) {
         this.newsPage = newsPage;
@@ -272,6 +275,8 @@ class CreateNewsPostPage {
         this.postButtonElement = document.getElementById("post-button") as HTMLButtonElement;
         this.clearButtonElement = document.getElementById("clear-editor") as HTMLButtonElement;
         this.titleElement = document.getElementById("news-title") as HTMLInputElement;
+        this.isMobile = window.window.innerWidth <= 600;
+        this.previewStyle = this.isMobile ? "tab" : "vertical";
 
         this.init();
     }
@@ -291,7 +296,7 @@ class CreateNewsPostPage {
 
         this.editor = new Editor({
             el: document.querySelector("#editor") as HTMLElement,
-            previewStyle: "vertical",
+            previewStyle: this.previewStyle,
             height: "500px",
             initialEditType: "markdown",
             initialValue: savedContent,

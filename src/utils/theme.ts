@@ -65,8 +65,6 @@ function checkLogos(){
 }
 
 export async function loadTheme() {
-    document.body.style.display = 'none';
-
     const [theme, mode] = await Promise.all([
         appSettings.getSetting("theme", "#006493"),
         appSettings.getSetting("mode", "auto"),
@@ -79,8 +77,6 @@ export async function loadTheme() {
     ui("theme", theme);
 
     checkLogos();
-
-    document.body.style.removeProperty('display');
 }
 
 export function setTheme(color: string) {
