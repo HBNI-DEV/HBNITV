@@ -1,25 +1,33 @@
+import asyncio
+
 from tornado.httpserver import HTTPServer
-from tornado.ioloop import IOLoop
 from tornado.web import Application
 
 from app.config.environments import Environment
 from app.routes import url_patterns
+from app.utils.class_cache import start_cache_updater, update_class_cache
 
 
 class TornadoApp(Application):
     def __init__(self):
-        Application.__init__(
-            self, url_patterns, cookie_secret="hbni-itv-secret", static_hash_cache=True
+        super().__init__(
+            url_patterns,
+            cookie_secret="hbni-itv-secret",
+            static_hash_cache=True,
         )
 
 
-def main():
+async def main():
+    await update_class_cache()
+    start_cache_updater()
+
     print(f"🔧 Starting Tornado on port {Environment.PORT}...")
     app = TornadoApp()
     http_server = HTTPServer(app)
     http_server.listen(Environment.PORT)
-    IOLoop.instance().start()
+
+    await asyncio.Event().wait()
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

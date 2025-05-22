@@ -1,26 +1,85 @@
+import io
+
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+from googleapiclient.http import MediaIoBaseDownload
 
 from app.config.environments import Environment
 
-SCOPES = [
-    "https://www.googleapis.com/auth/admin.directory.user",
-    "https://www.googleapis.com/auth/admin.directory.group.member",
-]
 
-
-def get_directory_service():
+def get_workspace_directory_service():
     credentials = service_account.Credentials.from_service_account_file(
-        Environment.SERVICE_ACCOUNT_FILE, scopes=SCOPES
+        Environment.SERVICE_ACCOUNT_FILE,
+        scopes=[
+            "https://www.googleapis.com/auth/admin.directory.user",
+            "https://www.googleapis.com/auth/admin.directory.group.member",
+        ],
     ).with_subject(Environment.DELEGATED_ADMIN)
 
     return build("admin", "directory_v1", credentials=credentials)
 
 
-def create_user_if_not_exists(
-    directory, user_info: dict[str, str], org_unit="/Students"
-):
+def get_drive_service():
+    credentials = service_account.Credentials.from_service_account_file(
+        Environment.SERVICE_ACCOUNT_FILE,
+        scopes=["https://www.googleapis.com/auth/drive.readonly"],
+    ).with_subject(Environment.DELEGATED_ADMIN)
+
+    return build("drive", "v3", credentials=credentials)
+
+
+def list_mp4_files_in_folder(drive, folder_id: str) -> list[dict]:
+    query = f"'{folder_id}' in parents and mimeType='video/mp4' and trashed=false"
+    try:
+        response = (
+            drive.files()
+            .list(
+                q=query,
+                spaces="drive",
+                fields="files(id, name, mimeType)",
+            )
+            .execute()
+        )
+
+        return response.get("files", [])
+    except HttpError as error:
+        print(f"An error occurred: {error}")
+        return []
+
+
+def get_file_metadata(drive, file_id: str) -> dict:
+    try:
+        return (
+            drive.files()
+            .get(
+                fileId=file_id,
+                fields="id, name, mimeType, thumbnailLink, size, createdTime, modifiedTime, owners, webViewLink, webContentLink, videoMediaMetadata",
+            )
+            .execute()
+        )
+    except HttpError as error:
+        print(f"An error occurred: {error}")
+        return {}
+
+
+def download_file(drive, file_id: str, destination_path: str):
+    try:
+        request = drive.files().get_media(fileId=file_id)
+        fh = io.FileIO(destination_path, "wb")
+        downloader = MediaIoBaseDownload(fh, request)
+
+        done = False
+        while not done:
+            status, done = downloader.next_chunk()
+            print(f"Download progress: {int(status.progress() * 100)}%")
+    except HttpError as error:
+        print(f"An error occurred: {error}")
+
+
+def create_user_if_not_exists(user_info: dict[str, str], org_unit="/Students"):
+    directory = get_workspace_directory_service()
+
     email = user_info["email"]
     given_name = user_info["given_name"]
     family_name = user_info["family_name"]

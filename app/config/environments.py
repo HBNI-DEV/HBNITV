@@ -20,3 +20,4 @@ class Environment:
     CLOCK_SKEW_IN_SECONDS = int(os.getenv("CLOCK_SKEW_IN_SECONDS", 0))
     SERVICE_ACCOUNT_FILE = os.getenv("SERVICE_ACCOUNT_FILE")
     DELEGATED_ADMIN = os.getenv("DELEGATED_ADMIN")
+    CLASSES_FOLDER_ID = os.getenv("CLASSES_FOLDER_ID")

@@ -2,6 +2,7 @@ import json
 
 from app.handlers.generic_page import GenericPageHandler
 from app.routes.helpers import route
+from app.utils.class_cache import classes_cache
 
 
 def load_view_routes(config_path="app/routes/routes.json"):
@@ -12,7 +13,17 @@ def load_view_routes(config_path="app/routes/routes.json"):
     for page in pages:
         path = page["path"]
         template = page["template"]
-        view_routes.append(route(path, GenericPageHandler, template_name=template))
+        if template == "classes.html":
+            view_routes.append(
+                route(
+                    path,
+                    GenericPageHandler,
+                    template_name=template,
+                    extra_context={"classes": classes_cache},
+                )
+            )
+        else:
+            view_routes.append(route(path, GenericPageHandler, template_name=template))
 
     return view_routes
 

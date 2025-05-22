@@ -30,10 +30,7 @@ class RegisterAPIHandler(BaseHandler):
         }
 
         try:
-            directory = google_api.get_directory_service()
-
             result = google_api.create_user_if_not_exists(
-                directory,
                 user_info,
                 org_unit=f"/{colony}",
             )
