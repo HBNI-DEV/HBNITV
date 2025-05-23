@@ -1,5 +1,6 @@
 from app.handlers.api.assignment import AssignmentAPIHandler
 from app.handlers.api.classes import ClassesAPIHandler
+from app.handlers.api.google_share_folder_ids import SharedGoogleFolderIDsAPIHandler
 from app.handlers.api.login import LoginAPIHandler
 from app.handlers.api.logout import LogoutAPIHandler
 from app.handlers.api.news import NewsAPIHandler
@@ -15,4 +16,9 @@ api_routes = [
     route(r"/api/assignment", AssignmentAPIHandler, name="api_assignment"),
     route(r"/api/classes", ClassesAPIHandler, name="api_classes"),
     route(r"/api/thumbnail", ThumbnailProxyHandler, name="api_thumbnail"),
+    route(
+        r"/api/shared_google_folder_ids",
+        SharedGoogleFolderIDsAPIHandler,
+        name="api_shared_google_folder_ids",
+    ),
 ]

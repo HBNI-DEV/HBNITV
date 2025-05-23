@@ -54,6 +54,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (video && spinner) {
         const iFrame = document.createElement("iframe");
         iFrame.src = `https://drive.google.com/file/d/${id}/preview`;
+        iFrame.classList.add("small-round");
         iFrame.setAttribute("allowfullscreen", "");
         iFrame.setAttribute("frameborder", "0");
         iFrame.setAttribute("width", "100%");

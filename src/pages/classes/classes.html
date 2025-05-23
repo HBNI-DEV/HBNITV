@@ -29,7 +29,7 @@
                 {% if is_logged_in %}
                 <div class="grid" id="classes-page">
                     {% for class_id, class_data in classes.items() %}
-                    <article class="no-padding s12 m6 l4 round clickable" onclick="window.location.href='/classes/watch?id={{ class_id}}'">
+                    <article class="no-padding s12 m6 l4 round clickable" onclick="window.location.href='/classes/watch?id={{ class_id }}'">
                         <img class="responsive small top-round" src="/api/thumbnail?link={{ class_data.thumbnailLink }}" alt="Thumbnail" />
                         <div class="padding">
                             <p class="bold">{{ class_data.name }}</p>

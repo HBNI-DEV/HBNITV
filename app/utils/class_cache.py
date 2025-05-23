@@ -1,6 +1,7 @@
 import asyncio
 from datetime import datetime, timezone
 
+import psycopg2
 from tornado.ioloop import PeriodicCallback
 
 from app.config.environments import Environment
@@ -26,25 +27,46 @@ def format_created_time(iso_time_str: str) -> tuple[str, str]:
     return readable_date, relative
 
 
+def get_shared_folders_from_db() -> list[tuple[str, str]]:
+    conn = psycopg2.connect(
+        dbname=Environment.POSTGRES_DB,
+        user=Environment.POSTGRES_USER,
+        password=Environment.POSTGRES_PASSWORD,
+        host=Environment.POSTGRES_HOST,
+        port=Environment.POSTGRES_PORT,
+    )
+    cur = conn.cursor()
+    try:
+        cur.execute("""
+            SELECT folder_id, delegated_email
+            FROM shared_google_folders
+        """)
+        return cur.fetchall()
+    finally:
+        cur.close()
+        conn.close()
+
+
 async def update_class_cache():
     try:
-        drive_service = google_api.get_drive_service()
-        mp4_files = google_api.list_mp4_files_in_folder(
-            drive_service, Environment.CLASSES_FOLDER_ID
-        )
-
         classes_cache.clear()
+        folders = get_shared_folders_from_db()
 
-        for file in mp4_files:
-            metadata = google_api.get_file_metadata(drive_service, file["id"])
-            created_time = metadata.get("createdTime")
+        for folder_id, delegated_email in folders:
+            drive_service = google_api.get_drive_credentials(delegated_email)
+            mp4_files = google_api.list_mp4_files_in_folder(drive_service, folder_id)
 
-            if created_time:
-                readable, relative = format_created_time(created_time)
-                metadata["createdTimeReadable"] = readable
-                metadata["createdTimeRelative"] = relative
+            for file in mp4_files:
+                metadata = google_api.get_file_metadata(drive_service, file["id"])
+                metadata["delegatedEmail"] = delegated_email
+                created_time = metadata.get("createdTime")
 
-            classes_cache[file["id"]] = metadata
+                if created_time:
+                    readable, relative = format_created_time(created_time)
+                    metadata["createdTimeReadable"] = readable
+                    metadata["createdTimeRelative"] = relative
+
+                classes_cache[file["id"]] = metadata
     except Exception as e:
         print(f"[ClassCache] ❌ Error updating cache: {e}")
 
