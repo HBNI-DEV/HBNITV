@@ -7,7 +7,13 @@ body:not(.loaded) {
 }
 
 .clickable {
+    transition: box-shadow 0.3s ease;
     cursor: pointer !important;
+    box-shadow: var(--elevate1);
+}
+
+.clickable:hover {
+    box-shadow: var(--elevate3);
 }
 
 #latex-preview .text {

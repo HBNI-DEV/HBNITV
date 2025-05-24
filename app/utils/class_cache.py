@@ -47,7 +47,7 @@ def get_shared_folders_from_db() -> list[tuple[str, str]]:
         conn.close()
 
 
-async def update_class_cache():
+def update_class_cache():
     try:
         classes_cache.clear()
         folders = get_shared_folders_from_db()
@@ -72,4 +72,10 @@ async def update_class_cache():
 
 
 def start_cache_updater():
-    PeriodicCallback(lambda: asyncio.ensure_future(update_class_cache()), 60000).start()
+    async def run_in_thread():
+        await asyncio.to_thread(update_class_cache)
+
+    PeriodicCallback(
+        lambda: asyncio.ensure_future(run_in_thread()),
+        60000 * Environment.UPDATE_CLASS_CACHE_INTERVAL_MINUTES,
+    ).start()

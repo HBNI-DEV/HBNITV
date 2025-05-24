@@ -194,7 +194,7 @@ def cache_folders_and_users():
         DELEGATED_USER = user["primaryEmail"]
         credentials = service_account.Credentials.from_service_account_file(
             Environment.SERVICE_ACCOUNT_FILE,
-            scopes=["https://www.googleapis.com/auth/drive.readonly"],
+            scopes=["https://www.googleapis.com/auth/drive"],
         ).with_subject(DELEGATED_USER)
 
         drive_service = build("drive", "v3", credentials=credentials)
@@ -222,7 +222,22 @@ def cache_folders_and_users():
 
             try:
                 _insert_shared_folder(folder["id"], DELEGATED_USER)
-                print(f"[CACHE] Folder cached: {folder_id}")
+                print(
+                    f"[CACHE] Folder cached: {folder_id} delegated to {DELEGATED_USER}"
+                )
+                permission = {
+                    "type": "anyone",
+                    "role": "reader",
+                    "allowFileDiscovery": False,
+                }
+
+                drive_service.permissions().create(
+                    fileId=folder_id,
+                    body=permission,
+                    supportsAllDrives=True,
+                    fields="id",
+                ).execute()
+                print(f"[PERMISSION] Shared {folder_id} with hbni.net (link-only)")
             except Exception as api_err:
                 print(f"[ERROR] Failed to cache folder {folder_id}: {api_err}")
 
@@ -257,6 +272,10 @@ def move_files():
 
 
 def start_folder_cache_updater():
+    async def run_in_thread():
+        await asyncio.to_thread(cache_folders_and_users)
+
     PeriodicCallback(
-        lambda: asyncio.ensure_future(cache_folders_and_users()), 60000
+        lambda: asyncio.ensure_future(run_in_thread()),
+        60000 * Environment.UPDATE_GOOGLE_SHARED_FOLDERS_INTERVAL_MINUTES,
     ).start()
