@@ -13,6 +13,8 @@ class GenericPageHandler(BaseHandler):
         self.extra_context = extra_context or {}
 
     def prepare(self):
+        self.set_header("Cache-Control", "no-store")
+
         if self.required_roles:
             role = self.current_role
             if not role or role not in self.required_roles:

@@ -123,7 +123,7 @@ def create_user_if_not_exists(user_info: dict[str, str], org_unit="/Students"):
             raise
 
 
-def list_users():
+def list_users(domain: str):
     credentials = service_account.Credentials.from_service_account_file(
         Environment.SERVICE_ACCOUNT_FILE,
         scopes=["https://www.googleapis.com/auth/admin.directory.user.readonly"],
@@ -138,7 +138,7 @@ def list_users():
             service.users()
             .list(
                 customer="my_customer",
-                domain="hbni.net",
+                domain=domain,
                 maxResults=100,
                 pageToken=page_token,
                 orderBy="email",
@@ -190,7 +190,7 @@ def _insert_shared_folder(folder_id: str, delegated_email: str):
 
 
 def cache_folders_and_users():
-    for user in list_users():
+    for user in list_users("hbni.net"):
         DELEGATED_USER = user["primaryEmail"]
         credentials = service_account.Credentials.from_service_account_file(
             Environment.SERVICE_ACCOUNT_FILE,

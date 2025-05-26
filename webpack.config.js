@@ -152,7 +152,7 @@ module.exports = {
             runtimeCaching: [
                 {
                     urlPattern: ({ request }) => request.mode === 'navigate',
-                    handler: 'NetworkFirst',
+                    handler: 'NetworkOnly',
                     options: {
                         cacheName: 'html-pages',
                     },
