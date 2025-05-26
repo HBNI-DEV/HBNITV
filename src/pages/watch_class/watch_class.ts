@@ -53,13 +53,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (video && spinner) {
         const iFrame = document.createElement("iframe");
+        const wrapper = document.createElement("div");
+        wrapper.classList.add("aspect-ratio-16-9");
+        wrapper.appendChild(iFrame);
         iFrame.src = `https://drive.google.com/file/d/${id}/preview`;
         iFrame.classList.add("small-round");
         iFrame.setAttribute("allowfullscreen", "");
         iFrame.setAttribute("frameborder", "0");
-        iFrame.setAttribute("width", "100%");
-        iFrame.setAttribute("height", "680");
         iFrame.setAttribute("allow", "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture");
+        iFrame.style.width = "100%";
+        iFrame.style.height = "100%";
         iFrame.onload = () => {
             spinner.style.display = "none";
             video.style.display = "block";
@@ -69,6 +72,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
         };
 
-        video.appendChild(iFrame);
+        video.appendChild(wrapper);
     }
 });
