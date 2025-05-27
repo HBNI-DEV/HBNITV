@@ -126,7 +126,10 @@ def create_user_if_not_exists(user_info: dict[str, str], org_unit="/Students"):
 def list_users(domain: str):
     credentials = service_account.Credentials.from_service_account_file(
         Environment.SERVICE_ACCOUNT_FILE,
-        scopes=["https://www.googleapis.com/auth/admin.directory.user.readonly"],
+        scopes=[
+            "https://www.googleapis.com/auth/admin.directory.user",
+            "https://www.googleapis.com/auth/admin.directory.group.member",
+        ],
     ).with_subject(Environment.DELEGATED_ADMIN)
     service = build("admin", "directory_v1", credentials=credentials)
 
