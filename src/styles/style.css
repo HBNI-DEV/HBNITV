@@ -7,13 +7,13 @@ body:not(.loaded) {
 }
 
 .clickable {
-    transition: box-shadow 0.3s ease;
+    transition: box-shadow 0.3s ease !important;
     cursor: pointer !important;
-    box-shadow: var(--elevate1);
+    box-shadow: var(--elevate1) !important;
 }
 
 .clickable:hover {
-    box-shadow: var(--elevate3);
+    box-shadow: var(--elevate3) !important;
 }
 
 #latex-preview .text {
@@ -49,6 +49,7 @@ body:not(.loaded) {
 .fade-in.show {
     opacity: 1;
 }
+
 .aspect-ratio-16-9 {
   position: relative;
   width: 100%;

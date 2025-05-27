@@ -15,6 +15,10 @@ export class News implements NewsData {
     userData!: UserData;
 
     private eventTarget = new EventTarget();
+    createdAtReadable: string;
+    createdAtRelative: string;
+    updatedAtReadable: string;
+    updatedAtRelative: string;
 
     constructor(data?: Partial<NewsData>) {
         const now = new Date().toISOString();
@@ -27,6 +31,30 @@ export class News implements NewsData {
             updatedAt: data?.updatedAt ?? now,
         };
         this.synced = (data as any)?.synced ?? false;
+        this.createdAtReadable = this.formatDateTime(this._data.createdAt).readable;
+        this.createdAtRelative = this.formatDateTime(this._data.createdAt).relative;
+        this.updatedAtReadable = this.formatDateTime(this._data.updatedAt).readable;
+        this.updatedAtRelative = this.formatDateTime(this._data.updatedAt).relative;
+    }
+
+    formatDateTime(isoString: string): { readable: string; relative: string } {
+        const date = new Date(isoString);
+        const now = new Date();
+        const diffTime = now.getTime() - date.getTime();
+        const daysAgo = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+        const readable = new Intl.DateTimeFormat("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true,
+        }).format(date);
+
+        const relative = daysAgo === 0 ? "Today" : `${daysAgo} day${daysAgo !== 1 ? "s" : ""} ago`;
+
+        return { readable, relative };
     }
 
     onChange(listener: (news: News) => void): void {

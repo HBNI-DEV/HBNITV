@@ -115,7 +115,13 @@ export class NavigationDialog {
     private setCurrentTab(): void {
         const header = document.querySelector("#header") as HTMLElement;
         // make first letter uppercase
-        header.innerText = window.location.pathname.replace(/^\//, "").replace(/\//g, " ").replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase()).replace("Admin ", "");
+        const pathParts = window.location.pathname.split("/").filter(Boolean);
+        const lastSegment = pathParts[pathParts.length - 1] || "";
+
+        header.innerText = lastSegment
+            .replace(/-/g, " ")
+            .replace(/\b\w/g, c => c.toUpperCase())
+            .replace("Admin ", "");
         const path = window.location.pathname;
         const currentTabs = this.tabs[path];
         if (currentTabs) {

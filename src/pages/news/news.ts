@@ -99,7 +99,7 @@ class ViewNewsPage {
                 </div>
             </nav>
             <h5 id="dialog-title">${news.title}</h5>
-            <span style="color: var(--on-surface-variant);" id="created-at">${news.createdAt}</span>
+            <span style="color: var(--on-surface-variant);" id="created-at">${news.createdAtReadable} (${news.createdAtRelative})</span>
             <div id="latest-news-viewer"></div>
         `;
 
@@ -119,8 +119,8 @@ class ViewNewsPage {
         htmlElement.innerHTML = `
             <article class="s12 m6 l4 round no-space fade-in clickable">
                 <h5 class="small">${news.title}</h5>
-                <span style="color: var(--on-surface-variant);" id="created-at"></span>
-                <blockquote>${news.content.slice(0, 250)}...<button id="updated-button" class="badge none no-border no-padding no-margin transparent ripple hidden"><span style="color: var(--on-surface-variant);">(Edited)</span><div id="updated-at" class="tooltip">${news.updatedAt}</div></button></blockquote>
+                <span style="color: var(--on-surface-variant);" id="created-at">${news.createdAtReadable} (${news.createdAtRelative})</span>
+                <blockquote>${news.content.slice(0, 250)}...<button id="updated-button" class="badge none no-border no-padding no-margin transparent ripple hidden"><span style="color: var(--on-surface-variant);">(Edited)</span><div id="updated-at" class="tooltip">${news.updatedAtReadable} (${news.updatedAtRelative})</div></button></blockquote>
                 <nav class="row top-margin">
                     <img class="circle" src="${news.user_info.profile_picture}" alt="Profile Picture" />
                     <div class="max">
@@ -135,7 +135,7 @@ class ViewNewsPage {
         articleElement.addEventListener("click", () => this.openDialogWithArticle(news));
 
         const createdAt = articleElement.querySelector("#created-at") as HTMLSpanElement;
-        createdAt.innerText = news.createdAt;
+        createdAt.innerText = `${news.createdAtReadable} (${news.createdAtRelative})`;
 
         const updateButton = articleElement.querySelector("#updated-button") as HTMLButtonElement;
         if (news.updatedAt != news.createdAt) {
@@ -223,7 +223,7 @@ class ViewNewsPage {
         // updatedAt.innerText = article.updatedAt;
 
         const createdAt = this.dialogElement.querySelector("#created-at") as HTMLSpanElement;
-        createdAt.innerText = news.createdAt;
+        createdAt.innerText = `${news.createdAtReadable} (${news.createdAtRelative})`;
 
         ui("#news-dialog");
     }
