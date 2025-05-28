@@ -37,22 +37,23 @@
                     <label>Title</label>
                 </div>
                 <div class="s12" id="question-elements"></div>
+                <button class="round extra primary s12" id="add-question-button">
+                    <i>add</i>
+                    <span>Add Question</span>
+                </button>
             </div>
         </main>
     </body>
-    <footer class="fixed surface-container">
+    <footer class="fixed transparent">
         <nav>
             <div class="max"></div>
-            <button class="chip" id="sync-status-button">
+            <button class="square round extra primary" id="sync-status-button">
                 <progress class="circle small hidden" id="sync-progress"></progress>
-                <i id="sync-status-icon">check_circle</i>
-                <span id="sync-status-text">Synced</span>
-                <div class="tooltip top">
+                <i id="sync-status-icon">save</i>
+                <span id="sync-status-text">Save</span>
+                <div class="tooltip left">
                     <span id="sync-last-updated"></span>
                 </div>
-            </button>
-            <button class="square round extra primary" id="add-question-button">
-                <i>add</i>
             </button>
         </nav>
     </footer>
@@ -68,6 +69,7 @@
             given_name: "{{ given_name }}",
             family_name: "{{ family_name }}",
             is_logged_in: "{{ is_logged_in }}",
+            user_id: "{{ user_id }}",
         };
     </script>
     {% endif %}

@@ -1,5 +1,8 @@
+import os
+
 import psycopg2
-from google.auth.transport import requests
+import requests
+from google.auth.transport import requests as google_requests
 from google.oauth2 import id_token
 
 from app.config.environments import Environment
@@ -17,7 +20,7 @@ class LoginAPIHandler(BaseHandler):
         try:
             idinfo = id_token.verify_oauth2_token(
                 token,
-                requests.Request(),
+                google_requests.Request(),
                 Environment.CLIENT_ID,
                 clock_skew_in_seconds=Environment.CLOCK_SKEW_IN_SECONDS,
             )
@@ -90,6 +93,8 @@ class LoginAPIHandler(BaseHandler):
             self.set_secure_cookie("email_verified", str(email_verified))
             self.set_secure_cookie("user_id", user_id)
 
+            self.cache_google_photo(user_id, picture)
+
             self.write(
                 {
                     "success": True,
@@ -103,3 +108,17 @@ class LoginAPIHandler(BaseHandler):
             print("TOKEN VERIFICATION ERROR:", e)
             self.set_status(401)
             self.write({"success": False, "message": f"{e}"})
+
+    def cache_google_photo(self, user_id: str, photo_url: str):
+        cache_dir = "static/profiles"
+        os.makedirs(cache_dir, exist_ok=True)
+        local_path = os.path.join(cache_dir, f"{user_id}.jpg")
+
+        if not os.path.exists(local_path):
+            print(f"Downloading and caching photo for {user_id}")
+            response = requests.get(photo_url, stream=True)
+            if response.status_code == 200:
+                with open(local_path, "wb") as f:
+                    for chunk in response.iter_content(1024):
+                        f.write(chunk)
+        return f"/static/profiles/{user_id}.jpg"

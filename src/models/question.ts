@@ -10,6 +10,7 @@ export class Question implements QuestionData {
             worth: data?.worth ?? 5,
             questionSpace: data?.questionSpace ?? 0.5,
             question: data?.question ?? "",
+            open: data?.open ?? true,
             answer: data?.answer ?? "",
         };
     }
@@ -36,6 +37,9 @@ export class Question implements QuestionData {
 
     get answer() { return this._data.answer; }
     set answer(value: string) { this._data.answer = value; this.emitChange(); }
+
+    get open() { return this._data.open; }
+    set open(value: boolean) { this._data.open = value; this.emitChange(); }
 
     toJSON(): QuestionData {
         return { ...this._data };

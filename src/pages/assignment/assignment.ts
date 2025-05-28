@@ -9,6 +9,7 @@ import { Question } from "@models/question";
 import { SnackbarError } from "@components/snackbar-error";
 import { Snackbar } from "@components/snackbar";
 import { CookieManager } from "@managers/cookie-manager";
+import { createSwapy } from 'swapy'
 
 let assignmentPage: AssignmentPage | null = null;
 let syncStatusInterval: number | null = null;
@@ -20,6 +21,7 @@ class AssignmentPage {
     private saveDelayMs = 5000;
     syncStatusInterval: number | null = null;
     private destroyed = false;
+    private swapy: ReturnType<typeof createSwapy> | null = null;
 
     assignment!: Assignment;
     assignmentId: string;
@@ -52,7 +54,6 @@ class AssignmentPage {
 
     async init() {
         this.assignment = await this.fetchAssignment() as Assignment;
-
         if (this.assignment) {
             this.loadAssignment();
             this.startSyncStatusUpdater();
@@ -120,6 +121,37 @@ class AssignmentPage {
         this.questionElementDiv.innerHTML = "";
         this.assignmentTitleElement.value = this.assignment.title;
         this.assignment.questions.forEach(question => this.addQuestionElement(question));
+
+        this.swapy = createSwapy(this.questionElementDiv, {
+            animation: 'spring',
+            dragAxis: 'y',
+            autoScrollOnDrag: true,
+            swapMode: 'drop',
+        })
+        this.swapy.enable(true)
+
+        this.swapy.onSwap((event) => {
+            const slotToItem = event.newSlotItemMap.asMap;
+
+            console.log(slotToItem);
+
+            let newQuestionOrder: Question[] = [];
+
+            let index = 0;
+            slotToItem.forEach((slot, newSlot) => {
+                const slotNumber = parseInt(slot);
+                const newSlotNumber = parseInt(newSlot);
+                const questionElement = this.questionElements[index];
+                questionElement.updateQuestionNumber(newSlotNumber);
+                newQuestionOrder.push(this.assignment.questions[slotNumber-1]);
+                index++;
+            });
+
+            this.assignment.questions = newQuestionOrder;
+
+            this.saveOpenDetailsState();
+            this.scheduleSave();
+        });
     }
 
     private addQuestionElement(question: Question) {
@@ -128,7 +160,7 @@ class AssignmentPage {
         this.questionElementDiv.appendChild(questionElement.htmlElement);
         requestAnimationFrame(() => questionElement.htmlElement.classList.add('show'));
 
-        questionElement.htmlElement.addEventListener("toggle", () => {
+        questionElement.toggleQuestionButton.addEventListener("click", () => {
             this.saveOpenDetailsState();
         });
 
@@ -136,21 +168,47 @@ class AssignmentPage {
             const customEvent = event as CustomEvent;
             this.scheduleSave();
         });
+
+        questionElement.htmlElement.addEventListener("delete", () => {
+            this.assignment.removeQuestion(questionElement.questionNumber-1);
+            this.removeQuestionElement(questionElement);
+            this.scheduleSave();
+        });
+
         this.restoreDetailsState(questionElement);
+    }
+
+    private removeQuestionElement(questionElement: QuestionElement) {
+        const index = this.questionElements.indexOf(questionElement);
+        if (index !== -1) {
+            this.questionElements.splice(index, 1); // remove it from the array
+        }
+        questionElement.htmlElement.classList.remove('show');
+
+        setTimeout(() => {
+            if (questionElement.htmlElement.parentElement === this.questionElementDiv) {
+                this.questionElementDiv.removeChild(questionElement.htmlElement);
+                this.saveOpenDetailsState();
+                this.swapy?.update();
+            }
+        }, 300);
     }
 
     private createQuestionElement() {
         const newQuestion = new Question();
         this.assignment.addQuestion(newQuestion);
         this.addQuestionElement(newQuestion);
+        this.swapy?.update();
     }
 
     private saveOpenDetailsState() {
-        const openNumbers = this.questionElements
-            .filter(qe => qe.htmlElement.open)
-            .map(qe => qe.questionNumber);
-        const value = JSON.stringify(openNumbers);
-        CookieManager.setCookie(`openDetails-${this.assignmentId}`, value, 7);
+        const openIndexes = this.assignment.questions
+            .map((q, index) => q.open ? index + 1 : -1)
+            .filter(index => index !== -1);
+
+        console.log(openIndexes);
+
+        CookieManager.setCookie(`openDetails-${this.assignmentId}`, JSON.stringify(openIndexes), 365);
     }
 
     private startSyncStatusUpdater() {
@@ -174,8 +232,25 @@ class AssignmentPage {
         try {
             const openNumbers: number[] = JSON.parse(cookieValue);
             const isOpen = openNumbers.includes(questionElement.questionNumber);
-            const details = questionElement.htmlElement;
-            details.open = isOpen;
+            const wrapper = questionElement.htmlElement.querySelector(".question-content-wrapper") as HTMLElement;
+
+            if (isOpen) {
+                questionElement.questionItem.classList.add("open");
+                questionElement.question.open = true;
+
+                // Ensure styles are applied after layout is ready
+                wrapper.style.maxHeight = "0px";
+                wrapper.style.opacity = "0";
+                requestAnimationFrame(() => {
+                    wrapper.style.maxHeight = wrapper.scrollHeight + "px";
+                    wrapper.style.opacity = "1";
+                });
+            } else {
+                wrapper.style.maxHeight = "0px";
+                wrapper.style.opacity = "0";
+                questionElement.questionItem.classList.remove("open");
+                questionElement.question.open = false;
+            }
         } catch (e) {
             console.warn("Failed to parse openDetails cookie:", e);
         }
@@ -192,7 +267,7 @@ class AssignmentPage {
             this.saveAssignment().then(() => {
                 this.syncProgressElement.classList.add("hidden");
                 this.syncStatusIconElement.classList.remove("hidden");
-                this.syncStatusTextElement.innerText = "Synced";
+                this.syncStatusTextElement.innerText = "Save";
 
                 if (!this.syncStatusInterval) {
                     this.startSyncStatusUpdater();
@@ -210,6 +285,7 @@ class AssignmentPage {
         this.assignment.lastSyncedAt = new Date();
 
         await Promise.all([
+            this.saveOpenDetailsState(),
             this.assignmentManager.saveAssignment(this.assignment),
             AssignmentsAPI.saveAssignment(this.assignment),
         ])

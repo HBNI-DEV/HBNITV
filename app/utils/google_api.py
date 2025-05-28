@@ -1,5 +1,7 @@
 import asyncio
 import io
+import random
+import time
 
 import psycopg2
 from google.oauth2 import service_account
@@ -126,10 +128,7 @@ def create_user_if_not_exists(user_info: dict[str, str], org_unit="/Students"):
 def list_users(domain: str):
     credentials = service_account.Credentials.from_service_account_file(
         Environment.SERVICE_ACCOUNT_FILE,
-        scopes=[
-            "https://www.googleapis.com/auth/admin.directory.user",
-            "https://www.googleapis.com/auth/admin.directory.group.member",
-        ],
+        scopes=["https://www.googleapis.com/auth/admin.directory.user.readonly"],
     ).with_subject(Environment.DELEGATED_ADMIN)
     service = build("admin", "directory_v1", credentials=credentials)
 
@@ -165,6 +164,20 @@ def _get_connection():
         host=Environment.POSTGRES_HOST,
         port=Environment.POSTGRES_PORT,
     )
+
+
+def safe_execute(request, max_retries=5):
+    for attempt in range(max_retries):
+        try:
+            return request.execute()
+        except HttpError as e:
+            if e.resp.status in [500, 503]:
+                wait = (2**attempt) + random.uniform(0, 1)
+                print(f"[RETRY] API error {e.resp.status}. Retrying in {wait:.2f}s...")
+                time.sleep(wait)
+            else:
+                raise
+    raise Exception(f"Request failed after {max_retries} retries.")
 
 
 def _insert_shared_folder(folder_id: str, delegated_email: str):
@@ -208,15 +221,22 @@ def cache_folders_and_users():
             "and trashed = false"
         )
 
-        results = (
-            drive_service.files()
-            .list(
+        results = safe_execute(
+            drive_service.files().list(
                 q=query,
                 fields="files(id, name, parents)",
                 pageSize=1000,
             )
-            .execute()
         )
+        # results = (
+        #     drive_service.files()
+        #     .list(
+        #         q=query,
+        #         fields="files(id, name, parents)",
+        #         pageSize=1000,
+        #     )
+        #     .execute()
+        # )
 
         folders = results.get("files", [])
 

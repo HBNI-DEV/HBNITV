@@ -23,10 +23,6 @@ export class Assignment implements AssignmentData {
             questions: data?.questions?.map(q => new Question(q)) ?? [],
             lastSyncedAt: data?.lastSyncedAt ? new Date(data.lastSyncedAt) : null,
         };
-        console.log("Raw data:", data);
-        console.log("Raw questions:", data?.questions);
-        console.log("Mapped questions:", data?.questions?.map(q => new Question(q)));
-
         this.synced = (data as any)?.synced ?? false;
     }
 

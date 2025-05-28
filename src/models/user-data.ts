@@ -8,4 +8,5 @@ export interface UserData {
     given_name: string;
     family_name: string;
     is_logged_in: boolean;
+    user_id: string;
 }

@@ -5,7 +5,7 @@ from tornado.web import Application
 
 from app.config.environments import Environment
 from app.routes import url_patterns
-from app.utils.class_cache import start_cache_updater
+from app.utils.class_cache import start_cache_updater, update_class_cache
 from app.utils.google_api import start_folder_cache_updater
 
 
@@ -19,6 +19,7 @@ class TornadoApp(Application):
 
 
 async def main():
+    update_class_cache()
     start_cache_updater()
     start_folder_cache_updater()
 

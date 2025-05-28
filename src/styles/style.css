@@ -1,9 +1,13 @@
 body:not(.loaded) {
-  display:none;
+    display: none;
 }
 
-.hidden{
+.hidden {
     display: none !important;
+}
+
+.handle {
+    cursor: move;
 }
 
 .clickable {
@@ -14,6 +18,47 @@ body:not(.loaded) {
 
 .clickable:hover {
     box-shadow: var(--elevate3) !important;
+}
+
+.question-item>nav>button.toggle-question-button {
+    background-color: var(--surface-variant);
+    color: var(--on-surface-variant);
+}
+
+.question-item.open>nav>button.toggle-question-button {
+    background-color: var(--primary);
+    color: var(--on-primary);
+}
+
+.question-item>nav>button.toggle-question-button>nav>i {
+    transition: transform 0.3s ease;
+    transform: rotate(0deg);
+}
+
+.question-item.open>nav>button.toggle-question-button>nav>i {
+    transition: transform 0.3s ease;
+    transform: rotate(180deg);
+}
+
+.question-content-wrapper {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.question-item.open .question-content-wrapper {
+    max-height: 1000px;
+    /* set high enough */
+    opacity: 1;
+}
+
+.question-slot[data-swapy-highlighted] {
+    background: var(--surface-container-highest);
+}
+
+.question-item[data-swapy-dragging] {
+    opacity: 0.6;
 }
 
 #latex-preview .text {
@@ -33,11 +78,11 @@ body:not(.loaded) {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.page-break-inside{
+.page-break-inside {
     page-break-inside: avoid !important;
 }
 
-.field.min > textarea {
+.field.min>textarea {
     max-block-size: 100rem !important;
 }
 
@@ -51,20 +96,20 @@ body:not(.loaded) {
 }
 
 .aspect-ratio-16-9 {
-  position: relative;
-  width: 100%;
-  padding-top: 56.25%;
-  overflow: hidden;
-  border-radius: 1rem;
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%;
+    overflow: hidden;
+    border-radius: 1rem;
 }
 
 .aspect-ratio-16-9 iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
 }
 
 @keyframes fade-in {

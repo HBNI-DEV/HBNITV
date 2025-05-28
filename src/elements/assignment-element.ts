@@ -23,17 +23,17 @@ export class AssignmentElement {
 
     private init() {
         this.tagsElement.innerHTML = `
-            <div class="chip small-round">
+            <div class="chip small-round tiny-margin">
                 <i>question_mark</i>
                 <span>${this.assignment.questions.length} questions</span>
             </div>
-            <div class="chip small-round">
+            <div class="chip small-round tiny-margin">
                 <i>star_rate</i>
                 <span>${this.assignment.getPoints()} points</span>
             </div>
-            <div class="chip small-round">
+            <div class="chip small-round tiny-margin">
                 <i>update</i>
-                <span id="sync-last-updated">Synced</span>
+                <span id="sync-last-updated">${this.assignment.getSmartTimeAgo()}</span>
             </div>
         `;
         this.assignment.tags.forEach(tag => {
@@ -49,7 +49,7 @@ export class AssignmentElement {
         template.innerHTML = `
         <article class="assignment s12 m12 l6 fade-in round">
             <h5 class="max">${this.assignment.title}</h5>
-            <nav class="wrap" id="tags"></nav>
+            <nav class="wrap no-space" id="tags"></nav>
             <nav class="right-align">
                 <button id="open-assignment">
                     <span>Open</span>

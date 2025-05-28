@@ -53,7 +53,7 @@ export class Header {
         container.innerHTML = User.is_logged_in
             ? `
             <button class="transparent circle" id="profile-button" onclick="ui('#profile-dialog')">
-                <img class="responsive" src="${User.profile_picture}" alt="Profile Picture" id="profile-picture" />
+                <img class="responsive" src="/static/profiles/${User.user_id}.jpg" alt="Profile Picture" id="profile-picture" />
                 <div class="badge tiny tiny-padding bottom right green" id="internet-status-badge"><i class="tiny">wifi</i></div>
             </button>`
             : `

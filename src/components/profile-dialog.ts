@@ -32,7 +32,7 @@ export class ProfileDialog {
                 <div class="padding">
                     <div class="row">
                         <div>
-                            <img class="responsive circle" width="96px" height="96px" src="${User.profile_picture}" alt="Profile Picture" />
+                            <img class="responsive circle" width="96px" height="96px" src="/static/profiles/${User.user_id}.jpg" alt="Profile Picture" />
                         </div>
                         <div>
                             <p class="no-margin bold">${User.username}</p>

@@ -12,6 +12,7 @@ class AssignmentsPage {
     constructor() {
         this.createAssignmentButton = document.getElementById("create-assignment") as HTMLButtonElement;
         this.assignmentsList = document.getElementById("assignments-list") as HTMLDivElement;
+
         this.init();
         this.bindEvents();
     }

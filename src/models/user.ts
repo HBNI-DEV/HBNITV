@@ -12,6 +12,7 @@ declare global {
             given_name: string;
             family_name: string;
             is_logged_in: boolean;
+            user_id: string;
         };
     }
 }
@@ -19,7 +20,7 @@ declare global {
 
 // Safe fallback default user
 export const defaultUser: UserData = {
-    profile_picture: "/static/icons/default-profile.png",
+    profile_picture: "/static/profile/default-profile.jpg",
     username: "Guest",
     email: "",
     role: "guest",
@@ -28,6 +29,7 @@ export const defaultUser: UserData = {
     given_name: "",
     family_name: "",
     is_logged_in: false,
+    user_id: "default-profile",
 };
 
 // Merge default with actual USER (if it exists)

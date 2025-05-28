@@ -23,6 +23,7 @@ class BaseHandler(RequestHandler):
             profile_picture=self.current_profile_picture,
             hd=self.current_hd,
             role=self.current_role,
+            user_id=self.current_user_id,
             **kwargs,
         )
         self.write(rendered_template)
