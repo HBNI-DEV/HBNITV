@@ -1,9 +1,0 @@
-[
-    { "path": "/", "template": "index.html" },
-    { "path": "/calendar", "template": "calendar.html" },
-    { "path": "/classes", "template": "classes.html" },
-    { "path": "/classes/watch", "template": "watch_class.html" },
-    { "path": "/contact", "template": "contact.html" },
-    { "path": "/news", "template": "news.html" },
-    { "path": "/settings", "template": "settings.html" }
-]

@@ -3,7 +3,7 @@ from app.handlers.core.base import BaseHandler
 from app.utils import google_api
 
 
-class ClassesAPIHandler(BaseHandler):
+class RecordingsAPIHandler(BaseHandler):
     def prepare(self):
         self.set_header("Content-Type", "application/json")
         role = self.current_role

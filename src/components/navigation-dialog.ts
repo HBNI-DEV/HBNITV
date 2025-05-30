@@ -1,18 +1,36 @@
 import { User } from "@models/user";
 
 export class NavigationDialog {
+    navLarge: HTMLElement;
     navMedium: HTMLElement;
     navSmall: HTMLElement;
     tabs: Record<string, HTMLAnchorElement[]> = {};
 
     constructor() {
-        const { navMedium, navSmall } = this.createNavs();
+        const { navLarge, navMedium, navSmall } = this.createNavs();
+        this.navLarge = navLarge;
         this.navMedium = navMedium;
         this.navSmall = navSmall;
         this.init();
     }
 
     private createNavs() {
+        const navLarge = document.createElement("nav");
+        navLarge.className = "left l drawer surface-container";
+        navLarge.innerHTML = `
+            <header class="surface-container">
+                <a href="/" class="left-align">
+                    <img src="/static/icons/icon-192.png" width="96px" height="96px" class="square" alt="HBNI Logo">
+                    <h6 class="no-margin small-padding">HBNI ITV</h6>
+                </a>
+            </header>
+            ${this.link("news", "news", "News")}
+            ${this.link("calendar", "calendar_today", "Calendar")}
+            ${this.link("recordings", "video_library", "Recordings")}
+            ${this.link("settings", "settings", "Settings")}
+            ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/assignments", "folder_open", "Assignments") : ""}
+        `;
+
         const navMedium = document.createElement("nav");
         navMedium.className = "left m l surface-container";
         navMedium.innerHTML = `
@@ -21,7 +39,11 @@ export class NavigationDialog {
                     <img src="/static/icons/icon-192.png" width="96px" height="96px" class="square" alt="HBNI Logo">
                 </a>
             </header>
-            ${this.links()}
+            ${this.link("news", "news", "News")}
+            ${this.link("calendar", "calendar_today", "Calendar")}
+            ${this.link("recordings", "video_library", "Recordings")}
+            ${this.link("settings", "settings", "Settings")}
+            ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/assignments", "folder_open", "Assign...") : ""}
         `;
 
         const navSmall = document.createElement("nav");
@@ -29,11 +51,10 @@ export class NavigationDialog {
         navSmall.innerHTML = `
             ${this.link("news", "news", "News")}
             ${this.link("calendar", "calendar_today", "Calendar")}
-            ${this.link("classes", "video_library", "Classes")}
-            ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/assignments", "folder_open", "Assign...") : ""}
+            ${this.link("recordings", "video_library", "Recordings")}
         `;
 
-        return { navMedium, navSmall };
+        return { navLarge, navMedium, navSmall };
     }
 
     private createDialog(): HTMLDialogElement {
@@ -64,9 +85,10 @@ export class NavigationDialog {
         return `
             ${this.link("news", "news", "News")}
             ${this.link("calendar", "calendar_today", "Calendar")}
-            ${this.link("classes", "video_library", "Classes")}
+            ${this.link("recordings", "video_library", "Recordings")}
             ${this.link("settings", "settings", "Settings")}
             ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/assignments", "folder_open", "Assign...") : ""}
+            ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/classes", "school", "Classes") : ""}
         `;
     }
 
@@ -80,6 +102,7 @@ export class NavigationDialog {
     }
 
     private init(): void {
+        // document.body.appendChild(this.navLarge);
         document.body.appendChild(this.navMedium);
         document.body.appendChild(this.navSmall);
 
@@ -89,6 +112,7 @@ export class NavigationDialog {
 
     private cacheTabs(): void {
         const anchors = [
+            ...this.navLarge.querySelectorAll("a"),
             ...this.navMedium.querySelectorAll("a"),
             ...this.navSmall.querySelectorAll("a"),
         ];

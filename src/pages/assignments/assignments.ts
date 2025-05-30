@@ -48,6 +48,8 @@ class AssignmentsPage {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+    document.body.classList.add("hidden");
     await initializeCoreUI();
     const assignmentPage = new AssignmentsPage();
+    document.body.classList.remove("hidden");
 });

@@ -8,7 +8,6 @@ import { ProfileDialog } from "@components/profile-dialog";
 import { SnackbarLogin } from "@components/snackbar-login";
 
 export async function initializeCoreUI() {
-    // document.body.classList.add("hidden");
 
     mount(Header, "header");
 
@@ -25,7 +24,6 @@ export async function initializeCoreUI() {
     } catch (error) {
         console.error("⚠️ UI Core: Theme or animation failed to load", error);
     }
-    // document.body.classList.remove("hidden");
 }
 
 function mount(

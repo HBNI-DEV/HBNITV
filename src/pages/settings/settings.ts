@@ -2,6 +2,7 @@ import { setTheme, setMode, appSettings, savedMode } from '@utils/theme';
 import { initializeCoreUI } from "@utils/ui-core";
 
 document.addEventListener("DOMContentLoaded", async () => {
+    document.body.classList.add("hidden");
     await initializeCoreUI();
 
     const themeButtons = document.querySelectorAll("#theme-button") as NodeListOf<HTMLButtonElement>;
@@ -45,4 +46,5 @@ document.addEventListener("DOMContentLoaded", async () => {
             lightModeButton.checked = true;
         }
     });
+    document.body.classList.remove("hidden");
 });

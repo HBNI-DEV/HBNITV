@@ -2,11 +2,12 @@ import { initializeCoreUI } from "@utils/ui-core";
 // import { ClassElement } from "@elements/class-element";
 
 document.addEventListener("DOMContentLoaded", async () => {
+    document.body.classList.add("hidden");
     await initializeCoreUI();
 
     // const classes = document.getElementById("classes-page") as HTMLDivElement;
 
-    // const response = await fetch('/api/classes', {
+    // const response = await fetch('/api/recordings', {
     //     method: "GET",
     //     headers: { "Content-Type": "application/json" },
     // });
@@ -27,4 +28,5 @@ document.addEventListener("DOMContentLoaded", async () => {
     //         }
     //     }
     // }
+    document.body.classList.remove("hidden");
 });

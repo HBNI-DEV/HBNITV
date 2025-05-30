@@ -1,13 +1,13 @@
 from tornado.web import RequestHandler
 
-from app.routes.view_routes import load_view_routes
+from app.routes.view_routes import view_routes
 
 
 class SitemapHandler(RequestHandler):
     def get(self):
         self.set_header("Content-Type", "application/xml")
 
-        routes = load_view_routes()
+        routes = view_routes
 
         self.write('<?xml version="1.0" encoding="UTF-8"?>\n')
         self.write('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n')

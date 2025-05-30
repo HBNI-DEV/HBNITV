@@ -1,6 +1,7 @@
 from app.handlers.generic_page import GenericPageHandler
 from app.routes.helpers import route
 from app.utils.colony_names import COLONY_NAMES
+from app.utils.users_cache import organizational_units_cache, users_cache
 
 admin_routes = [
     route(
@@ -38,5 +39,16 @@ admin_routes = [
         name="assignment",
         template_name="assignment.html",
         required_roles=("admin", "super_admin"),
+    ),
+    route(
+        r"/admin/classes",
+        GenericPageHandler,
+        name="classes",
+        template_name="classes.html",
+        required_roles=("admin", "super_admin"),
+        extra_context={
+            "users": users_cache,
+            "organizational_units": organizational_units_cache,
+        },
     ),
 ]

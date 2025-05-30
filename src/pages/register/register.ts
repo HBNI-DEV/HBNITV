@@ -17,6 +17,7 @@ function updateEmailElement(firstName: string, lastName: string, colony: string)
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+    document.body.classList.add("hidden");
     await initializeCoreUI();
 
     const colonyNameInput = document.querySelector("#colony") as HTMLInputElement;
@@ -73,4 +74,5 @@ document.addEventListener("DOMContentLoaded", async () => {
                 console.error("❌ Register failed:", err);
             });
     });
+    document.body.classList.remove("hidden");
 });

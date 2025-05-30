@@ -358,6 +358,8 @@ function showPage(pageId: string) {
 
 
 document.addEventListener("DOMContentLoaded", async () => {
+    document.body.classList.add("hidden");
+
     Promise.all([
         initializeCoreUI(),
         loadToastUICSS(),
@@ -382,4 +384,5 @@ document.addEventListener("DOMContentLoaded", async () => {
             await settings.saveSetting("last_active_news_tab", pageId);
         });
     });
+    document.body.classList.remove("hidden");
 });

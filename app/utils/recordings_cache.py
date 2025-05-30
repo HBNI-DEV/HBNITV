@@ -8,7 +8,17 @@ from app.config.environments import Environment
 from app.utils import google_api
 
 # Global cache
-classes_cache = {}
+recordings_cache = {}
+
+
+def _get_connection():
+    return psycopg2.connect(
+        dbname=Environment.POSTGRES_DB,
+        user=Environment.POSTGRES_USER,
+        password=Environment.POSTGRES_PASSWORD,
+        host=Environment.POSTGRES_HOST,
+        port=Environment.POSTGRES_PORT,
+    )
 
 
 def format_created_time(iso_time_str: str) -> tuple[str, str]:
@@ -28,13 +38,7 @@ def format_created_time(iso_time_str: str) -> tuple[str, str]:
 
 
 def get_shared_folders_from_db() -> list[tuple[str, str]]:
-    conn = psycopg2.connect(
-        dbname=Environment.POSTGRES_DB,
-        user=Environment.POSTGRES_USER,
-        password=Environment.POSTGRES_PASSWORD,
-        host=Environment.POSTGRES_HOST,
-        port=Environment.POSTGRES_PORT,
-    )
+    conn = _get_connection()
     cur = conn.cursor()
     try:
         cur.execute("""
@@ -47,9 +51,9 @@ def get_shared_folders_from_db() -> list[tuple[str, str]]:
         conn.close()
 
 
-def update_class_cache():
+def update_recordings_cache():
     try:
-        classes_cache.clear()
+        recordings_cache.clear()
         folders = get_shared_folders_from_db()
 
         for folder_id, delegated_email in folders:
@@ -66,14 +70,14 @@ def update_class_cache():
                     metadata["createdTimeReadable"] = readable
                     metadata["createdTimeRelative"] = relative
 
-                classes_cache[file["id"]] = metadata
+                recordings_cache[file["id"]] = metadata
     except Exception as e:
         print(f"[ClassCache] ❌ Error updating cache: {e}")
 
 
-def start_cache_updater():
+def start_recordings_cache_updater():
     async def run_in_thread():
-        await asyncio.to_thread(update_class_cache)
+        await asyncio.to_thread(update_recordings_cache)
 
     PeriodicCallback(
         lambda: asyncio.ensure_future(run_in_thread()),

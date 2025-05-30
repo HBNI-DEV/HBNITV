@@ -67,7 +67,10 @@ class AssignmentAPIHandler(BaseHandler):
                     self.set_status(404)
                     self.write({"status": "error", "message": "Assignment not found"})
             else:
-                self.cur.execute("SELECT id, data FROM assignments")
+                self.cur.execute(
+                    "SELECT id, data FROM assignments WHERE user_id = %s",
+                    (self.current_user_id,),
+                )
                 results = self.cur.fetchall()
                 self.write(
                     {

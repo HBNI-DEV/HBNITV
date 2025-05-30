@@ -27,3 +27,6 @@ class Environment:
     UPDATE_CLASS_CACHE_INTERVAL_MINUTES = int(
         os.getenv("UPDATE_CLASS_CACHE_INTERVAL_MINUTES", 1)
     )
+    UPDATE_USER_CACHE_INTERVAL_MINUTES = int(
+        os.getenv("UPDATE_USER_CACHE_INTERVAL_MINUTES", 1440)
+    )

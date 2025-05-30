@@ -48,6 +48,7 @@ class StudentCalendarElement {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+    document.body.classList.add("hidden");
     await initializeCoreUI();
 
     const calenderDiv = document.querySelector("#calendar") as HTMLDivElement;
@@ -58,4 +59,5 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else {
         console.warn("⚠️ calendar.ts: #calendar container not found.");
     }
+    document.body.classList.remove("hidden");
 });

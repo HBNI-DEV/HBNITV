@@ -31,6 +31,7 @@ function loadVideoInformation(videoInfo: HTMLDivElement,json_data: any) {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+    document.body.classList.add("hidden");
     await initializeCoreUI();
     const video = document.getElementById("video-player") as HTMLDivElement;
     const spinner = document.getElementById("loading-spinner") as HTMLProgressElement;
@@ -39,7 +40,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // use proper url query params
     const id = new URLSearchParams(window.location.search).get("id");
     console.log(id);
-    const response = await fetch(`/api/classes?id=${id}`, {
+    const response = await fetch(`/api/recordings?id=${id}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
     });
@@ -74,4 +75,5 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         video.appendChild(wrapper);
     }
+    document.body.classList.remove("hidden");
 });

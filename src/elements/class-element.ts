@@ -14,7 +14,7 @@ export class ClassElement {
     }
 
     private async getJsonData() {
-        const response = await fetch(`/api/classes?id=${this.id}`, {
+        const response = await fetch(`/api/recordings?id=${this.id}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         });

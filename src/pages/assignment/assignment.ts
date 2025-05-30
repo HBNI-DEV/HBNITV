@@ -312,9 +312,11 @@ function loadAssignmentFromID() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+    document.body.classList.add("hidden");
     await initializeCoreUI();
     loadAssignmentFromID();
     new AssignmentSyncManager();
+    document.body.classList.remove("hidden");
 });
 
 window.addEventListener("hashchange", () => {

@@ -12,11 +12,11 @@ export class AssignmentElement {
     constructor(assignment: Assignment) {
         this.assignment = assignment;
         this.htmlElement = this.createElement();
+        this.tagsElement = this.htmlElement.querySelector("#tags") as HTMLDivElement;
         this.btnOpenAssignment = this.htmlElement.querySelector("#open-assignment") as HTMLButtonElement;
         this.btnDeleteAssignment = this.htmlElement.querySelector("#delete-assignment") as HTMLButtonElement;
-        this.syncLastUpdatedElement = this.htmlElement.querySelector("#sync-last-updated") as HTMLSpanElement;
-        this.tagsElement = this.htmlElement.querySelector("#tags") as HTMLDivElement;
         this.init();
+        this.syncLastUpdatedElement = this.htmlElement.querySelector("#sync-last-updated") as HTMLSpanElement;
         this.bindEvents();
         this.startSyncStatusUpdater();
     }
