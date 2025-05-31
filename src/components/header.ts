@@ -11,34 +11,13 @@ export class Header {
 
     private createElement(): HTMLElement {
         const nav = document.createElement("nav");
-        nav.className = "no-space";
         nav.innerHTML = `
-            <h5 id="header"></h5>
-            <div class="max"></div>
-            <button class="circle transparent">
-                <i>more_vert</i>
-                <menu class="left border no-wrap">
-                    <li onclick="window.location.href='/settings'">
-                        <i>settings</i><span>Settings</span>
-                    </li>
-                    <li onclick="window.location.href='/contact'">
-                        <i>contact_mail</i><span>Contact</span>
-                    </li>
-                    ${
-                        User.role === "admin" ||
-                        User.role === "super_admin"
-                            ? `
-                        <li onclick="window.location.href='/admin/register'">
-                            <i>person_add</i><span>Register</span>
-                        </li>
-                        <li onclick="window.location.href='/admin/assignments'">
-                            <i>folder_open</i><span>Assignments</span>
-                        </li>
-                        `
-                            : ""
-                    }
-                </menu>
+            <button class="s circle transparent" onclick="ui('#navigation-dialog')">
+                <i>menu</i>
             </button>
+            <img class="s circle" src="/static/icons/icon-192.png" alt="HBNI Logo" id="logo" />
+            <h5 class="s m left-align" id="app-title"></h5>
+            <div class="max"></div>
             <span id="auth-button-container"></span>
         `;
         return nav;

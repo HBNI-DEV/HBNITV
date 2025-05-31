@@ -47,7 +47,7 @@ export class AssignmentElement {
     private createElement(): HTMLDetailsElement {
         const template = document.createElement("template");
         template.innerHTML = `
-        <article class="assignment s12 m12 l6 fade-in round">
+        <article class="assignment s12 m12 l6 fade-in border round">
             <h5 class="max">${this.assignment.title}</h5>
             <nav class="wrap no-space" id="tags"></nav>
             <nav class="right-align">

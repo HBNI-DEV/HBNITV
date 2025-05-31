@@ -6,7 +6,8 @@ class StudentCalendarElement {
     private padding = 16;
     private headerHeight = 80; // Footer height for mobile
     private footerHeight = 80; // Footer height for mobile
-    private navWidth = 80;     // Side nav width for desktop
+    private mediumNavWidth = 80;     // Side nav width for desktop
+    private largeNavWidth = 320;     // Side nav width for desktop
 
     constructor() {
         const template = document.createElement("template");
@@ -33,13 +34,18 @@ class StudentCalendarElement {
 
     resize() {
         const isMobile = window.innerWidth <= 600;
+        const isMedium = window.innerWidth <= 992;
+        const isLarge = window.innerWidth > 992;
 
         if (isMobile) {
             this.htmlElement.style.width = `calc(100vw - ${this.padding}px)`;
             this.htmlElement.style.height = `calc(100vh - ${this.footerHeight}px - ${this.headerHeight}px)`;
-        } else {
-            this.htmlElement.style.width = `calc(100vw - ${this.navWidth}px - ${this.padding}px)`;
+        } else if (isMedium) {
+            this.htmlElement.style.width = `calc(100vw - ${this.mediumNavWidth}px - ${this.padding}px)`;
             this.htmlElement.style.height = `calc(100vh - ${this.footerHeight}px)`;
+        }else{
+            this.htmlElement.style.width = `calc(100vw - ${this.largeNavWidth}px - ${this.padding}px)`;
+            this.htmlElement.style.height = `calc(100vh - ${this.headerHeight}px)`;
         }
 
         this.htmlElement.style.maxWidth = `1200px`;
