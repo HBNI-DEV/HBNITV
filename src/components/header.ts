@@ -15,7 +15,6 @@ export class Header {
             <button class="s circle transparent" onclick="ui('#navigation-dialog')">
                 <i>menu</i>
             </button>
-            <img class="s circle" src="/static/icons/icon-192.png" alt="HBNI Logo" id="logo" />
             <h5 class="s m left-align" id="app-title"></h5>
             <div class="max"></div>
             <span id="auth-button-container"></span>

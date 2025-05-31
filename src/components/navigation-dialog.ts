@@ -153,7 +153,7 @@ export class NavigationDialog {
 
         appTitles.forEach((appTitle) => {
             if (pathParts.length === 0) {
-                appTitle.innerText = "";
+                appTitle.innerText = "HBNITV";
             } else {
                 appTitle.innerText = lastSegment
                     .replace(/-/g, " ")
