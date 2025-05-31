@@ -1,6 +1,6 @@
-# HBNI ITV
+# HBNITV
 
-HBNI ITV is a project that is used to display the latest news from HBNI.
+HBNITV is a project that is used to display the latest news from HBNI.
 
 ## Installation
 

@@ -25,7 +25,6 @@ function loadVideoInformation(videoInfo: HTMLDivElement, json_data: any) {
     const createdDate = new Date(json_data.createdTime);
     const now = new Date();
     const daysAgo = Math.floor((now.getTime() - createdDate.getTime()) / (1000 * 60 * 60 * 24));
-    console.log(json_data);
 
     const readableDate = new Intl.DateTimeFormat("en-US", {
         year: "numeric",
@@ -38,11 +37,12 @@ function loadVideoInformation(videoInfo: HTMLDivElement, json_data: any) {
 
     const relative = daysAgo === 0 ? "Today" : `${daysAgo} day${daysAgo !== 1 ? "s" : ""} ago`;
 
+    document.title = json_data.name;
+
     videoInfo.innerHTML = `
-    <nav class="row no-marign no-padding wrap">
-        <h6 class="small bold" id="dialog-title">${json_data.name}</h6>
-        <div class="max"></div>
-        <div class="right-align badge none border">${formatDuration(json_data.videoMediaMetadata.durationMillis)}</div>
+    <nav class="row no-marign no-padding">
+        <h6 class="small bold max" id="dialog-title">${json_data.name}</h6>
+        <div class="badge none border">${formatDuration(json_data.videoMediaMetadata.durationMillis)}</div>
     </nav>
     <span style="color: var(--on-surface-variant);" id="created-at">${readableDate} <span style="opacity: 0.7;">(${relative})</span>
     </span>

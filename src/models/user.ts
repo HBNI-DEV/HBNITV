@@ -20,7 +20,7 @@ declare global {
 
 // Safe fallback default user
 export const defaultUser: UserData = {
-    profile_picture: "/static/profile/default-profile.jpg",
+    profile_picture: "/static/profiles/default-profile.jpg",
     username: "Guest",
     email: "",
     role: "guest",

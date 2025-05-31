@@ -70,7 +70,21 @@ class ViewNewsPage {
             this.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
         }
 
-        this.updateNewsPage();
+        await this.updateNewsPage();
+
+        window.addEventListener("resize", () => {
+            this.resizeDialog();
+        });
+        this.resizeDialog();
+    }
+
+    resizeDialog() {
+        const dialog = document.querySelector("#news-dialog") as HTMLDialogElement;
+        if (window.innerWidth <= 600) {
+            dialog.classList.add("max");
+        } else {
+            dialog.classList.remove("max");
+        }
     }
 
     async updateNewsPage() {
@@ -117,7 +131,7 @@ class ViewNewsPage {
     private renderNewsArticle(news: News): HTMLElement {
         const htmlElement = document.createElement("template");
         htmlElement.innerHTML = `
-            <article class="s12 m6 l4 round no-space fade-in clickable">
+            <article class="s12 m6 l4 round border no-space fade-in clickable">
                 <h5 class="small">${news.title}</h5>
                 <span style="color: var(--on-surface-variant);" id="created-at">${news.createdAtReadable} (${news.createdAtRelative})</span>
                 <blockquote>${news.content.slice(0, 250)}...<button id="updated-button" class="badge none no-border no-padding no-margin transparent ripple hidden"><span style="color: var(--on-surface-variant);">(Edited)</span><div id="updated-at" class="tooltip">${news.updatedAtReadable} (${news.updatedAtRelative})</div></button></blockquote>

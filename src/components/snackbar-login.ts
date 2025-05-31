@@ -8,7 +8,7 @@ export class SnackbarLogin {
         const template = document.createElement("template");
         template.innerHTML = `
         <div class="snackbar" id="login-snackbar">
-            <div class="max">Welcome to HBNI ITV!</div>
+            <div class="max">Welcome to HBNITV!</div>
                 <div id="g_id_onload"
                     data-client_id="453511062592-hcnq2v5956hpktbgmi9605o09q007fo6.apps.googleusercontent.com"
                     data-callback="handleGoogleLogin"

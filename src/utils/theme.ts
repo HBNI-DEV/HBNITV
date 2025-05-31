@@ -98,42 +98,25 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e =
     ui("mode", newTheme);
 });
 
+export function triggerThemeTransition(duration = 500) {
+    const html = document.documentElement;
+    html.classList.add("theme-transition");
+    setTimeout(() => {
+        html.classList.remove("theme-transition");
+    }, duration);
+}
+
 export function loadAnimationStyleSheet() {
     const style = document.createElement("style");
+    style.id = "theme-transition-style"; // so we can manage it if needed
     style.textContent = `
-    html,
-    body,
-    nav,
-    div,
-    article,
-    p,
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    ul,
-    li,
-    span,
-    a,
-    button,
-    input,
-    textarea,
-    select,
-    details,
-    summary,
-    header,
-    footer,
-    blockquote,
-    pre,
-    code,
-    .field {
-        transition: background-color var(--speed3) ease-in-out, color var(--speed1) ease;
+    html.theme-transition *,
+    html.theme-transition dialog {
+        transition-property: background-color, color;
+        transition-duration: var(--speed3), var(--speed1);
+        transition-timing-function: ease-in-out, ease;
+        transition-delay: 0s, 0s;
     }
-    dialog{
-        transition: background-color var(--speed3) ease-in-out, color var(--speed1) ease, all var(--speed3);
-    }
-  `.trim();
+    `;
     document.head.appendChild(style);
 }

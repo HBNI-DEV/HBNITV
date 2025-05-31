@@ -1,6 +1,6 @@
 {
-    "short_name": "HBNI ITV",
-    "name": "HBNI ITV",
+    "short_name": "HBNITV",
+    "name": "HBNITV",
     "icons": [
         {
             "src": "/static/icons/icon-512x512.png",
@@ -39,7 +39,7 @@
             ]
         }
     ],
-    "description": "HBNI ITV is a website to find the latest news, classes, and more.",
+    "description": "HBNITV is a website to find the latest news, classes, and more.",
     "screenshots": [
         {
             "src": "/static/screenshots/home.png",

@@ -1,12 +1,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html lang="en">
     <head>
-        <title>HBNI ITV</title>
+        <title>HBNITV</title>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <meta name="author" content="Jared Gross" />
-        <meta name="description" content="HBNI ITV is a website to find the latest news, classes, and more."/>
+        <meta name="description" content="HBNITV is a website to find the latest news, classes, and more."/>
         <meta name="keywords" content="hutterite, itv, hbni, classes, news, calendar, contact"/>
         <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png">
@@ -27,7 +27,7 @@
         <main class="responsive">
             <div id="recordings">
                 {% if is_logged_in %}
-                <div class="field fill label prefix border round">
+                <div class="field fill label prefix border no-margin round">
                     <i>search</i>
                     <input type="text" id="search-input" name="search-input"/>
                     <label for="search-input">Search</label>
@@ -53,14 +53,14 @@
                 <div class="page padding {{'active' if loop.first else ''}}" id="{{ date_tab.lower().replace(' ', '-') }}">
                     <div class="grid">
                         {% for recording_data in date_tab_data %}
-                        <article class="recording no-padding s12 m6 l4 round clickable" onclick="window.location.href='/recordings/watch?id={{ recording_data.id }}'" data-owner-email="{{recording_data.owners[0].emailAddress}}">
+                        <article class="recording no-padding s12 m6 l4 border round clickable" onclick="window.location.href='/recordings/watch?id={{ recording_data.id }}'" data-owner-email="{{recording_data.owners[0].emailAddress}}" title="{{recording_data.name}}">
                             <img class="responsive small top-round" src="/api/thumbnail?link={{ recording_data.thumbnailLink }}" alt="Thumbnail" />
                             <div class="padding">
-                                <nav class="row no-marign no-padding right-align" style="min-block-size: 20px">
+                                <nav class="row no-marign no-padding top-align" style="min-block-size: 20px">
+                                    <p class="bold max wrap no-line" id="title">{{ recording_data.name }}</p>
                                     <div class="right-align badge none border">{{recording_data.durationReadable}}</div>
                                 </nav>
-                                <p class="bold" id="title">{{ recording_data.name }}</p>
-                                <span style="color: var(--on-surface-variant);" id="created-at">{{recording_data.createdTimeReadable}} <span style="opacity: 0.7;" id="created-at-relative">({{recording_data.createdTimeRelative}})</span></span>
+                                <span class="top-margin" style="color: var(--on-surface-variant);" id="created-at">{{recording_data.createdTimeReadable}} <span style="opacity: 0.7;" id="created-at-relative">({{recording_data.createdTimeRelative}})</span></span>
                                 <nav class="row top-padding">
                                     <img id="dialog-profile-picture" src="{{recording_data.owners[0].photoLink}}" class="circle" alt="Profile Picture" />
                                     <div class="max">

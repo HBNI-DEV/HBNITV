@@ -16,12 +16,12 @@ export class NavigationDialog {
 
     private createNavs() {
         const navLarge = document.createElement("nav");
-        navLarge.className = "left l drawer surface-container";
+        navLarge.className = "left l drawer surface";
         navLarge.innerHTML = `
-            <header class="surface-container">
+            <header class="">
                 <a href="/" class="left-align">
                     <img src="/static/icons/icon-192.png" width="96px" height="96px" class="square" alt="HBNI Logo">
-                    <h6 class="no-margin small-padding">HBNI ITV</h6>
+                    <h6 class="no-margin small-padding">HBNITV</h6>
                 </a>
             </header>
             ${this.link("news", "news", "News")}
@@ -32,9 +32,9 @@ export class NavigationDialog {
         `;
 
         const navMedium = document.createElement("nav");
-        navMedium.className = "left m l surface-container";
+        navMedium.className = "left m l surface";
         navMedium.innerHTML = `
-            <header class="surface-container">
+            <header class="">
                 <a href="/">
                     <img src="/static/icons/icon-192.png" width="96px" height="96px" class="square" alt="HBNI Logo">
                 </a>
@@ -52,6 +52,7 @@ export class NavigationDialog {
             ${this.link("news", "news", "News")}
             ${this.link("calendar", "calendar_today", "Calendar")}
             ${this.link("recordings", "video_library", "Recordings")}
+            ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/assignments", "folder_open", "Assign...") : ""}
         `;
 
         return { navLarge, navMedium, navSmall };
@@ -88,7 +89,6 @@ export class NavigationDialog {
             ${this.link("recordings", "video_library", "Recordings")}
             ${this.link("settings", "settings", "Settings")}
             ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/assignments", "folder_open", "Assign...") : ""}
-            ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/classes", "school", "Classes") : ""}
         `;
     }
 
@@ -138,14 +138,18 @@ export class NavigationDialog {
 
     private setCurrentTab(): void {
         const header = document.querySelector("#header") as HTMLElement;
-        // make first letter uppercase
         const pathParts = window.location.pathname.split("/").filter(Boolean);
         const lastSegment = pathParts[pathParts.length - 1] || "";
 
-        header.innerText = lastSegment
-            .replace(/-/g, " ")
-            .replace(/\b\w/g, c => c.toUpperCase())
-            .replace("Admin ", "");
+        if (pathParts.length === 0) {
+            header.innerText = "HBNITV";
+        } else {
+            header.innerText = lastSegment
+                .replace(/-/g, " ")
+                .replace(/\b\w/g, c => c.toUpperCase())
+                .replace("Admin ", "");
+        }
+
         const path = window.location.pathname;
         const currentTabs = this.tabs[path];
         if (currentTabs) {
