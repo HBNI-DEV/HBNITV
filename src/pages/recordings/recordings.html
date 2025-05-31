@@ -27,25 +27,53 @@
         <main class="responsive">
             <div id="recordings">
                 {% if is_logged_in %}
-                <div class="grid" id="classes-page">
-                    {% for recording_id, recording_data in recordings.items() %}
-                    <article class="no-padding s12 m6 l4 round clickable" onclick="window.location.href='/recordings/watch?id={{ recording_id }}'">
-                        <img class="responsive small top-round" src="/api/thumbnail?link={{ recording_data.thumbnailLink }}" alt="Thumbnail" />
-                        <div class="padding">
-                            <p class="bold">{{ recording_data.name }}</p>
-                            <span style="color: var(--on-surface-variant);" id="created-at">{{recording_data.createdTimeReadable}} <span style="opacity: 0.7;">({{recording_data.createdTimeRelative}})</span>
-                            </span>
-                            <nav class="row top-padding">
-                                <img id="dialog-profile-picture" src="{{recording_data.owners[0].photoLink}}" class="circle" alt="Profile Picture" />
-                                <div class="max">
-                                    <h6 class="small bold">{{recording_data.owners[0].displayName}}</h6>
-                                    <a href="mailto:{{recording_data.owners[0].emailAddress}}" class="link" id="dialog-email">{{recording_data.owners[0].emailAddress}}</a>
-                                </div>
-                            </nav>
-                        </div>
-                    </article>
-                    {% endfor %}
+                <div class="field fill label prefix border round">
+                    <i>search</i>
+                    <input type="text" id="search-input" name="search-input"/>
+                    <label for="search-input">Search</label>
                 </div>
+                <fieldset class="small-round">
+                    <legend>Filter by owner</legend>
+                    <nav class="wrap row no-space" id="owners">
+                        {% for owner in recordings._owners %}
+                        <div class="chip round tiny-margin pointer" data-owner-name="{{owner.displayName}}" data-owner-email="{{owner.email}}">
+                            <img class="responsive" src="{{owner.photoLink}}" alt="Profile Picture" />
+                            <i class="hidden">check</i>
+                            <span>{{owner.displayName}}</span>
+                        </div>
+                        {% endfor %}
+                    </nav>
+                </fieldset>
+                <div class="tabs left-align scroll" id="tabs">
+                {% for date_tab in recordings.tabs %}
+                    <a class="{{'active' if loop.first else ''}}" data-ui="#{{ date_tab.lower().replace(' ', '-') }}">{{ date_tab }}</a>
+                {% endfor %}
+                </div>
+                {% for date_tab, date_tab_data in recordings.tabs.items() %}
+                <div class="page padding {{'active' if loop.first else ''}}" id="{{ date_tab.lower().replace(' ', '-') }}">
+                    <div class="grid">
+                        {% for recording_data in date_tab_data %}
+                        <article class="recording no-padding s12 m6 l4 round clickable" onclick="window.location.href='/recordings/watch?id={{ recording_data.id }}'" data-owner-email="{{recording_data.owners[0].emailAddress}}">
+                            <img class="responsive small top-round" src="/api/thumbnail?link={{ recording_data.thumbnailLink }}" alt="Thumbnail" />
+                            <div class="padding">
+                                <nav class="row no-marign no-padding right-align" style="min-block-size: 20px">
+                                    <div class="right-align badge none border">{{recording_data.durationReadable}}</div>
+                                </nav>
+                                <p class="bold" id="title">{{ recording_data.name }}</p>
+                                <span style="color: var(--on-surface-variant);" id="created-at">{{recording_data.createdTimeReadable}} <span style="opacity: 0.7;" id="created-at-relative">({{recording_data.createdTimeRelative}})</span></span>
+                                <nav class="row top-padding">
+                                    <img id="dialog-profile-picture" src="{{recording_data.owners[0].photoLink}}" class="circle" alt="Profile Picture" />
+                                    <div class="max">
+                                        <h6 class="small bold" id="display-name">{{recording_data.owners[0].displayName}}</h6>
+                                        <a href="mailto:{{recording_data.owners[0].emailAddress}}" class="link" id="email">{{recording_data.owners[0].emailAddress}}</a>
+                                    </div>
+                                </nav>
+                            </div>
+                        </article>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
                 {% else %}
                 <article
                     class="absolute center round large-width large-padding"

@@ -24,7 +24,8 @@
     "homepage": "https://github.com/thecodingjsoftware/hbni-itv#readme",
     "dependencies": {
         "@toast-ui/editor": "^3.2.2",
-        "beercss": "^3.10.5",
+        "beercss": "^3.11.11",
+        "install": "^0.13.0",
         "katex": "^0.16.22",
         "swapy": "^1.0.5",
         "typescript": "^5.8.3"
