@@ -22,7 +22,7 @@ export class NavigationDialog {
             <nav class="left l drawer no-padding">
                 <nav class="primary small-padding">
                     <a href="/" class="left-align">
-                        <img src="/static/icons/icon-192.png" width="96px" height="96px" class="square" alt="HBNI Logo">
+                        <img src="/static/icons/android-icon-192x192.png" width="96px" height="96px" class="square" alt="HBNI Logo">
                     </a>
                     <h6 class="no-margin small-padding" id="app-title"></h6>
                 </nav>
@@ -42,9 +42,9 @@ export class NavigationDialog {
         const navMedium = document.createElement("nav");
         navMedium.className = "left m";
         navMedium.innerHTML = `
-            <header class="primary">
+            <header class="primary fixed">
                 <a href="/">
-                    <img src="/static/icons/icon-192.png" width="96px" height="96px" class="square" alt="HBNI Logo">
+                    <img src="/static/icons/android-icon-192x192.png" width="96px" height="96px" class="square" alt="HBNI Logo">
                 </a>
             </header>
             ${this.link("news", "news", "News")}
@@ -79,7 +79,7 @@ export class NavigationDialog {
                         <i>close</i>
                     </button>
                     <button class="small-round large" onclick="window.location.href='/';">
-                        <img class="responsive" src="/static/icons/icon-192.png" alt="HBNI Logo" />
+                        <img class="responsive" src="/static/icons/android-icon-192x192.png" alt="HBNI Logo" />
                         <h5 class="no-margin">HBNITV</h5>
                     </button>
                 </nav>

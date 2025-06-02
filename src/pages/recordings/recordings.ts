@@ -1,4 +1,5 @@
 import { SettingsManager } from "@managers/settings-manager";
+import { User } from "@models/user";
 import { initializeCoreUI } from "@utils/ui-core";
 
 
@@ -62,47 +63,48 @@ document.addEventListener("DOMContentLoaded", async () => {
     const settings = new SettingsManager();
     const savedTab = await settings.getSetting("last_active_recordings_tab", "#this-week") as string;
 
-    showPage(savedTab);
-
-    const tabs = document.getElementById("tabs") as HTMLDivElement;
-    const anchors = tabs.querySelectorAll("a");
-    anchors.forEach((anchor) => {
-        anchor.addEventListener("click", async () => {
-            const dataUi = anchor.getAttribute("data-ui");
-            await settings.saveSetting("last_active_recordings_tab", dataUi);
+    if (User.is_logged_in) {
+        showPage(savedTab);
+        const tabs = document.getElementById("tabs") as HTMLDivElement;
+        const anchors = tabs.querySelectorAll("a");
+        anchors.forEach((anchor) => {
+            anchor.addEventListener("click", async () => {
+                const dataUi = anchor.getAttribute("data-ui");
+                await settings.saveSetting("last_active_recordings_tab", dataUi);
+            });
         });
-    });
 
-    const searchInput = document.getElementById("search-input") as HTMLInputElement;
-    searchInput.addEventListener("input", () => {
-        applyRecordingFilters();
-    });
-
-    const ownersNav = document.getElementById("owners") as HTMLDivElement;
-    const owners = ownersNav.querySelectorAll(".chip") as NodeListOf<HTMLElement>;
-    owners.forEach(owner => {
-        const ownerName = owner.dataset.ownerName as string;
-        const ownerEmail = owner.dataset.ownerEmail as string;
-
-        const checkIcon = owner.querySelector("i") as HTMLElement;
-        const image = owner.querySelector("img") as HTMLImageElement;
-
-        owner.addEventListener("click", () => {
-            const isChecked = checkIcon.classList.contains("hidden");
-            if (isChecked) {
-                selectedOwners.push(ownerEmail);
-                checkIcon.classList.remove("hidden");
-                image.classList.add("hidden");
-                owner.classList.add("fill")
-            } else {
-                selectedOwners = selectedOwners.filter(email => email !== ownerEmail);
-                checkIcon.classList.add("hidden");
-                image.classList.remove("hidden");
-                owner.classList.remove("fill")
-            }
+        const searchInput = document.getElementById("search-input") as HTMLInputElement;
+        searchInput.addEventListener("input", () => {
             applyRecordingFilters();
         });
-    });
 
+        const ownersNav = document.getElementById("owners") as HTMLDivElement;
+        const owners = ownersNav.querySelectorAll(".chip") as NodeListOf<HTMLElement>;
+        owners.forEach(owner => {
+            const ownerName = owner.dataset.ownerName as string;
+            const ownerEmail = owner.dataset.ownerEmail as string;
+
+            const checkIcon = owner.querySelector("i") as HTMLElement;
+            const image = owner.querySelector("img") as HTMLImageElement;
+
+            owner.addEventListener("click", () => {
+                const isChecked = checkIcon.classList.contains("hidden");
+                if (isChecked) {
+                    selectedOwners.push(ownerEmail);
+                    checkIcon.classList.remove("hidden");
+                    image.classList.add("hidden");
+                    owner.classList.add("fill")
+                } else {
+                    selectedOwners = selectedOwners.filter(email => email !== ownerEmail);
+                    checkIcon.classList.add("hidden");
+                    image.classList.remove("hidden");
+                    owner.classList.remove("fill")
+                }
+                applyRecordingFilters();
+            });
+        });
+
+    }
     document.body.classList.remove("hidden");
 });
