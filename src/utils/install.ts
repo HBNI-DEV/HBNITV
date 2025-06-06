@@ -20,13 +20,13 @@ function isAppInstalled(): boolean {
 }
 
 function hideInstallButton() {
-    const installButton = document.getElementById("install");
-    if (installButton) installButton.classList.add("hidden");
+    const installButtons = document.querySelectorAll("#install");
+    installButtons.forEach((button) => button.classList.add("hidden"));
 }
 
 function showInstallButton() {
-    const installButton = document.getElementById("install");
-    if (installButton) installButton.classList.remove("hidden");
+    const installButtons = document.querySelectorAll("#install");
+    installButtons.forEach((button) => button.classList.remove("hidden"));
 }
 
 async function handleInstallClick() {
@@ -63,6 +63,6 @@ export function initInstall() {
         hideInstallButton();
     }
 
-    const installButton = document.getElementById("install");
-    if (installButton) installButton.addEventListener("click", handleInstallClick);
+    const installButtons = document.querySelectorAll("#install");
+    installButtons.forEach((button) => button.addEventListener("click", handleInstallClick));
 }
