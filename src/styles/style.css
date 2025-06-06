@@ -2,6 +2,12 @@ body:not(.loaded) {
     display: none;
 }
 
+.highlight {
+    background-color: var(--primary);
+    color: var(--on-primary);
+    font-weight: bold;
+}
+
 .hidden {
     display: none !important;
 }

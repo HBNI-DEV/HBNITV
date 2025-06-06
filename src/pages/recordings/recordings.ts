@@ -5,29 +5,17 @@ import { initializeCoreUI } from "@utils/ui-core";
 
 let selectedOwners: string[] = [];
 
-function showPage(pageId: string) {
-    document.querySelectorAll(".page").forEach((el) => {
-        el.classList.remove("active");
-    });
-    const page = document.querySelector(pageId);
-    if (page) page.classList.add("active");
-
-    const tabs = document.getElementById("tabs") as HTMLDivElement;
-    const anchors = tabs.querySelectorAll("a");
-    anchors.forEach((anchor) => {
-        anchor.classList.remove("active");
-        if (anchor.getAttribute("data-ui") === pageId) {
-            anchor.classList.add("active");
-        }
-    });
-}
-
 function applyRecordingFilters() {
     const recordings = document.getElementById("recordings") as HTMLDivElement;
     const recordingsList = recordings.querySelectorAll(".recording") as NodeListOf<HTMLElement>;
 
-    const searchInput = (document.getElementById("search-input") as HTMLInputElement).value.toLowerCase().trim();
-    const searchTerms = searchInput.length > 0 ? searchInput.split(" ") : [];
+    const searchInput = (document.getElementById("search-input") as HTMLInputElement).value.toLowerCase();
+    const searchTerms = searchInput.length > 0
+        ? [...new Set(searchInput.match(/"[^"]+"|\S+/g)?.map(s => s.replace(/^"|"$/g, "")) || [])]
+        : [];
+
+    const sectionWrappers = recordings.querySelectorAll("article[id^='recordings-']");
+    sectionWrappers.forEach(section => section.classList.remove("hidden"));
 
     recordingsList.forEach(recording => {
         const recordingOwnerEmail = recording.dataset.ownerEmail || "";
@@ -54,26 +42,23 @@ function applyRecordingFilters() {
             recording.classList.add("hidden");
         }
     });
+
+    // Hide sections where all child recordings are hidden
+    sectionWrappers.forEach(section => {
+        const visibleRecordings = section.querySelectorAll(".recording:not(.hidden)");
+        if (visibleRecordings.length === 0) {
+            section.classList.add("hidden");
+        } else {
+            section.classList.remove("hidden");
+        }
+    });
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
     document.body.classList.add("hidden");
     await initializeCoreUI();
 
-    const settings = new SettingsManager();
-    const savedTab = await settings.getSetting("last_active_recordings_tab", "#this-week") as string;
-
     if (User.is_logged_in) {
-        showPage(savedTab);
-        const tabs = document.getElementById("tabs") as HTMLDivElement;
-        const anchors = tabs.querySelectorAll("a");
-        anchors.forEach((anchor) => {
-            anchor.addEventListener("click", async () => {
-                const dataUi = anchor.getAttribute("data-ui");
-                await settings.saveSetting("last_active_recordings_tab", dataUi);
-            });
-        });
-
         const searchInput = document.getElementById("search-input") as HTMLInputElement;
         searchInput.addEventListener("input", () => {
             applyRecordingFilters();
@@ -104,7 +89,42 @@ document.addEventListener("DOMContentLoaded", async () => {
                 applyRecordingFilters();
             });
         });
+        document.querySelectorAll(".menu-button").forEach(button => {
+            button.addEventListener("click", e => {
+                e.stopPropagation();
+            });
+        });
+        document.querySelectorAll("menu").forEach(menu => {
+            menu.addEventListener("click", e => {
+                const target = (e.target as HTMLElement).closest("li");
+                if (!target) return;
+                e.stopPropagation();
 
+                const id = target.dataset.id;
+                const title = target.dataset.title;
+
+                if (target.id === "copy-link-button") {
+                    const link = `${location.origin}/recordings/watch?id=${id}`;
+                    navigator.clipboard.writeText(link).then(() => {
+                        ui("#copied-snackbar", 1000);
+                    });
+                }
+
+                if (target.id === "share-button") {
+                    const link = `${location.origin}/recordings/watch?id=${id}`;
+                    if (navigator.share) {
+                        navigator.share({
+                            title: title || "Recording",
+                            url: link
+                        }).catch(console.error);
+                    } else {
+                        navigator.clipboard.writeText(link).then(() => {
+                            console.log(`Copied (fallback): ${link}`);
+                        });
+                    }
+                }
+            });
+        });
     }
     document.body.classList.remove("hidden");
 });

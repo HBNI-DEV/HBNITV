@@ -38,9 +38,9 @@
         <main class="responsive">
             <div id="classes">
                 {% if is_logged_in %}
-                <progress id="loading-spinner" class="circle large absolute center"></progress>
+                <progress id="loading-spinner" class="circle large absolute center middle"></progress>
                 <div class="fade-in" id="video-player"></div>
-                <div class="padding fade-in" id="video-info"></div>
+                <article class="border round fade-in" id="video-info"></article>
                 {% else %}
                 <article
                     class="absolute center round large-width large-padding"
@@ -53,6 +53,7 @@
             </div>
         </main>
     </body>
+    <div class="snackbar" id="copied-snackbar">Link copied to clipboard</div>
     {% if is_logged_in %}
     <script>
         window.USER = {

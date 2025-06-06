@@ -38,7 +38,7 @@
         <main class="responsive">
             <div id="recordings">
                 {% if is_logged_in %}
-                <div class="field fill label prefix border no-margin round">
+                <div class="field label prefix border no-margin round">
                     <i>search</i>
                     <input type="text" id="search-input" name="search-input"/>
                     <label for="search-input">Search</label>
@@ -55,13 +55,9 @@
                         {% endfor %}
                     </nav>
                 </fieldset>
-                <div class="tabs left-align scroll" id="tabs">
-                {% for date_tab in recordings.tabs %}
-                    <a class="{{'active' if loop.first else ''}}" data-ui="#{{ date_tab.lower().replace(' ', '-') }}">{{ date_tab }}</a>
-                {% endfor %}
-                </div>
                 {% for date_tab, date_tab_data in recordings.tabs.items() %}
-                <div class="page padding {{'active' if loop.first else ''}}" id="{{ date_tab.lower().replace(' ', '-') }}">
+                <article class="border round transparent" id="recordings-{{ date_tab.lower().replace(' ', '-') }}">
+                    <h6 id="recording-label">{{ date_tab }}</h6>
                     <div class="grid">
                         {% for recording_data in date_tab_data %}
                         <article class="recording no-padding s12 m6 l4 border round clickable" onclick="window.location.href='/recordings/watch?id={{ recording_data.id }}'" data-owner-email="{{recording_data.owners[0].emailAddress}}" title="{{recording_data.name}}">
@@ -78,12 +74,25 @@
                                         <h6 class="small bold" id="display-name">{{recording_data.owners[0].displayName}}</h6>
                                         <a href="mailto:{{recording_data.owners[0].emailAddress}}" class="link" id="email">{{recording_data.owners[0].emailAddress}}</a>
                                     </div>
+                                    <button class="circle transparent menu-button">
+                                        <i>more_vert</i>
+                                        <menu class="left no-wrap">
+                                            <li id="copy-link-button" data-id="{{recording_data.id}}" data-title="{{recording_data.name}}">
+                                                <i>content_copy</i>
+                                                <span>Copy Link</span>
+                                            </li>
+                                            <li id="share-button" data-id="{{recording_data.id}}" data-title="{{recording_data.name}}">
+                                                <i>share</i>
+                                                <span>Share</span>
+                                            </li>
+                                        </menu>
+                                    </button>
                                 </nav>
                             </div>
                         </article>
                         {% endfor %}
                     </div>
-                </div>
+                </article>
                 {% endfor %}
                 {% else %}
                 <article class="round border">
@@ -95,6 +104,7 @@
             </div>
         </main>
     </body>
+    <div class="snackbar" id="copied-snackbar">Link copied to clipboard</div>
     {% if is_logged_in %}
     <script>
         window.USER = {
