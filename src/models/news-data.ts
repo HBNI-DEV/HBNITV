@@ -7,4 +7,7 @@ export interface NewsData {
     content: string;
     createdAt: string;
     updatedAt: string;
+    edited: boolean;
+    lastEditedAt: string;
+    revisons: string[]
 }

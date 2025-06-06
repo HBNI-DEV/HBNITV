@@ -34,6 +34,10 @@ export class NavigationDialog {
                     ${this.link("contact", "contact_mail", "Contact")}
                     ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/assignments", "folder_open", "Assignments") : ""}
                     ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/register", "person_add", "Register") : ""}
+                    <a id="install" text="Install">
+                        <i>download</i>
+                        <span>Install</span>
+                    </a>
                 </nav>
             </nav>
         `;
@@ -54,6 +58,10 @@ export class NavigationDialog {
             ${this.link("contact", "contact_mail", "Contact")}
             ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/assignments", "folder_open", "Assign...") : ""}
             ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/register", "person_add", "Register") : ""}
+            <a id="install" text="Install">
+                <i>download</i>
+                <span>Install</span>
+            </a>
         `;
 
         const navSmall = document.createElement("nav");
@@ -93,6 +101,10 @@ export class NavigationDialog {
                 ${this.link("contact", "contact_mail", "Contact")}
                 ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/assignments", "folder_open", "Assignments") : ""}
                 ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/register", "person_add", "Register") : ""}
+                <a id="install" text="Install">
+                    <i>download</i>
+                    <span>Install</span>
+                </a>
             </nav>
             <hr class="tiny-margin">
         `;

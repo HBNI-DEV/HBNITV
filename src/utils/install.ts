@@ -19,24 +19,23 @@ function isAppInstalled(): boolean {
     );
 }
 
-function hideInstallUI() {
-    console.log("Hiding install UI");
-    const snackbar = document.querySelector("#install-snackbar");
-    if (snackbar) snackbar.classList.add("hidden");
+function hideInstallButton() {
+    const installButton = document.getElementById("install");
+    if (installButton) installButton.classList.add("hidden");
 }
 
-function showInstallSnackbar() {
-    ui("#install-snackbar");
+function showInstallButton() {
+    const installButton = document.getElementById("install");
+    if (installButton) installButton.classList.remove("hidden");
 }
 
 async function handleInstallClick() {
     if (!installPrompt) return;
     try {
         const result = await installPrompt.prompt();
-        console.log(`Install prompt outcome: ${result.outcome}`);
         if (result.outcome === "accepted") {
             installPrompt = null;
-            hideInstallUI();
+            hideInstallButton();
         }
     } catch (err) {
         console.error("Error showing install prompt:", err);
@@ -48,36 +47,22 @@ window.addEventListener("beforeinstallprompt", (event) => {
     installPrompt = event;
 
     if (!isAppInstalled()) {
-        showInstallSnackbar();
+        showInstallButton();
     } else {
-        hideInstallUI();
+        hideInstallButton();
     }
 });
 
 window.addEventListener("appinstalled", () => {
     installPrompt = null;
-    hideInstallUI();
+    hideInstallButton();
 });
 
 export function initInstall() {
     if (isAppInstalled()) {
-        hideInstallUI();
+        hideInstallButton();
     }
 
-    const installSnackbarButton = document.getElementById(
-        "install-snackbar-btn",
-    );
-    if (installSnackbarButton) {
-        installSnackbarButton.addEventListener("click", handleInstallClick);
-    }
+    const installButton = document.getElementById("install");
+    if (installButton) installButton.addEventListener("click", handleInstallClick);
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-    const installSnackBar = document.createElement("div");
-    installSnackBar.innerHTML = `
-        <div id="install-snackbar" class="snackbar">
-            <div class="max">Install this app for a better experience!</div>
-            <a id="install-snackbar-btn" class="inverse-link">Install</a>
-        </div>`;
-    document.body.appendChild(installSnackBar);
-});

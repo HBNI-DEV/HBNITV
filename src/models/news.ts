@@ -10,6 +10,9 @@ export class News implements NewsData {
         content: string;
         createdAt: string;
         updatedAt: string;
+        edited: boolean;
+        lastEditedAt: string;
+        revisons: string[]
     };
     synced?: boolean;
     userData!: UserData;
@@ -29,6 +32,9 @@ export class News implements NewsData {
             content: data?.content ?? "",
             createdAt: data?.createdAt ?? now,
             updatedAt: data?.updatedAt ?? now,
+            edited: data?.edited ?? false,
+            lastEditedAt: data?.lastEditedAt ?? "",
+            revisons: data?.revisons ?? [],
         };
         this.synced = (data as any)?.synced ?? false;
         this.createdAtReadable = this.formatDateTime(this._data.createdAt).readable;
@@ -80,6 +86,15 @@ export class News implements NewsData {
 
     get createdAt() { return this._data.createdAt; }
     get updatedAt() { return this._data.updatedAt; }
+
+    get edited() { return this._data.edited; }
+    set edited(value: boolean) { this._data.edited = value; this.emitChange(); }
+
+    get lastEditedAt() { return this._data.lastEditedAt; }
+    set lastEditedAt(value: string) { this._data.lastEditedAt = value; this.emitChange(); }
+
+    get revisons() { return this._data.revisons; }
+    set revisons(value: string[]) { this._data.revisons = value; this.emitChange(); }
 
     toJSON(): NewsData {
         return { ...this._data };
