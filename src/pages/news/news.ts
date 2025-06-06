@@ -114,7 +114,7 @@ class ViewNewsPage {
             </nav>
             <h5 id="dialog-title">${news.title}</h5>
             <span style="color: var(--on-surface-variant);" id="created-at">${news.createdAtReadable} (${news.createdAtRelative})</span>
-            <div id="latest-news-viewer"></div>
+            <div id="latest-news-viewer" style="z-index: 0 !important;"></div>
         `;
 
         const latestNewsViewer = this.latestNewsElement.querySelector("#latest-news-viewer") as HTMLElement;
