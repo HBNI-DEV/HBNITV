@@ -16,6 +16,10 @@ body:not(.loaded) {
     cursor: pointer;
 }
 
+#recordings{
+    overflow: hidden !important;
+}
+
 .handle {
     cursor: move;
 }
