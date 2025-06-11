@@ -17,5 +17,6 @@ class MathOutcome(Outcome):
             "grade": self.grade,
             "strand": self.strand.to_dict(),
             "skills": self.skills.to_dict(),
+            "specific_learning_outcome": self.specific_learning_outcome,
             "general_learning_outcome": self.general_learning_outcome,
         }
