@@ -32,13 +32,15 @@
             defer></script>
         {% endif %}
     </head>
-    <header class="primary fixed">
-    </header>
     <body onload="document.body.classList.add('loaded')">
+        <nav class="m l left max" id="rail-bar">
+        </nav>
+        <header id="header">
+        </header>
         <main class="responsive">
             <div id="classes">
                 {% if is_logged_in %}
-                <progress id="loading-spinner" class="circle large absolute center middle"></progress>
+                <div class="shape loading-indicator extra absolute center middle" id="loading-spinner"></div>
                 <div class="fade-in" id="video-player"></div>
                 <article class="border round fade-in" id="video-info"></article>
                 {% else %}
@@ -47,6 +49,7 @@
                     style="overflow: hidden"
                 >
                     <h5>Login</h5>
+                    <p>To view recording, please login first.</p>
                     <div id="login-page"></div>
                 </article>
                 {% endif %}

@@ -8,8 +8,10 @@ import { ProfileDialog } from "@components/profile-dialog";
 import { SnackbarLogin } from "@components/snackbar-login";
 
 export async function initializeCoreUI() {
-
-    mount(Header, "header");
+    const headerElement = document.querySelector("#header") as HTMLElement;
+    if (headerElement) {
+        headerElement.outerHTML = new Header().htmlElement.outerHTML;
+    }
 
     new SnackbarLogin();
 
@@ -23,18 +25,6 @@ export async function initializeCoreUI() {
         ]);
     } catch (error) {
         console.error("⚠️ UI Core: Theme or animation failed to load", error);
-    }
-}
-
-function mount(
-    Component: new () => { htmlElement: HTMLElement },
-    selector: string,
-) {
-    const target = document.querySelector(selector);
-    if (target) {
-        target.appendChild(new Component().htmlElement);
-    } else {
-        console.warn(`⚠️ UI Core: Missing selector ${selector}`);
     }
 }
 

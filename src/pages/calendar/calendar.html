@@ -32,11 +32,14 @@
             defer></script>
         {% endif %}
     </head>
-    <header class="primary fixed">
-    </header>
     <body onload="document.body.classList.add('loaded')">
+        <nav class="m l left max" id="rail-bar">
+        </nav>
+        <header id="header">
+        </header>
         <main class="responsive">
-            <div id="calendar">
+            <div class="shape loading-indicator extra absolute center middle" id="loading-spinner"></div>
+            <div id="calendar-div">
             </div>
         </main>
     </body>

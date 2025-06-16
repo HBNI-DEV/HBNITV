@@ -65,4 +65,7 @@ export function initInstall() {
 
     const installButtons = document.querySelectorAll("#install");
     installButtons.forEach((button) => button.addEventListener("click", handleInstallClick));
+    if (!installPrompt) {
+        hideInstallButton();
+    }
 }

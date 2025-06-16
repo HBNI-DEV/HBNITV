@@ -1,79 +1,56 @@
 import { User } from "@models/user";
+import { SettingsManager } from "@managers/settings-manager";
 
 export class NavigationDialog {
     dialog: HTMLDialogElement;
     navLarge: HTMLElement;
-    navMedium: HTMLElement;
-    navSmall: HTMLElement;
+    navMobile: HTMLElement;
+    appSettings = new SettingsManager();
     tabs: Record<string, HTMLAnchorElement[]> = {};
 
     constructor() {
-        const { navLargeElement, navMedium, navSmall } = this.createNavs();
+        const { navDesktop, navMobile } = this.createNavs();
         this.dialog = this.createDialog();
-        this.navLarge = navLargeElement;
-        this.navMedium = navMedium;
-        this.navSmall = navSmall;
+        this.navLarge = navDesktop;
+        this.navMobile = navMobile;
         this.init();
     }
 
     private createNavs() {
         const navLarge = document.createElement("template");
         navLarge.innerHTML = `
-            <nav class="left l drawer no-padding">
-                <nav class="primary small-padding">
-                    <a href="/" class="left-align">
-                        <img src="/static/icons/android-icon-192x192.png" width="96px" height="96px" class="square" alt="HBNI Logo">
-                    </a>
-                    <h6 class="no-margin small-padding" id="app-title"></h6>
-                </nav>
-                <nav class="drawer">
-                    ${this.link("news", "news", "News")}
-                    ${this.link("calendar", "calendar_today", "Calendar")}
-                    ${this.link("recordings", "video_library", "Recordings")}
-                    ${this.link("settings", "settings", "Settings")}
-                    ${this.link("contact", "contact_mail", "Contact")}
-                    ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/assignments", "folder_open", "Assignments") : ""}
-                    ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/register", "person_add", "Register") : ""}
-                    <a id="install" text="Install">
-                        <i>download</i>
-                        <span>Install</span>
-                    </a>
-                </nav>
-            </nav>
-        `;
-        const navLargeElement = navLarge.content.firstElementChild as HTMLElement;
-
-        const navMedium = document.createElement("nav");
-        navMedium.className = "left m";
-        navMedium.innerHTML = `
-            <header class="primary fixed">
-                <a href="/">
-                    <img src="/static/icons/android-icon-192x192.png" width="96px" height="96px" class="square" alt="HBNI Logo">
+            <div>
+                <header class="small-padding">
+                    <button class="extra circle transparent" id="menu-button">
+                        <i>menu_open</i>
+                    </button>
+                </header>
+                ${this.link("news", "news", "News")}
+                ${this.link("calendar", "calendar_today", "Calendar")}
+                ${this.link("recordings", "video_library", "Recordings")}
+                ${this.link("settings", "settings", "Settings")}
+                ${this.link("contact", "contact_mail", "Contact")}
+                ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/assignments", "folder_open", "Assignments") : ""}
+                ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/register", "person_add", "Register") : ""}
+                <a id="install" text="Install">
+                    <i>download</i>
+                    <span>Install</span>
                 </a>
-            </header>
-            ${this.link("news", "news", "News")}
-            ${this.link("calendar", "calendar_today", "Calendar")}
-            ${this.link("recordings", "video_library", "Recordings")}
-            ${this.link("settings", "settings", "Settings")}
-            ${this.link("contact", "contact_mail", "Contact")}
-            ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/assignments", "folder_open", "Assign...") : ""}
-            ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/register", "person_add", "Register") : ""}
-            <a id="install" text="Install">
-                <i>download</i>
-                <span>Install</span>
-            </a>
+            </div>
         `;
 
-        const navSmall = document.createElement("nav");
-        navSmall.className = "bottom s surface-container";
-        navSmall.innerHTML = `
+        const navDesktop = navLarge.content.firstElementChild as HTMLElement;
+
+        const navMobile = document.createElement("nav");
+        navMobile.className = "bottom s surface-container";
+        navMobile.innerHTML = `
             ${this.link("news", "news", "News")}
             ${this.link("calendar", "calendar_today", "Calendar")}
             ${this.link("recordings", "video_library", "Recordings")}
             ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/assignments", "folder_open", "Assign...") : ""}
         `;
 
-        return { navLargeElement, navMedium, navSmall };
+        return { navDesktop, navMobile };
     }
 
     private createDialog(): HTMLDialogElement {
@@ -113,29 +90,50 @@ export class NavigationDialog {
 
     private link(href: string, icon: string, label: string): string {
         return `
-            <a id="${href}" href="/${href}" text="${label}">
-                <i>${icon}</i>
-                <span>${label}</span>
-            </a>
+        <a id="${href}"  href="/${href}" text="${label}">
+            <i>${icon}</i>
+            <span>${label}</span>
+        </a>
         `;
     }
 
-    private init(): void {
-        document.body.appendChild(this.navLarge);
-        document.body.appendChild(this.navMedium);
-        document.body.appendChild(this.navSmall);
-        document.body.appendChild(this.dialog);
+    private async init() {
+        const railBar = document.querySelector("#rail-bar") as HTMLElement;
+        if (railBar) {
+            railBar.innerHTML = this.navLarge.innerHTML;
+        }
+        // document.body.appendChild(this.navLarge);
+        // document.body.appendChild(this.navMedium);
+        document.body.appendChild(this.navMobile);
+        // document.body.appendChild(this.dialog);
 
         this.cacheTabs();
         this.setCurrentTab();
+
+        const menuButton = document.querySelector("#menu-button") as HTMLButtonElement;
+        const menuButtonIcon = menuButton.querySelector("i") as HTMLElement;
+        const isCollapsed =  await this.appSettings.getSetting("navigation-collapsed", false) as boolean;
+        menuButtonIcon.innerText = isCollapsed ? "menu" : "menu_open" ;
+        railBar.classList.toggle("max", !isCollapsed);
+
+        menuButton.addEventListener("click", async () => {
+            railBar.classList.toggle("max");
+            if (railBar.classList.contains("max")) {
+                menuButtonIcon.textContent = "menu_open";
+                this.appSettings.saveSetting("navigation-collapsed", false);
+            }
+            else {
+                menuButtonIcon.textContent = "menu";
+                this.appSettings.saveSetting("navigation-collapsed", true);
+            }
+        });
     }
 
     private cacheTabs(): void {
+        const railBar = document.querySelector("#rail-bar") as HTMLElement;
         const anchors = [
-            ...this.navLarge.querySelectorAll("a"),
-            ...this.navMedium.querySelectorAll("a"),
-            ...this.navSmall.querySelectorAll("a"),
-            ...this.dialog.querySelectorAll("a"),
+            ...railBar.querySelectorAll("a"),
+            ...this.navMobile.querySelectorAll("a"),
         ];
 
         anchors.forEach((anchor) => {
@@ -175,6 +173,7 @@ export class NavigationDialog {
 
         const path = window.location.pathname;
         const currentTabs = this.tabs[path];
+        console.log(currentTabs);
         if (currentTabs) {
             this.setActiveTab(currentTabs);
         }

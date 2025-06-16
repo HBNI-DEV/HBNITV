@@ -314,3 +314,4 @@ hbni-itv-service-account.json
 client_secret.json
 static/thumbnails
 static/profiles
+*.lock

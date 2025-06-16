@@ -10,16 +10,48 @@ export class Header {
     }
 
     private createElement(): HTMLElement {
-        const nav = document.createElement("nav");
-        nav.innerHTML = `
-            <button class="s circle transparent" onclick="ui('#navigation-dialog')">
-                <i>menu</i>
-            </button>
-            <h5 class="s m left-align" id="app-title"></h5>
-            <div class="max"></div>
-            <span id="auth-button-container"></span>
+        const header = document.createElement("header");
+        header.classList.add("fixed", "transparent", "center-align", "min");
+        header.innerHTML = `
+        <div class="margin">
+            <nav class="toolbar primary elevate min">
+                <nav class="s min active">
+                    <button class="extra circle">
+                        <i>menu</i>
+                    </button>
+                    <menu class="bottom transparent no-wrap">
+                        ${this.link("news", "news", "News")}
+                        ${this.link("calendar", "calendar_today", "Calendar")}
+                        ${this.link("recordings", "video_library", "Recordings")}
+                        ${this.link("settings", "settings", "Settings")}
+                        ${this.link("contact", "contact_mail", "Contact")}
+                        ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/assignments", "folder_open", "Assignments") : ""}
+                        ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/register", "person_add", "Register") : ""}
+                        <li>
+                            <button class="fill" id="install" text="Install">
+                                <i>download</i>
+                                <span>Install</span>
+                            </button>
+                        </li>
+                    </menu>
+                </nav>
+                <h5 id="app-title"></h5>
+                <span id="auth-button-container"></span>
+            </nav>
+        </div>
         `;
-        return nav;
+        return header;
+    }
+
+    private link(href: string, icon: string, label: string): string {
+        return `
+        <li>
+            <button class="fill" id="${href}"  onclick="window.location.href='/${href}';">
+                <i>${icon}</i>
+                <span>${label}</span>
+            </button>
+        </li>
+        `;
     }
 
     private init(): void {

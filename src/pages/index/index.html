@@ -32,13 +32,15 @@
             defer></script>
         {% endif %}
     </head>
-    <header class="primary fixed">
-    </header>
     <body onload="document.body.classList.add('loaded')">
+        <nav class="m l left max" id="rail-bar">
+        </nav>
+        <header id="header">
+        </header>
         <main class="responsive">
-            <img class="responsive relative center" src="/static/images/hbnilogo.png"
-            alt="HBNI Logo" style="max-height: 300px; width: auto;"/>
             <article class="round border center-align">
+                <img class="responsive" src="/static/images/hbnilogo.png"
+                alt="HBNI Logo" style="max-height: 300px; width: auto;"/>
                 <p>
                     Welcome to the HBNITV website. Here you can find all the latest <a class="link underline"
                         href="/news">news</a>, <a class="link underline" href="/recordings">recordings</a>, and more.
