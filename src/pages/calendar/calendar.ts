@@ -41,7 +41,7 @@ class StudentCalendarElement {
 
     async resize() {
         const isMobile = window.innerWidth <= 600;
-        const isRailBarCollapsed = await this.appSettings.getSetting("navigation-collapsed", true);
+        const isRailBarCollapsed = await this.appSettings.getSetting("navigation-collapsed", false);
 
         if (isMobile) {
             this.iFrame.style.width = `calc(100vw - ${this.padding}px)`;
