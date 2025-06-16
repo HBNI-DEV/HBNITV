@@ -19,7 +19,7 @@ export class Header {
                     <button class="extra circle">
                         <i>menu</i>
                     </button>
-                    <menu class="bottom transparent no-wrap">
+                    <menu class="bottom transparent no-wrap" style="max-block-size: 100vh !important;">
                         ${this.link("news", "news", "News")}
                         ${this.link("calendar", "calendar_today", "Calendar")}
                         ${this.link("recordings", "video_library", "Recordings")}
