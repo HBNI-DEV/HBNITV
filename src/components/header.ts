@@ -35,7 +35,7 @@ export class Header {
                         </li>
                     </menu>
                 </nav>
-                <h5 id="app-title"></h5>
+                <h6 id="app-title"></h6>
                 <span id="auth-button-container"></span>
             </nav>
         </div>
