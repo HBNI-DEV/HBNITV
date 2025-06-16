@@ -42,7 +42,7 @@ export class NavigationDialog {
         const navDesktop = navLarge.content.firstElementChild as HTMLElement;
 
         const navMobile = document.createElement("nav");
-        navMobile.className = "bottom s surface-container";
+        navMobile.className = "bottom s";
         navMobile.innerHTML = `
             ${this.link("news", "news", "News")}
             ${this.link("calendar", "calendar_today", "Calendar")}
