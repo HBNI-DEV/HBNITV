@@ -6,7 +6,8 @@ import { initializeCoreUI } from "@utils/ui-core";
 let selectedOwners: string[] = [];
 
 function applyRecordingFilters() {
-    const recordings = document.getElementById("recordings") as HTMLDivElement;
+    const recordings = document.getElementById("recordings-container") as HTMLDivElement;
+    console.log(recordings);
     const recordingsList = recordings.querySelectorAll(".recording") as NodeListOf<HTMLElement>;
 
     const searchInput = (document.getElementById("search-input") as HTMLInputElement).value.toLowerCase();
