@@ -42,10 +42,6 @@ export class ProfileDialog {
                                     <i>${icon}</i>
                                     <span>${roleLabel}</span>
                                 </div>
-                                <div class="chip round tiny green tiny-margin" id="internet-status-badge">
-                                    <i>wifi</i>
-                                    <span>Online</span>
-                                </div>
                             </nav>
                         </div>
                     </div>
@@ -73,7 +69,6 @@ export class ProfileDialog {
 
         this.bindLogout();
         this.showWelcomeSnackbar();
-        this.setupNetworkStatusBadge();
     }
 
     private bindLogout() {
@@ -96,28 +91,6 @@ export class ProfileDialog {
                 console.error("🚫 Logout failed:", error);
             }
         });
-    }
-
-    private setupNetworkStatusBadge(): void {
-        const badge = this.htmlElement.querySelector("#internet-status-badge") as HTMLElement;
-        if (!badge) return;
-
-        const updateBadge = () => {
-            if (navigator.onLine) {
-                badge.classList.remove("error");
-                badge.classList.add("green");
-                badge.innerHTML = `<i style="color: black;">wifi</i><span style="color: black;">Online</span>`;
-            } else {
-                badge.classList.remove("green");
-                badge.classList.add("error");
-                badge.innerHTML = `<i style="color: black;">wifi_off</i><span style="color: black;">Offline</span>`;
-            }
-        };
-
-        updateBadge();
-
-        window.addEventListener("online", updateBadge);
-        window.addEventListener("offline", updateBadge);
     }
 
     private showWelcomeSnackbar() {
