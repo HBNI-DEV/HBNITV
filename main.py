@@ -1,6 +1,7 @@
 import asyncio
 
 from tornado.httpserver import HTTPServer
+from tornado.options import define, options
 from tornado.web import Application
 
 from app.config.environments import Environment
@@ -12,6 +13,8 @@ from app.utils.recordings_cache import (
 from app.utils.shared_folders import start_folder_cache_updater
 from app.utils.users_cache import start_users_cache_updater
 
+define("compress_response", default=True, help="Enable Gzip compression")
+
 
 class TornadoApp(Application):
     def __init__(self):
@@ -19,6 +22,7 @@ class TornadoApp(Application):
             url_patterns,
             cookie_secret="hbni-itv-secret",
             static_hash_cache=True,
+            compress_response=options.compress_response,
         )
 
 

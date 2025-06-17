@@ -6,6 +6,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { GenerateSW } = require('workbox-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const Critters = require('critters-webpack-plugin');
+const { PurgeCSSPlugin } = require('purgecss-webpack-plugin');
+const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
+const globAll = require('glob-all');
 
 const webpack = require('webpack');
 
@@ -50,7 +54,7 @@ module.exports = {
         clean: true,
     },
 
-    devtool: isProduction ? 'source-map' : 'eval-cheap-module-source-map',
+    devtool: isProduction ? false : 'source-map',
 
     devServer: {
         static: { directory: path.join(__dirname, 'public') },
@@ -107,8 +111,17 @@ module.exports = {
             },
             {
                 test: /\.css$/i,
-                use: [MiniCssExtractPlugin.loader, 'css-loader'],
-            },
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: false,
+                        },
+                    },
+                ],
+            }
+
         ],
     },
 
@@ -127,6 +140,18 @@ module.exports = {
     },
 
     plugins: [
+        new Critters({
+            preload: 'swap',
+        }),
+
+        // ⬇️ Remove unused CSS (based on your HTML + TS/JS)
+        new PurgeCSSPlugin({
+            paths: globAll.sync([
+                path.join(__dirname, 'src/**/*.{ts,tsx,js,jsx,html}'),
+                path.join(__dirname, 'src/pages/**/*.html'),
+            ]),
+            safelist: { standard: [/^html/, /^body/, /^#/, /^\.*/] }, // optional: adjust as needed
+        }),
         new MiniCssExtractPlugin({
             filename: isProduction ? 'css/[name].[contenthash].css' : 'css/[name].bundle.css',
         }),
@@ -173,4 +198,21 @@ module.exports = {
             ],
         }),
     ],
+    optimization: {
+        ...module.exports.optimization,
+        minimizer: [
+            '...', // keep existing minimizers like Terser
+            new ImageMinimizerPlugin({
+                minimizer: {
+                    implementation: ImageMinimizerPlugin.imageminMinify,
+                    options: {
+                        plugins: [
+                            ['imagemin-webp', { quality: 75 }],
+                            ['imagemin-avif', { quality: 50 }],
+                        ],
+                    },
+                },
+            }),
+        ],
+    },
 };
