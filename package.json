@@ -6,11 +6,11 @@
     "scripts": {
         "dev": "cross-env NODE_ENV=development webpack serve",
         "build": "cross-env NODE_ENV=production webpack",
-        "run": "main.py"
+        "run": ".venv/bin/python main.py"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/thecodingjsoftware/hbni-itv.git"
+        "url": "git+https://github.com/TheCodingJsoftware/HBNITV"
     },
     "keywords": [
         "hbni",
@@ -19,12 +19,13 @@
     "author": "Jared Gross",
     "license": "GPL-3.0",
     "bugs": {
-        "url": "https://github.com/thecodingjsoftware/hbni-itv/issues"
+        "url": "https://github.com/TheCodingJsoftware/HBNITV/issues"
     },
-    "homepage": "https://github.com/thecodingjsoftware/hbni-itv#readme",
+    "homepage": "https://github.com/TheCodingJsoftware/HBNITV#readme",
     "dependencies": {
         "@toast-ui/editor": "^3.2.2",
         "beercss": "^3.11.18",
+        "firebase": "^11.9.1",
         "install": "^0.13.0",
         "katex": "^0.16.22",
         "swapy": "^1.0.5",

@@ -1,10 +1,11 @@
 import io
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaIoBaseDownload
+from ics import Calendar
 
 from app.config.environments import Environment
 
@@ -33,6 +34,17 @@ def get_drive_service():
     return build("drive", "v3", credentials=credentials)
 
 
+def get_calendar_service():
+    credentials = service_account.Credentials.from_service_account_file(
+        Environment.SERVICE_ACCOUNT_FILE,
+        scopes=[
+            "https://www.googleapis.com/auth/calendar",
+        ],
+    ).with_subject(Environment.DELEGATED_ADMIN)
+
+    return build("calendar", "v3", credentials=credentials)
+
+
 def get_delegated_drive_service(delegated_email: str):
     credentials = service_account.Credentials.from_service_account_file(
         Environment.SERVICE_ACCOUNT_FILE,
@@ -53,6 +65,59 @@ def get_drive_credentials(delegated_email: str):
     ).with_subject(delegated_email)
 
     return build("drive", "v3", credentials=credentials)
+
+
+def get_time_range_for_three_years():
+    now = datetime.now(timezone.utc)
+    last_year = now.year - 1
+    next_year = now.year + 1
+
+    # Start from Jan 1 of last year at 00:00:00 UTC
+    time_min = datetime(last_year, 1, 1).strftime("%Y-%m-%dT%H:%M:%SZ")
+    # End on Dec 31 of next year at 23:59:59 UTC
+    time_max = datetime(next_year, 12, 31, 23, 59, 59).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    return time_min, time_max
+
+
+def clear_existing_day_x_events(service, calendar_id: str):
+    page_token = None
+    while True:
+        events = (
+            service.events()
+            .list(
+                calendarId=calendar_id,
+                maxResults=2500,
+                pageToken=page_token,
+            )
+            .execute()
+        )
+
+        for event in events.get("items", []):
+            try:
+                service.events().delete(
+                    calendarId=calendar_id, eventId=event["id"]
+                ).execute()
+            except Exception as e:
+                print(f"Failed to delete event {event['id']}: {e}")
+
+        page_token = events.get("nextPageToken")
+        if not page_token:
+            break
+
+
+def update_ics_to_google_calendar(calendar_id: str, calendar_obj: Calendar):
+    service = get_calendar_service()
+    clear_existing_day_x_events(service, calendar_id)
+
+    for event in calendar_obj.events:
+        body = {
+            "summary": event.name,
+            "start": {"date": event.begin.date().isoformat()},
+            "end": {"date": (event.begin.date() + timedelta(days=1)).isoformat()},
+        }
+
+        service.events().insert(calendarId=calendar_id, body=body).execute()
 
 
 def list_mp4_files_in_folder(drive, folder_id: str) -> list[dict]:

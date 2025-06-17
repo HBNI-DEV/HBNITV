@@ -1,5 +1,6 @@
 import { SettingsManager } from "@managers/settings-manager";
 import { initializeCoreUI } from "@utils/ui-core";
+import { EditCalendarDialog } from "@components/edit-calendar-dialog";
 
 class StudentCalendarElement {
     tagName: string;
@@ -35,26 +36,35 @@ class StudentCalendarElement {
         menuButton.addEventListener("click", async () => {
             this.resize();
         });
+
+        const editCalendarButton = document.querySelector("#edit-calendar-button") as HTMLButtonElement;
+        if (editCalendarButton) {
+            editCalendarButton.addEventListener("click", async () => {
+                ui("#edit-calendar-dialog");
+            });
+        }
         this.resize();
     }
 
     async resize() {
+        const main = document.querySelector("main") as HTMLElement;
+        const mainHeight = main.offsetHeight;
         const isMobile = window.innerWidth <= 600;
         const isRailBarCollapsed = await this.appSettings.getSetting("navigation-collapsed", false);
 
         if (isMobile) {
             this.iFrame.style.width = `calc(100vw - ${this.padding}px)`;
-            this.iFrame.style.height = `calc(100vh - ${this.footerHeight}px - ${this.headerHeight}px - ${this.padding}px)`;
+            // this.iFrame.style.height = `calc(100vh - ${this.footerHeight}px - ${this.headerHeight}px - ${this.padding}px)`;
         }else{
             if (isRailBarCollapsed) {
                 this.iFrame.style.width = `calc(100vw - ${this.railBarCollapsedWidth}px - ${this.padding}px)`;
-                this.iFrame.style.height = `calc(100vh - ${this.headerHeight}px - ${this.padding}px)`;
+                // this.iFrame.style.height = `calc(100vh - ${this.footerHeight}px - ${this.headerHeight}px - ${this.padding}px)`;
             }else{
                 this.iFrame.style.width = `calc(100vw - ${this.railBarExpandedWidth}px - ${this.padding}px)`;
-                this.iFrame.style.height = `calc(100vh - ${this.headerHeight}px - ${this.padding}px)`;
+                // this.iFrame.style.height = `calc(100vh - ${this.footerHeight}px - ${this.headerHeight}px - ${this.padding}px)`;
             }
         }
-
+        this.iFrame.style.height = `calc(${main.offsetHeight}px - ${this.padding}px)`;
         this.iFrame.style.maxWidth = `1200px`;
         this.iFrame.style.maxInlineSize = `75rem`;
     }
@@ -63,6 +73,8 @@ class StudentCalendarElement {
 document.addEventListener("DOMContentLoaded", async () => {
     document.body.classList.add("hidden");
     await initializeCoreUI();
+
+    const editCalendarDialog = new EditCalendarDialog();
 
     const calenderDiv = document.querySelector("#calendar-div") as HTMLDivElement;
     if (calenderDiv) {

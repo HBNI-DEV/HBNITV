@@ -1,4 +1,5 @@
 from app.handlers.api.assignment import AssignmentAPIHandler
+from app.handlers.api.calendar import CalendarAPIHandler
 from app.handlers.api.curiki.biology import (
     CurikiBiologyGeneralLearningOutcomesAPIHandler,
     CurikiBiologyOutcomesAPIHandler,
@@ -10,19 +11,19 @@ from app.handlers.api.curiki.math import (
     CurikiMathStrandsAPIHandler,
 )
 from app.handlers.api.curiki.science import (
+    CurikiScienceClustersAPIHandler,
     CurikiScienceGeneralLearningOutcomesAPIHandler,
     CurikiScienceOutcomesAPIHandler,
-    CurikiScienceClustersAPIHandler,
 )
 from app.handlers.api.curiki.social_studies import (
     CurikiSocialStudiesClustersAPIHandler,
     CurikiSocialStudiesDistinctiveLearningOutcomesAPIHandler,
     CurikiSocialStudiesGeneralLearningOutcomesAPIHandler,
     CurikiSocialStudiesGlossaryAPIHandler,
-    CurikiSocialStudiesOutcomeTypesAPIHandler,
     CurikiSocialStudiesOutcomesAPIHandler,
-    CurikiSocialStudiesSkillTypesAPIHandler,
+    CurikiSocialStudiesOutcomeTypesAPIHandler,
     CurikiSocialStudiesSkillsAPIHandler,
+    CurikiSocialStudiesSkillTypesAPIHandler,
 )
 from app.handlers.api.google_share_folder_ids import SharedGoogleFolderIDsAPIHandler
 from app.handlers.api.login import LoginAPIHandler
@@ -131,4 +132,5 @@ api_routes = [
         CurikiSocialStudiesGlossaryAPIHandler,
         name="api_curiki_social_studies_glossary",
     ),
+    route(r"/api/calendar", CalendarAPIHandler, name="api_calendar"),
 ]

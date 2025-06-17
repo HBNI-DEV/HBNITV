@@ -11,9 +11,9 @@ export class Header {
 
     private createElement(): HTMLElement {
         const header = document.createElement("header");
-        header.classList.add("fixed", "transparent", "center-align", "min");
+        header.classList.add("fixed", "transparent", "center-align", "min", "margin");
         header.innerHTML = `
-        <div class="margin">
+        <div>
             <nav class="toolbar primary elevate min">
                 <nav class="s min active">
                     <button class="extra circle">
