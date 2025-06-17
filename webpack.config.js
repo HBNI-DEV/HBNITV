@@ -1,15 +1,13 @@
 const path = require('path');
 const fs = require('fs');
 const glob = require('glob');
+const globAll = require('glob-all');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { GenerateSW } = require('workbox-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const Critters = require('critters-webpack-plugin');
 const { PurgeCSSPlugin } = require('purgecss-webpack-plugin');
-const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
-const globAll = require('glob-all');
 
 const webpack = require('webpack');
 
@@ -140,11 +138,6 @@ module.exports = {
     },
 
     plugins: [
-        new Critters({
-            preload: 'swap',
-        }),
-
-        // ⬇️ Remove unused CSS (based on your HTML + TS/JS)
         new PurgeCSSPlugin({
             paths: globAll.sync([
                 path.join(__dirname, 'src/**/*.{ts,tsx,js,jsx,html}'),
@@ -198,21 +191,4 @@ module.exports = {
             ],
         }),
     ],
-    optimization: {
-        ...module.exports.optimization,
-        minimizer: [
-            '...', // keep existing minimizers like Terser
-            new ImageMinimizerPlugin({
-                minimizer: {
-                    implementation: ImageMinimizerPlugin.imageminMinify,
-                    options: {
-                        plugins: [
-                            ['imagemin-webp', { quality: 75 }],
-                            ['imagemin-avif', { quality: 50 }],
-                        ],
-                    },
-                },
-            }),
-        ],
-    },
 };

@@ -6,6 +6,8 @@ WORKDIR /app
 # Copy only package.json/package-lock.json first for better caching
 COPY package.json package-lock.json ./
 
+RUN npm install -g npm@11.4.2
+
 # Install only what's needed
 RUN npm install
 
