@@ -1,6 +1,6 @@
 import "beercss";
 import "@utils/theme";
-import "@utils/register-service-worker";
+// import "@utils/register-service-worker";
 import { User } from "@models/user";
 
 export class LoginDialog {

@@ -1,5 +1,5 @@
-import { SettingsManager } from "@managers/settings-manager";
 import { User } from "@models/user";
+import { loadTheme } from "@utils/theme";
 import { initializeCoreUI } from "@utils/ui-core";
 
 
@@ -7,7 +7,6 @@ let selectedOwners: string[] = [];
 
 function applyRecordingFilters() {
     const recordings = document.getElementById("recordings-container") as HTMLDivElement;
-    console.log(recordings);
     const recordingsList = recordings.querySelectorAll(".recording") as NodeListOf<HTMLElement>;
 
     const searchInput = (document.getElementById("search-input") as HTMLInputElement).value.toLowerCase();
@@ -55,9 +54,11 @@ function applyRecordingFilters() {
     });
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
-    document.body.classList.add("hidden");
-    await initializeCoreUI();
+
+document.addEventListener("DOMContentLoaded", () => {
+    // document.body.classList.add("hidden");
+    loadTheme();
+    initializeCoreUI();
 
     if (User.is_logged_in) {
         const searchInput = document.getElementById("search-input") as HTMLInputElement;
@@ -127,5 +128,5 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
         });
     }
-    document.body.classList.remove("hidden");
+    // document.body.classList.add("hidden");
 });

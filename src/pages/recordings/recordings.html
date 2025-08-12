@@ -32,12 +32,12 @@
             defer></script>
         {% endif %}
     </head>
-    <body onload="document.body.classList.add('loaded')">
+    <body>
         <nav class="m l left max" id="rail-bar">
         </nav>
         <header id="header">
         </header>
-        <main class="responsive">
+        <main class="responsive" data-page="recordings">
             <div id="recordings-container">
                 {% if is_logged_in %}
                 <div class="field label prefix border no-margin round">
@@ -50,7 +50,7 @@
                     <nav class="wrap row no-space" id="owners">
                         {% for owner in recordings._owners %}
                         <div class="chip round tiny-margin pointer" data-owner-name="{{owner.displayName}}" data-owner-email="{{owner.email}}">
-                            <img class="responsive" src="{{owner.photoLink}}" alt="Profile Picture" />
+                            <img loading="lazy" class="responsive" src="{{owner.photoLink}}" alt="Profile Picture" />
                             <i class="hidden">check</i>
                             <span>{{owner.displayName}}</span>
                         </div>
@@ -63,7 +63,7 @@
                     <div class="grid">
                         {% for recording_data in date_tab_data %}
                         <article class="recording no-padding s12 m6 l4 border round clickable" onclick="window.location.href='/recordings/watch?id={{ recording_data.id }}'" data-owner-email="{{recording_data.owners[0].emailAddress}}" title="{{recording_data.name}}">
-                            <img class="responsive small top-round" src="/api/thumbnail?link={{ recording_data.thumbnailLink }}" alt="Thumbnail" />
+                            <img loading="lazy" class="responsive small top-round" src="/api/thumbnail?link={{ recording_data.thumbnailLink }}" alt="Thumbnail" />
                             <div class="padding">
                                 <nav class="row no-marign no-padding top-align" style="min-block-size: 20px">
                                     <p class="bold max wrap no-line" id="title">{{ recording_data.name }}</p>
@@ -71,7 +71,7 @@
                                 </nav>
                                 <span class="top-margin" style="color: var(--on-surface-variant);" id="created-at">{{recording_data.createdTimeReadable}} <span style="opacity: 0.7;" id="created-at-relative">({{recording_data.createdTimeRelative}})</span></span>
                                 <nav class="row top-padding">
-                                    <img id="dialog-profile-picture" src="{{recording_data.owners[0].photoLink}}" class="circle" alt="Profile Picture" />
+                                    <img loading="lazy" id="dialog-profile-picture" src="{{recording_data.owners[0].photoLink}}" class="circle" alt="Profile Picture" />
                                     <div class="max">
                                         <h6 class="small bold" id="display-name">{{recording_data.owners[0].displayName}}</h6>
                                         <a href="mailto:{{recording_data.owners[0].emailAddress}}" class="link" id="email">{{recording_data.owners[0].emailAddress}}</a>

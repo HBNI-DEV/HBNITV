@@ -32,22 +32,22 @@
             defer></script>
         {% endif %}
     </head>
-    <body onload="document.body.classList.add('loaded')">
+    <body>
         <nav class="m l left max" id="rail-bar">
         </nav>
         <header id="header">
         </header>
-        <main class="responsive">
+        <main class="responsive" data-page="assignments">
             <div id="assignments-list" class="grid"></div>
+            <footer class="transparent">
+                <nav class="right-align">
+                    <button class="square round extra primary medium-elevate" id="create-assignment">
+                        <i>add</i>
+                    </button>
+                </nav>
+            </footer>
         </main>
     </body>
-    <footer class="transparent">
-        <nav class="right-align">
-            <button class="square round extra primary medium-elevate" id="create-assignment">
-                <i>add</i>
-            </button>
-        </nav>
-    </footer>
     {% if is_logged_in %}
     <script>
         window.USER = {

@@ -16,9 +16,7 @@ function updateEmailElement(firstName: string, lastName: string, colony: string)
     emailElement.value = email;
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
-    document.body.classList.add("hidden");
-    await initializeCoreUI();
+function load() {
 
     const colonyNameInput = document.querySelector("#colony") as HTMLInputElement;
     const firstNameInput = document.querySelector("#first_name") as HTMLInputElement;
@@ -59,7 +57,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         // snackbar.show(2000);
                         const accountRegisteredDialog = new AccountRegisteredDialog(data.user_info);
                         accountRegisteredDialog.show();
-                    }else{
+                    } else {
                         const snackbar = new Snackbar("register-snackbar", data.message);
                         snackbar.show(6000);
                     }
@@ -74,5 +72,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                 console.error("❌ Register failed:", err);
             });
     });
-    document.body.classList.remove("hidden");
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    // document.body.classList.add("hidden");
+    initializeCoreUI();
+    load();
+    // document.body.classList.add("hidden");
 });

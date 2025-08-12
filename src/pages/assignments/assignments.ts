@@ -38,7 +38,7 @@ class AssignmentsPage {
     private bindEvents() {
         this.createAssignmentButton.addEventListener("click", async () => {
             const assignmentId = new Date().getTime().toString();
-            const assignment = new Assignment({id: assignmentId});
+            const assignment = new Assignment({ id: assignmentId });
             assignment.title = "New Assignment";
             assignment.userInfo = User;
             await AssignmentsAPI.saveAssignment(assignment);
@@ -47,9 +47,7 @@ class AssignmentsPage {
     }
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
-    document.body.classList.add("hidden");
-    await initializeCoreUI();
-    const assignmentPage = new AssignmentsPage();
-    document.body.classList.remove("hidden");
+document.addEventListener("DOMContentLoaded", () => {
+    initializeCoreUI();
+    const assignmentsPage = new AssignmentsPage();
 });

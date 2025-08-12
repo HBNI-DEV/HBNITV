@@ -50,29 +50,29 @@ class StudentCalendarElement {
         const main = document.querySelector("main") as HTMLElement;
         const mainHeight = main.offsetHeight;
         const isMobile = window.innerWidth <= 600;
-        const isRailBarCollapsed = await this.appSettings.getSetting("navigation-collapsed", false);
+        const isRailBarCollapsed = localStorage.getItem("navigation-collapsed") === "true";
 
         if (isMobile) {
             this.iFrame.style.width = `calc(100vw - ${this.padding}px)`;
             // this.iFrame.style.height = `calc(100vh - ${this.footerHeight}px - ${this.headerHeight}px - ${this.padding}px)`;
-        }else{
+        } else {
             if (isRailBarCollapsed) {
                 this.iFrame.style.width = `calc(100vw - ${this.railBarCollapsedWidth}px - ${this.padding}px)`;
                 // this.iFrame.style.height = `calc(100vh - ${this.footerHeight}px - ${this.headerHeight}px - ${this.padding}px)`;
-            }else{
+            } else {
                 this.iFrame.style.width = `calc(100vw - ${this.railBarExpandedWidth}px - ${this.padding}px)`;
                 // this.iFrame.style.height = `calc(100vh - ${this.footerHeight}px - ${this.headerHeight}px - ${this.padding}px)`;
             }
         }
-        this.iFrame.style.height = `calc(${main.offsetHeight}px - ${this.padding}px)`;
+        this.iFrame.style.height = `calc(${mainHeight}px - ${this.padding}px)`;
         this.iFrame.style.maxWidth = `1200px`;
         this.iFrame.style.maxInlineSize = `75rem`;
     }
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
-    document.body.classList.add("hidden");
-    await initializeCoreUI();
+document.addEventListener("DOMContentLoaded", () => {
+    // document.body.classList.add("hidden");
+    initializeCoreUI();
 
     const editCalendarDialog = new EditCalendarDialog();
 
@@ -83,5 +83,5 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else {
         console.warn("⚠️ calendar.ts: #calendar container not found.");
     }
-    document.body.classList.remove("hidden");
+    // document.body.classList.add("hidden");
 });

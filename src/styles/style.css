@@ -1,6 +1,6 @@
-body:not(.loaded) {
+/* body:not(.loaded) {
     display: none;
-}
+} */
 
 /* html, body {
   height: 100%;
@@ -13,6 +13,15 @@ main {
   overflow-x: hidden;
   overflow-y: auto;
 } */
+
+.softnav-fade-out main {
+    opacity: 0;
+    transition: opacity .15s;
+}
+
+main {
+    transition: opacity .15s;
+}
 
 .highlight {
     background-color: var(--primary);
@@ -28,7 +37,7 @@ main {
     cursor: pointer;
 }
 
-#recordings{
+#recordings {
     overflow: hidden !important;
 }
 

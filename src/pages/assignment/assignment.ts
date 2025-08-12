@@ -133,8 +133,6 @@ class AssignmentPage {
         this.swapy.onSwap((event) => {
             const slotToItem = event.newSlotItemMap.asMap;
 
-            console.log(slotToItem);
-
             let newQuestionOrder: Question[] = [];
 
             let index = 0;
@@ -143,7 +141,7 @@ class AssignmentPage {
                 const newSlotNumber = parseInt(newSlot);
                 const questionElement = this.questionElements[index];
                 questionElement.updateQuestionNumber(newSlotNumber);
-                newQuestionOrder.push(this.assignment.questions[slotNumber-1]);
+                newQuestionOrder.push(this.assignment.questions[slotNumber - 1]);
                 index++;
             });
 
@@ -170,7 +168,7 @@ class AssignmentPage {
         });
 
         questionElement.htmlElement.addEventListener("delete", () => {
-            this.assignment.removeQuestion(questionElement.questionNumber-1);
+            this.assignment.removeQuestion(questionElement.questionNumber - 1);
             this.removeQuestionElement(questionElement);
             this.scheduleSave();
         });
@@ -205,8 +203,6 @@ class AssignmentPage {
         const openIndexes = this.assignment.questions
             .map((q, index) => q.open ? index + 1 : -1)
             .filter(index => index !== -1);
-
-        console.log(openIndexes);
 
         CookieManager.setCookie(`openDetails-${this.assignmentId}`, JSON.stringify(openIndexes), 365);
     }
@@ -311,12 +307,12 @@ function loadAssignmentFromID() {
     assignmentPage = new AssignmentPage(assignmentId);
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
-    document.body.classList.add("hidden");
-    await initializeCoreUI();
+document.addEventListener("DOMContentLoaded", () => {
+    // document.body.classList.add("hidden");
+    initializeCoreUI();
     loadAssignmentFromID();
     new AssignmentSyncManager();
-    document.body.classList.remove("hidden");
+    // document.body.classList.add("hidden");
 });
 
 window.addEventListener("hashchange", () => {

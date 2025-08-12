@@ -69,49 +69,48 @@ function loadVideoInformation(videoInfo: HTMLDivElement, json_data: any) {
     `;
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
-    // use proper url query params
+function load() {
+
     const id = new URLSearchParams(window.location.search).get("id");
 
     fetch(`/api/recordings?id=${id}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`Failed to save assignment: ${response.statusText}`);
-        }
-        return response.json();
-    })
-    .then(json => {
-        const videoInfo = document.getElementById("video-info") as HTMLDivElement;
-        loadVideoInformation(videoInfo, json);
-        videoInfo.classList.add('show');
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to save assignment: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(json => {
+            const videoInfo = document.getElementById("video-info") as HTMLDivElement;
+            loadVideoInformation(videoInfo, json);
+            videoInfo.classList.add('show');
 
-        const copyLinkButton = document.getElementById("copy-link-button") as HTMLLIElement;
-        const shareButton = document.getElementById("share-button") as HTMLLIElement;
+            const copyLinkButton = document.getElementById("copy-link-button") as HTMLLIElement;
+            const shareButton = document.getElementById("share-button") as HTMLLIElement;
 
-        copyLinkButton.addEventListener("click", () => {
-            navigator.clipboard.writeText(window.location.href);
-            ui("#copied-snackbar", 1000);
-        });
-
-        shareButton.addEventListener("click", () => {
-            const shareUrl = window.location.href;
-            const shareText = document.title;
-            navigator.share({
-                title: shareText,
-                text: shareText,
-                url: shareUrl,
+            copyLinkButton.addEventListener("click", () => {
+                navigator.clipboard.writeText(window.location.href);
+                ui("#copied-snackbar", 1000);
             });
-        });
-    })
-    .catch(error => {
-        console.error("Error fetching video data:", error);
-    });
 
-    document.body.classList.add("hidden");
-    await initializeCoreUI();
+            shareButton.addEventListener("click", () => {
+                const shareUrl = window.location.href;
+                const shareText = document.title;
+                navigator.share({
+                    title: shareText,
+                    text: shareText,
+                    url: shareUrl,
+                });
+            });
+        })
+        .catch(error => {
+            console.error("Error fetching video data:", error);
+        });
+
+    // document.body.classList.add("hidden");
 
     const video = document.getElementById("video-player") as HTMLDivElement;
     const spinner = document.getElementById("loading-spinner") as HTMLProgressElement;
@@ -138,6 +137,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         video.appendChild(wrapper);
     }
+}
 
-    document.body.classList.remove("hidden");
+document.addEventListener("DOMContentLoaded", () => {
+    // use proper url query params
+    initializeCoreUI();
+    load();
+    // document.body.classList.add("hidden");
 });

@@ -1,5 +1,10 @@
 import { User } from "@models/user";
 import { SettingsManager } from "@managers/settings-manager";
+import Prefetcher from "@utils/prefetcher";
+// import { installSoftNav } from "@utils/soft-nav";
+
+// installSoftNav();
+
 
 export class NavigationDialog {
     dialog: HTMLDialogElement;
@@ -14,6 +19,41 @@ export class NavigationDialog {
         this.navLarge = navDesktop;
         this.navMobile = navMobile;
         this.init();
+    }
+
+    private async init() {
+        const railBar = document.querySelector("#rail-bar") as HTMLElement;
+        if (railBar) {
+            railBar.innerHTML = this.navLarge.innerHTML;
+        }
+        // document.body.appendChild(this.navLarge);
+        // document.body.appendChild(this.navMedium);
+        document.body.appendChild(this.navMobile);
+        // document.body.appendChild(this.dialog);
+
+        this.cacheTabs();
+        // window.addEventListener("softnav:after", () => this.setCurrentTab());
+
+        this.setCurrentTab();
+        // this.initPrefetching();  // <— add this
+
+        const menuButton = document.querySelector("#menu-button") as HTMLButtonElement;
+        const menuButtonIcon = menuButton.querySelector("i") as HTMLElement;
+        const isCollapsed = localStorage.getItem("navigation-collapsed") === "true";
+        menuButtonIcon.innerText = isCollapsed ? "menu" : "menu_open";
+        railBar.classList.toggle("max", !isCollapsed);
+
+        menuButton.addEventListener("click", async () => {
+            railBar.classList.toggle("max");
+            if (railBar.classList.contains("max")) {
+                menuButtonIcon.textContent = "menu_open";
+                localStorage.setItem("navigation-collapsed", "false");
+            }
+            else {
+                menuButtonIcon.textContent = "menu";
+                localStorage.setItem("navigation-collapsed", "true");
+            }
+        });
     }
 
     private createNavs() {
@@ -97,36 +137,20 @@ export class NavigationDialog {
         `;
     }
 
-    private async init() {
-        const railBar = document.querySelector("#rail-bar") as HTMLElement;
-        if (railBar) {
-            railBar.innerHTML = this.navLarge.innerHTML;
-        }
-        // document.body.appendChild(this.navLarge);
-        // document.body.appendChild(this.navMedium);
-        document.body.appendChild(this.navMobile);
-        // document.body.appendChild(this.dialog);
+    private initPrefetching() {
+        // Collect a unique list of anchors from both rail + mobile nav
+        const anchors = [
+            ...document.querySelectorAll('#rail-bar a[href^="/"]'),
+            ...this.navMobile.querySelectorAll('a[href^="/"]'),
+        ] as HTMLAnchorElement[];
 
-        this.cacheTabs();
-        this.setCurrentTab();
+        const pf = new Prefetcher(anchors);
+        pf.install();
 
-        const menuButton = document.querySelector("#menu-button") as HTMLButtonElement;
-        const menuButtonIcon = menuButton.querySelector("i") as HTMLElement;
-        const isCollapsed =  await this.appSettings.getSetting("navigation-collapsed", false) as boolean;
-        menuButtonIcon.innerText = isCollapsed ? "menu" : "menu_open" ;
-        railBar.classList.toggle("max", !isCollapsed);
-
-        menuButton.addEventListener("click", async () => {
-            railBar.classList.toggle("max");
-            if (railBar.classList.contains("max")) {
-                menuButtonIcon.textContent = "menu_open";
-                this.appSettings.saveSetting("navigation-collapsed", false);
-            }
-            else {
-                menuButtonIcon.textContent = "menu";
-                this.appSettings.saveSetting("navigation-collapsed", true);
-            }
-        });
+        // (Optional) if you know per-page bundles, warm them here:
+        // pf.modulePreload('/static/js/assignments.js');
+        // pf.modulePreload('/static/js/settings.js');
+        // pf.modulePreload('/static/js/calendar.js');
     }
 
     private cacheTabs(): void {

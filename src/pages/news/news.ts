@@ -65,7 +65,7 @@ class ViewNewsPage {
     }
 
     async init() {
-        this.mode = await this.settings.getSetting("mode", "dark") as string;
+        this.mode = localStorage.getItem("mode") || "dark";
         if (this.mode === "auto") {
             this.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
         }
@@ -296,11 +296,11 @@ class CreateNewsPostPage {
     }
 
     async init() {
-        let [savedContent, savedTitle, editorTheme] = await Promise.all([
+        let [savedContent, savedTitle] = await Promise.all([
             this.settings.getSetting("toast_editor_content", "# Hello, World!"),
             this.settings.getSetting("toast_editor_title", "Hello, World!"),
-            this.settings.getSetting("mode", "dark") as Promise<string>
         ]);
+        let editorTheme = localStorage.getItem("mode") || "dark";
 
         if (editorTheme === "auto") {
             editorTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -370,18 +370,15 @@ function showPage(pageId: string) {
     if (page) page.classList.add("active");
 }
 
-
-document.addEventListener("DOMContentLoaded", async () => {
-    document.body.classList.add("hidden");
+function load() {
+    // document.body.classList.add("hidden");
 
     Promise.all([
-        initializeCoreUI(),
         loadToastUICSS(),
         loadEditorModules(),
     ]);
 
-    const settings = new SettingsManager();
-    const savedTab = await settings.getSetting("last_active_news_tab", "#news-page") as string;
+    const savedTab = localStorage.getItem("last_active_news_tab") || "#news-page";
 
     showPage(savedTab);
 
@@ -395,8 +392,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.querySelectorAll(".tabs a").forEach((tab) => {
         tab.addEventListener("click", async () => {
             const pageId = tab.getAttribute("data-ui")!;
-            await settings.saveSetting("last_active_news_tab", pageId);
+            localStorage.setItem("last_active_news_tab", pageId);
         });
     });
-    document.body.classList.remove("hidden");
+    // document.body.classList.remove("hidden");
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    initializeCoreUI();
+    load();
 });
