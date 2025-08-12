@@ -3,12 +3,8 @@ import '@styles/maintheme.css';
 import '@styles/style.css';
 import "material-dynamic-colors";
 
-import { SettingsManager } from "@managers/settings-manager";
-
-export const appSettings = new SettingsManager();
-export let savedTheme: string = "#006493";
-export let savedMode: string = "auto";
-
+export let savedTheme: string = localStorage.getItem("theme") || "#006493";
+export let savedMode: string = localStorage.getItem("mode") || "auto";
 
 function hexToRgb(hex: string): [number, number, number] {
     hex = hex.replace(/^#/, '');
@@ -53,7 +49,7 @@ function rgbToHsl(r: number, g: number, b: number): [number, number, number] {
     return [h * 360, s * 100, l * 100];
 }
 
-function checkLogos(){
+function checkLogos() {
     const [r, g, b] = hexToRgb(savedTheme);
     const [hue, saturation, lightness] = rgbToHsl(r, g, b);
     const hueRotateValue = `${hue}deg`;
@@ -64,29 +60,21 @@ function checkLogos(){
 
 }
 
-export async function loadTheme() {
-    const [theme, mode] = await Promise.all([
-        appSettings.getSetting("theme", "#006493"),
-        appSettings.getSetting("mode", "auto"),
-    ]);
-
-    savedMode = mode as string;
-    savedTheme = theme as string;
-
-    ui("mode", mode);
-    ui("theme", theme);
+export function loadTheme() {
+    ui("mode", savedMode);
+    ui("theme", savedTheme);
 
     checkLogos();
 }
 
 export function setTheme(color: string) {
-    appSettings.saveSetting("theme", color);
+    localStorage.setItem("theme", color);
     savedTheme = color;
     ui("theme", color);
 }
 
 export function setMode(mode: string) {
-    appSettings.saveSetting("mode", mode);
+    localStorage.setItem("mode", mode);
     savedMode = mode;
     ui("mode", mode);
 

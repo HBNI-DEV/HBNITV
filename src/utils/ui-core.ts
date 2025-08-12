@@ -1,4 +1,4 @@
-import "@utils/register-service-worker";
+// import "@utils/register-service-worker";
 import { initInstall } from "@utils/install";
 import { loadTheme, loadAnimationStyleSheet } from "@utils/theme";
 import { Header } from "@components/header";
@@ -10,17 +10,21 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA1UGxMTJTXzZObFWZyJ81zuNR6YzFwHmM",
-  authDomain: "hbnitv-91ffa.firebaseapp.com",
-  projectId: "hbnitv-91ffa",
-  storageBucket: "hbnitv-91ffa.firebasestorage.app",
-  messagingSenderId: "410778140165",
-  appId: "1:410778140165:web:4777c5f53f0aa1c3d7666c",
-  measurementId: "G-L4Y5X8MJJ3"
+    apiKey: "AIzaSyA1UGxMTJTXzZObFWZyJ81zuNR6YzFwHmM",
+    authDomain: "hbnitv-91ffa.firebaseapp.com",
+    projectId: "hbnitv-91ffa",
+    storageBucket: "hbnitv-91ffa.firebasestorage.app",
+    messagingSenderId: "410778140165",
+    appId: "1:410778140165:web:4777c5f53f0aa1c3d7666c",
+    measurementId: "G-L4Y5X8MJJ3"
 };
+let isLoaded = false;
 
-// Initialize Firebase
-export async function initializeCoreUI() {
+export function initializeCoreUI() {
+    if (isLoaded) return;
+
+    loadTheme();
+
     const headerElement = document.querySelector("#header") as HTMLElement;
     if (headerElement) {
         headerElement.outerHTML = new Header().htmlElement.outerHTML;
@@ -34,15 +38,12 @@ export async function initializeCoreUI() {
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
 
-
     try {
-        await Promise.all([
-            loadTheme(),
-            delay(100).then(loadAnimationStyleSheet),
-        ]);
+        setTimeout(() => loadAnimationStyleSheet(), 100);
     } catch (error) {
         console.error("⚠️ UI Core: Theme or animation failed to load", error);
     }
+    isLoaded = true;
 }
 
 function initDialogs(Components: (new () => any)[]) {

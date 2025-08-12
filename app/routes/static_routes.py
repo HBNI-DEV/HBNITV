@@ -8,7 +8,7 @@ from app.routes.helpers import route
 static_routes = [
     route(r"/sitemap.xml", SitemapHandler),
     route(r"/manifest.json", ManifestHandler),
-    route(r"/service-worker.js", ServiceWorkerHandler),
+    # route(r"/service-worker.js", ServiceWorkerHandler),
     route(
         r"/google1a0dfeb96678ee94.html",
         GoogleVerificationHandler,

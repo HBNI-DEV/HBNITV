@@ -124,17 +124,19 @@ module.exports = {
     },
 
     optimization: {
+        chunkIds: 'deterministic',
         splitChunks: {
+            name: false,
             chunks: 'all',
             cacheGroups: {
                 vendors: {
                     test: /[\\/]node_modules[\\/]/,
                     name: 'vendors',
-                    chunks: 'all',
+                    enforce: true,
+                    reuseExistingChunk: true,
                 },
             },
         },
-        runtimeChunk: 'single',
     },
 
     plugins: [
@@ -162,33 +164,38 @@ module.exports = {
         }),
         ...htmlPlugins,
 
-        new GenerateSW({
-            swDest: 'service-worker.js',
-            clientsClaim: true,
-            skipWaiting: true,
-            maximumFileSizeToCacheInBytes: 12 * 1024 * 1024, // allow bigger caching
-            runtimeCaching: [
-                {
-                    urlPattern: ({ request }) => request.mode === 'navigate',
-                    handler: 'NetworkOnly',
-                    options: {
-                        cacheName: 'html-pages',
-                    },
-                },
-                {
-                    urlPattern: /\.(?:js|css|png|jpg|jpeg|svg|woff2?)$/,
-                    handler: 'StaleWhileRevalidate',
-                    options: {
-                        cacheName: 'static-assets',
-                    },
-                },
-                {
-                    urlPattern: ({ url }) =>
-                        url.hostname === 'accounts.google.com' ||
-                        url.href.startsWith('https://accounts.google.com/gsi/'),
-                    handler: 'NetworkOnly',
-                },
-            ],
-        }),
+        // new GenerateSW({
+        //     swDest: 'service-worker.js',
+        //     clientsClaim: true,
+        //     skipWaiting: true,
+        //     maximumFileSizeToCacheInBytes: 12 * 1024 * 1024, // allow bigger caching
+        //     runtimeCaching: [
+        //         {
+        //             urlPattern: ({ request }) => request.mode === 'navigate',
+        //             handler: 'NetworkOnly',
+        //             options: {
+        //                 cacheName: 'html-pages',
+        //             },
+        //         },
+        //         {
+        //             urlPattern: /\.js$/,
+        //             handler: 'NetworkOnly',
+        //             options: { cacheName: 'js-cache' },
+        //         },
+        //         {
+        //             urlPattern: /\.(?:css|png|jpg|jpeg|svg|woff2?)$/,
+        //             handler: 'StaleWhileRevalidate',
+        //             options: {
+        //                 cacheName: 'static-assets',
+        //             },
+        //         },
+        //         {
+        //             urlPattern: ({ url }) =>
+        //                 url.hostname === 'accounts.google.com' ||
+        //                 url.href.startsWith('https://accounts.google.com/gsi/'),
+        //             handler: 'NetworkOnly',
+        //         },
+        //     ],
+        // }),
     ],
 };
