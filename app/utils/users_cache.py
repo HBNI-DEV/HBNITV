@@ -67,9 +67,7 @@ def get_user_from_db(user_id: str) -> dict[str, str | bool]:
 
 
 def get_users_from_db_from_org_unit(org_unit_path: str) -> list[dict[str, str | bool]]:
-    return _query_users(
-        "SELECT * FROM google_users WHERE org_unit_path = %s", (org_unit_path,)
-    )
+    return _query_users("SELECT * FROM google_users WHERE org_unit_path = %s", (org_unit_path,))
 
 
 def _insert_user(user_id: str, user_data: dict):
@@ -88,9 +86,7 @@ def _insert_user(user_id: str, user_data: dict):
         last_login_str = user_data.get("lastLoginTime")
         if last_login_str:
             try:
-                last_login = datetime.fromisoformat(
-                    last_login_str.replace("Z", "+00:00")
-                )
+                last_login = datetime.fromisoformat(last_login_str.replace("Z", "+00:00"))
             except ValueError:
                 last_login = None
         else:

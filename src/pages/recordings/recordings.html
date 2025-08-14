@@ -45,23 +45,16 @@
                     <input type="text" id="search-input" name="search-input"/>
                     <label for="search-input">Search</label>
                 </div>
-                <fieldset class="small-round">
-                    <legend>Filter by owner</legend>
-                    <nav class="wrap row no-space" id="owners">
-                        {% for owner in recordings._owners %}
-                        <div class="chip round tiny-margin pointer" data-owner-name="{{owner.displayName}}" data-owner-email="{{owner.email}}">
-                            <img loading="lazy" class="responsive" src="{{owner.photoLink}}" alt="Profile Picture" />
-                            <i class="hidden">check</i>
-                            <span>{{owner.displayName}}</span>
-                        </div>
-                        {% endfor %}
+                {% for folder_id, folder_data in recordings.items() %}
+                <article class="border round transparent" id="recordings-{{ folder_id.lower().replace(' ', '-') }}">
+                    <nav class="row">
+                        <i class="extra">
+                            folder_shared
+                        </i>
+                        <h6 id="recording-label">{{ folder_data[0].folderName }}</h6>
                     </nav>
-                </fieldset>
-                {% for date_tab, date_tab_data in recordings.tabs.items() %}
-                <article class="border round transparent" id="recordings-{{ date_tab.lower().replace(' ', '-') }}">
-                    <h6 id="recording-label">{{ date_tab }}</h6>
                     <div class="grid">
-                        {% for recording_data in date_tab_data %}
+                        {% for recording_data in folder_data %}
                         <article class="recording no-padding s12 m6 l4 border round clickable" onclick="window.location.href='/recordings/watch?id={{ recording_data.id }}'" data-owner-email="{{recording_data.owners[0].emailAddress}}" title="{{recording_data.name}}">
                             <img loading="lazy" class="responsive small top-round" src="/api/thumbnail?link={{ recording_data.thumbnailLink }}" alt="Thumbnail" />
                             <div class="padding">

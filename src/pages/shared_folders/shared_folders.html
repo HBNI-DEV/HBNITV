@@ -37,27 +37,54 @@
         </nav>
         <header id="header">
         </header>
-
-        <main class="responsive" data-page="watch_recording">
-            <div class="shape loading-indicator extra absolute center middle" id="loading-spinner"></div>
-            <div id="classes">
-                {% if is_logged_in %}
-                <div class="fade-in" id="video-player"></div>
-                <article class="border round fade-in" id="video-info"></article>
-                {% else %}
-                <article
-                    class="absolute center round large-width large-padding"
-                    style="overflow: hidden"
-                >
-                    <h5>Login</h5>
-                    <p>To view recording, please login first.</p>
-                    <div id="login-page"></div>
+        <main class="responsive" data-page="settings">
+            <p class="italic">Add users to your folder by name, email, studio name, or colony initals. Entries are case insensitive.</p>
+            <div class="grid">
+                {% for folder_id, folder in folder_cache.items() %}
+                {% if email == folder.delegated_email %}
+                <article class="s12 m6 l4 round border" data-folder-id="{{ folder_id }}">
+                    <nav class="row">
+                        <i>
+                            folder_shared
+                        </i>
+                        <p class="wrap max">{{ folder.name }}</p>
+                        <a class="transparent link circle wave small-padding" href="https://drive.google.com/drive/u/0/folders/{{folder_id}}" target="_blank">
+                            <i>open_in_new</i>
+                        </a>
+                    </nav>
+                    <nav class="row wrap no-space allowed-accounts-list">
+                        {% for allowed_account in folder.allowed_accounts %}
+                        <div class="chip round tiny-margin" data-allowed-account="{{allowed_account}}">
+                            <i>check</i>
+                            <span>{{allowed_account}}</span>
+                        </div>
+                        {% endfor %}
+                    </nav>
+                    <div class="field textarea label border small-round hidden">
+                    <textarea>{% for allowed_account in folder.allowed_accounts %}
+{{ allowed_account }}{% endfor %}</textarea>
+                    <label>Allowed Users</label>
+                    </div>
                 </article>
                 {% endif %}
+                {% endfor %}
             </div>
         </main>
+        <footer>
+            <nav class="transparent right-align">
+                <button class="square round extra elevate" id="edit-button">
+                    <i>edit</i>
+                </button>
+                <button class="square round extra elevate hidden" id="save-button">
+                    <i>save</i>
+                </button>
+            </nav>
+        </footer>
+        <div class="snackbar green" id="saved">
+            <i>check</i>
+            <span>Saved</span>
+        </div>
     </body>
-    <div class="snackbar" id="copied-snackbar">Link copied to clipboard</div>
     {% if is_logged_in %}
     <script>
         window.USER = {

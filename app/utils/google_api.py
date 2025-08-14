@@ -95,9 +95,7 @@ def clear_existing_day_x_events(service, calendar_id: str):
 
         for event in events.get("items", []):
             try:
-                service.events().delete(
-                    calendarId=calendar_id, eventId=event["id"]
-                ).execute()
+                service.events().delete(calendarId=calendar_id, eventId=event["id"]).execute()
             except Exception as e:
                 print(f"Failed to delete event {event['id']}: {e}")
 
@@ -122,6 +120,24 @@ def update_ics_to_google_calendar(calendar_id: str, calendar_obj: Calendar):
 
 def list_mp4_files_in_folder(drive, folder_id: str) -> list[dict]:
     query = f"'{folder_id}' in parents and mimeType='video/mp4' and trashed=false"
+    try:
+        response = (
+            drive.files()
+            .list(
+                q=query,
+                spaces="drive",
+                fields="files(id, name, mimeType)",
+            )
+            .execute()
+        )
+        return response.get("files", [])
+    except HttpError as error:
+        print(f"An error occurred: {error}")
+        return []
+
+
+def list_folders_in_folder(drive, folder_id: str) -> list[dict]:
+    query = f"'{folder_id}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false"
     try:
         response = (
             drive.files()
@@ -274,16 +290,10 @@ def delete_user(service, user_email: str):
     service.users().delete(userKey=user_email).execute()
 
 
-def get_all_org_units(
-    customer_id: str = "my_customer", org_unit_path: str = "/", type_: str = "all"
-) -> list[dict]:
+def get_all_org_units(customer_id: str = "my_customer", org_unit_path: str = "/", type_: str = "all") -> list[dict]:
     service = get_workspace_directory_service()
     try:
-        response = (
-            service.orgunits()
-            .list(customerId=customer_id, orgUnitPath=org_unit_path, type=type_)
-            .execute()
-        )
+        response = service.orgunits().list(customerId=customer_id, orgUnitPath=org_unit_path, type=type_).execute()
         return response.get("organizationUnits", [])
     except HttpError as error:
         print(f"An error occurred while listing org units: {error}")

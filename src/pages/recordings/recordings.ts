@@ -66,31 +66,31 @@ document.addEventListener("DOMContentLoaded", () => {
             applyRecordingFilters();
         });
 
-        const ownersNav = document.getElementById("owners") as HTMLDivElement;
-        const owners = ownersNav.querySelectorAll(".chip") as NodeListOf<HTMLElement>;
-        owners.forEach(owner => {
-            const ownerName = owner.dataset.ownerName as string;
-            const ownerEmail = owner.dataset.ownerEmail as string;
+        // const ownersNav = document.getElementById("owners") as HTMLDivElement;
+        // const owners = ownersNav.querySelectorAll(".chip") as NodeListOf<HTMLElement>;
+        // owners.forEach(owner => {
+        //     const ownerName = owner.dataset.ownerName as string;
+        //     const ownerEmail = owner.dataset.ownerEmail as string;
 
-            const checkIcon = owner.querySelector("i") as HTMLElement;
-            const image = owner.querySelector("img") as HTMLImageElement;
+        //     const checkIcon = owner.querySelector("i") as HTMLElement;
+        //     const image = owner.querySelector("img") as HTMLImageElement;
 
-            owner.addEventListener("click", () => {
-                const isChecked = checkIcon.classList.contains("hidden");
-                if (isChecked) {
-                    selectedOwners.push(ownerEmail);
-                    checkIcon.classList.remove("hidden");
-                    image.classList.add("hidden");
-                    owner.classList.add("fill")
-                } else {
-                    selectedOwners = selectedOwners.filter(email => email !== ownerEmail);
-                    checkIcon.classList.add("hidden");
-                    image.classList.remove("hidden");
-                    owner.classList.remove("fill")
-                }
-                applyRecordingFilters();
-            });
-        });
+        //     owner.addEventListener("click", () => {
+        //         const isChecked = checkIcon.classList.contains("hidden");
+        //         if (isChecked) {
+        //             selectedOwners.push(ownerEmail);
+        //             checkIcon.classList.remove("hidden");
+        //             image.classList.add("hidden");
+        //             owner.classList.add("fill")
+        //         } else {
+        //             selectedOwners = selectedOwners.filter(email => email !== ownerEmail);
+        //             checkIcon.classList.add("hidden");
+        //             image.classList.remove("hidden");
+        //             owner.classList.remove("fill")
+        //         }
+        //         applyRecordingFilters();
+        //     });
+        // });
         document.querySelectorAll(".menu-button").forEach(button => {
             button.addEventListener("click", e => {
                 e.stopPropagation();
@@ -99,7 +99,9 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelectorAll("menu").forEach(menu => {
             menu.addEventListener("click", e => {
                 const target = (e.target as HTMLElement).closest("li");
-                if (!target) return;
+                if (!target) {
+                    return;
+                }
                 e.stopPropagation();
 
                 const id = target.dataset.id;

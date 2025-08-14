@@ -31,10 +31,18 @@ class BaseHandler(RequestHandler):
     def write_error(self, status_code: int, **kwargs):
         error_message = ERROR_MESSAGES.get(status_code, "Something went majorly wrong.")
         template = self.get_template("error.html")
-        rendered_template = template.render(
-            error_code=status_code, error_message=error_message
-        )
+        rendered_template = template.render(error_code=status_code, error_message=error_message)
         self.write(rendered_template)
+
+    def _build_identity(self) -> str:
+        email = (self.current_email or "").lower()
+        username = (self.current_username or "").lower()
+        role = (self.current_role or "").lower()
+        user_id = (self.current_user_id or "").lower()
+        hd = (self.current_hd or "").lower()
+        given_name = (self.current_given_name or "").lower()
+        family_name = (self.current_family_name or "").lower()
+        return f"{user_id}:{email}:{username}:{given_name}:{family_name}:{role}:{hd}".lower()
 
     @property
     def current_user_id(self):

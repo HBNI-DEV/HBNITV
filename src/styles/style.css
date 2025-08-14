@@ -14,6 +14,20 @@ main {
   overflow-y: auto;
 } */
 
+/* For the google embed video player */
+[data-tooltip="Pop-out"] {
+    display: none !important;
+}
+
+/* Hide the pop-out button by its aria-label */
+[aria-label="Pop-out"] {
+    display: none !important;
+}
+
+iframe.small-round [aria-label="Pop-out"] {
+    display: none !important;
+}
+
 .softnav-fade-out main {
     opacity: 0;
     transition: opacity .15s;

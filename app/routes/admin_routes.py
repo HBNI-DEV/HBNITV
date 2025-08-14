@@ -1,7 +1,16 @@
+from app.handlers.core.base import BaseHandler
 from app.handlers.generic_page import GenericPageHandler
 from app.routes.helpers import route
 from app.utils.colony_names import COLONY_NAMES
+from app.utils.shared_folders import get_cache_from_db
 from app.utils.users_cache import organizational_units_cache, users_cache
+
+
+class SharedFoldersHandler(BaseHandler):
+    def get(self):
+        folder_cache = get_cache_from_db()
+        self.render_template("shared_folders.html", folder_cache=folder_cache, users=users_cache, organizational_units=organizational_units_cache)
+
 
 admin_routes = [
     route(
@@ -39,6 +48,10 @@ admin_routes = [
         name="assignment",
         template_name="assignment.html",
         required_roles=("admin", "super_admin"),
+    ),
+    route(
+        r"/admin/shared/folders",
+        SharedFoldersHandler,
     ),
     route(
         r"/admin/classes",

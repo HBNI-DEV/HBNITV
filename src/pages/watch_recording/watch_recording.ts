@@ -43,15 +43,6 @@ function loadVideoInformation(videoInfo: HTMLDivElement, json_data: any) {
     <nav>
         <h6 class="small bold max" id="dialog-title">${json_data.name}</h6>
         <div class="badge none border">${formatDuration(json_data.videoMediaMetadata.durationMillis)}</div>
-    </nav>
-    <p style="color: var(--on-surface-variant);" id="created-at">${readableDate} <span style="opacity: 0.7;">(${relative})</span>
-    </p>
-    <nav class="row top-padding">
-        <img id="dialog-profile-picture" src="${json_data.owners[0].photoLink}" class="circle" alt="Profile Picture" />
-        <div class="max">
-            <h6 class="small bold">${json_data.owners[0].displayName}</h6>
-            <a href="mailto:${json_data.owners[0].emailAddress}" class="link" id="dialog-email">${json_data.owners[0].emailAddress}</a>
-        </div>
         <button class="circle transparent">
             <i>more_vert</i>
             <menu class="left no-wrap">
@@ -66,12 +57,22 @@ function loadVideoInformation(videoInfo: HTMLDivElement, json_data: any) {
             </menu>
         </button>
     </nav>
+    <p style="color: var(--on-surface-variant);" id="created-at">${readableDate} <span style="opacity: 0.7;">(${relative})</span>
+    </p>
+    <nav class="row top-padding">
+        <img id="dialog-profile-picture" src="${json_data.owners[0].photoLink}" class="circle" alt="Profile Picture" />
+        <div class="max">
+            <h6 class="small bold">${json_data.owners[0].displayName}</h6>
+            <a href="mailto:${json_data.owners[0].emailAddress}" class="link" id="dialog-email">${json_data.owners[0].emailAddress}</a>
+        </div>
+    </nav>
     `;
 }
 
 function load() {
 
     const id = new URLSearchParams(window.location.search).get("id");
+    let videoInfo = document.getElementById("video-info") as HTMLDivElement;
 
     fetch(`/api/recordings?id=${id}`, {
         method: "GET",
@@ -84,9 +85,7 @@ function load() {
             return response.json();
         })
         .then(json => {
-            const videoInfo = document.getElementById("video-info") as HTMLDivElement;
             loadVideoInformation(videoInfo, json);
-            videoInfo.classList.add('show');
 
             const copyLinkButton = document.getElementById("copy-link-button") as HTMLLIElement;
             const shareButton = document.getElementById("share-button") as HTMLLIElement;
@@ -115,7 +114,7 @@ function load() {
     const video = document.getElementById("video-player") as HTMLDivElement;
     const spinner = document.getElementById("loading-spinner") as HTMLProgressElement;
 
-    if (video && spinner) {
+    if (video && spinner && videoInfo) {
         const iFrame = document.createElement("iframe");
         const wrapper = document.createElement("div");
         wrapper.classList.add("aspect-ratio-16-9");
@@ -132,6 +131,7 @@ function load() {
             video.style.display = "block";
             requestAnimationFrame(() => {
                 video.classList.add('show');
+                videoInfo.classList.add('show');
             });
         };
 
