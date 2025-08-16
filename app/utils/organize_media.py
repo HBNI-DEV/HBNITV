@@ -117,7 +117,7 @@ def transfer_file_between_accounts(user_drive_service, src_file_id, service_work
     print(f"Uploaded {file_name} to {dst_folder_id}")
 
 
-def backup_and_organize_media():
+def organize_media():
     global _is_running
     if _is_running:
         print("[Organizer] Skipping run - already in progress.")
@@ -174,7 +174,7 @@ def backup_and_organize_media():
 
 def start_organizer():
     async def run_in_thread():
-        await asyncio.to_thread(backup_and_organize_media)
+        await asyncio.to_thread(organize_media)
 
     PeriodicCallback(
         lambda: asyncio.ensure_future(run_in_thread()),

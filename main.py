@@ -6,7 +6,7 @@ from tornado.web import Application
 
 from app.config.environments import Environment
 from app.routes import url_patterns
-from app.utils.backup_and_organize_media import start_organizer
+from app.utils.organize_media import start_organizer
 from app.utils.recordings_cache import (
     start_recordings_cache_updater,
     update_recordings_cache,
