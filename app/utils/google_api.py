@@ -154,6 +154,38 @@ def list_folders_in_folder(drive, folder_id: str) -> list[dict]:
         return []
 
 
+def copy_file_to_folder(drive, file_id: str, folder_id: str) -> dict:
+    try:
+        body = {"parents": [folder_id]}
+        return drive.files().copy(fileId=file_id, body=body).execute()
+    except HttpError as error:
+        print(f"An error occurred: {error}")
+        return {}
+
+
+def create_folder_in_folder(drive, parent_folder_id: str, folder_name: str) -> dict:
+    try:
+        body = {"name": folder_name, "mimeType": "application/vnd.google-apps.folder", "parents": [parent_folder_id]}
+        return drive.files().create(body=body).execute()
+    except HttpError as error:
+        print(f"An error occurred: {error}")
+        return {}
+
+
+def folder_exists_in_folder(drive, parent_folder_id: str, folder_name: str) -> str:
+    try:
+        query = f"'{parent_folder_id}' in parents and mimeType='application/vnd.google-apps.folder' and name='{folder_name}'"
+        response = drive.files().list(q=query, fields="files(id)").execute()
+        files = response.get("files", [])
+        if len(files) > 0:
+            return files[0].get("id")
+        else:
+            return None
+    except HttpError as error:
+        print(f"An error occurred: {error}")
+        return None
+
+
 def get_file_metadata(drive, file_id: str) -> dict:
     try:
         return (

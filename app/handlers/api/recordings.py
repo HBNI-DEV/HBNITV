@@ -18,9 +18,3 @@ class RecordingsAPIHandler(BaseHandler):
         if file_id:
             file = google_api.get_file_metadata(drive_service, file_id)
             self.write(file)
-        else:
-            mp4_files = google_api.list_mp4_files_in_folder(
-                drive_service, Environment.CLASSES_FOLDER_ID
-            )
-
-            self.write({"files": mp4_files})
