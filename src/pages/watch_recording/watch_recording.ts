@@ -59,13 +59,6 @@ function loadVideoInformation(videoInfo: HTMLDivElement, json_data: any) {
     </nav>
     <p style="color: var(--on-surface-variant);" id="created-at">${readableDate} <span style="opacity: 0.7;">(${relative})</span>
     </p>
-    <nav class="row top-padding">
-        <img id="dialog-profile-picture" src="${json_data.owners[0].photoLink}" class="circle" alt="Profile Picture" />
-        <div class="max">
-            <h6 class="small bold">${json_data.owners[0].displayName}</h6>
-            <a href="mailto:${json_data.owners[0].emailAddress}" class="link" id="dialog-email">${json_data.owners[0].emailAddress}</a>
-        </div>
-    </nav>
     `;
 }
 

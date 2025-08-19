@@ -1,104 +1,106 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html lang="en">
-    <head>
-        <title>HBNITV</title>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-        <meta name="author" content="Jared Gross" />
-        <meta name="description" content="HBNITV is a website to find the latest news, classes, and more." />
-        <meta name="keywords" content="hutterite, itv, hbni, classes, news, calendar, contact" />
-        <meta name="msapplication-TileColor" content="#101413">
-        <meta name="msapplication-TileImage" content="/static/icons/ms-icon-144x144.png">
-        <meta name="theme-color" content="#101413">
-        <link rel="apple-touch-icon" sizes="57x57" href="/static/icons/apple-icon-57x57.png">
-        <link rel="apple-touch-icon" sizes="60x60" href="/static/icons/apple-icon-60x60.png">
-        <link rel="apple-touch-icon" sizes="72x72" href="/static/icons/apple-icon-72x72.png">
-        <link rel="apple-touch-icon" sizes="76x76" href="/static/icons/apple-icon-76x76.png">
-        <link rel="apple-touch-icon" sizes="114x114" href="/static/icons/apple-icon-114x114.png">
-        <link rel="apple-touch-icon" sizes="120x120" href="/static/icons/apple-icon-120x120.png">
-        <link rel="apple-touch-icon" sizes="144x144" href="/static/icons/apple-icon-144x144.png">
-        <link rel="apple-touch-icon" sizes="152x152" href="/static/icons/apple-icon-152x152.png">
-        <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-icon-180x180.png">
-        <link rel="icon" type="image/png" sizes="192x192"  href="/static/icons/android-icon-192x192.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="96x96" href="/static/icons/favicon-96x96.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png">
-        <link rel="manifest" href="/manifest.json">
-        {% if not is_logged_in %}
-        <script
-            src="https://accounts.google.com/gsi/client"
-            async
-            defer></script>
-        {% endif %}
-    </head>
-    <body>
-        <nav class="m l left max" id="rail-bar">
-        </nav>
-        <header id="header">
-        </header>
-        <main class="responsive" data-page="settings">
-            <p class="italic">Add users to your folder by name, email, studio name, or colony initals. Entries are case insensitive.</p>
-            <div class="grid">
-                {% for folder_id, folder in folder_cache.items() %}
-                {% if email == folder.delegated_email %}
-                <article class="s12 m6 l4 round border" data-folder-id="{{ folder_id }}">
-                    <nav class="row">
-                        <i>
-                            folder_shared
-                        </i>
-                        <p class="wrap max">{{ folder.name }}</p>
-                        <a class="transparent link circle wave small-padding" href="https://drive.google.com/drive/u/0/folders/{{folder_id}}" target="_blank">
-                            <i>open_in_new</i>
-                        </a>
-                    </nav>
-                    <nav class="row wrap no-space allowed-accounts-list">
-                        {% for allowed_account in folder.allowed_accounts %}
-                        <div class="chip round tiny-margin" data-allowed-account="{{allowed_account}}">
-                            <i>check</i>
-                            <span>{{allowed_account}}</span>
-                        </div>
-                        {% endfor %}
-                    </nav>
-                    <div class="field textarea label border small-round hidden">
+
+<head>
+    <title>HBNITV</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="author" content="Jared Gross" />
+    <meta name="description" content="HBNITV is a website to find the latest news, classes, and more." />
+    <meta name="keywords" content="hutterite, itv, hbni, classes, news, calendar, contact" />
+    <meta name="msapplication-TileColor" content="#101413">
+    <meta name="msapplication-TileImage" content="/static/icons/ms-icon-144x144.png">
+    <meta name="theme-color" content="#101413">
+    <link rel="apple-touch-icon" sizes="57x57" href="/static/icons/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/static/icons/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/static/icons/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/static/icons/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/static/icons/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/static/icons/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/static/icons/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/static/icons/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/static/icons/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/static/icons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    {% if not is_logged_in %}
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    {% endif %}
+</head>
+
+<body>
+    <nav class="m l left max" id="rail-bar">
+    </nav>
+    <header id="header">
+    </header>
+    <main class="responsive" data-page="settings">
+        <p class="italic">Add users to your folder by name, email, studio name, or colony initals. Entries are case
+            insensitive.</p>
+        <div class="grid">
+            {% for folder_id, folder in folder_cache.items() %}
+            {% if email == folder.delegated_email %}
+            <article class="s12 m6 l4 round border" data-folder-id="{{ folder_id }}">
+                <nav class="row">
+                    <i>
+                        folder_shared
+                    </i>
+                    <p class="wrap max">{{ folder.name }}</p>
+                    <a class="transparent link circle wave small-padding"
+                        href="https://drive.google.com/drive/u/0/folders/{{folder_id}}" target="_blank">
+                        <i>open_in_new</i>
+                    </a>
+                </nav>
+                <nav class="row wrap no-space allowed-accounts-list">
+                    {% for allowed_account in folder.allowed_accounts %}
+                    <div class="chip round tiny-margin" data-allowed-account="{{allowed_account}}">
+                        <i>check</i>
+                        <span>{{allowed_account}}</span>
+                    </div>
+                    {% endfor %}
+                </nav>
+                <div class="field textarea label border small-round hidden">
                     <textarea>{% for allowed_account in folder.allowed_accounts %}
 {{ allowed_account }}{% endfor %}</textarea>
                     <label>Allowed Users</label>
-                    </div>
-                </article>
-                {% endif %}
-                {% endfor %}
-            </div>
-        </main>
-        <footer>
-            <nav class="transparent right-align">
-                <button class="square round extra elevate" id="edit-button">
-                    <i>edit</i>
-                </button>
-                <button class="square round extra elevate hidden" id="save-button">
-                    <i>save</i>
-                </button>
-            </nav>
-        </footer>
-        <div class="snackbar green" id="saved">
-            <i>check</i>
-            <span>Saved</span>
+                </div>
+            </article>
+            {% endif %}
+            {% endfor %}
         </div>
-    </body>
-    {% if is_logged_in %}
-    <script>
-        window.USER = {
-            username: "{{ username }}",
-            email: "{{ email }}",
-            role: "{{ role }}",
-            profile_picture: "{{ profile_picture }}",
-            email_verified: "{{ email_verified }}",
-            hd: "{{ hd }}",
-            given_name: "{{ given_name }}",
-            family_name: "{{ family_name }}",
-            is_logged_in: "{{ is_logged_in }}",
-            user_id: "{{ user_id }}",
-        };
-    </script>
-    {% endif %}
+    </main>
+    <footer>
+        <nav class="transparent right-align">
+            <button class="square round extra elevate" id="edit-button">
+                <i>edit</i>
+            </button>
+            <button class="square round extra elevate hidden" id="save-button">
+                <i>save</i>
+            </button>
+        </nav>
+    </footer>
+    <div class="snackbar green" id="saved">
+        <i>check</i>
+        <span>Saved</span>
+    </div>
+</body>
+{% if is_logged_in %}
+<script>
+    window.USER = {
+        username: "{{ username }}",
+        email: "{{ email }}",
+        role: "{{ role }}",
+        profile_picture: "{{ profile_picture }}",
+        email_verified: "{{ email_verified }}",
+        hd: "{{ hd }}",
+        given_name: "{{ given_name }}",
+        family_name: "{{ family_name }}",
+        is_logged_in: "{{ is_logged_in }}",
+        user_id: "{{ user_id }}",
+    };
+</script>
+{% endif %}
+
 </html>

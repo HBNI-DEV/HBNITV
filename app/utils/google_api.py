@@ -95,7 +95,9 @@ def clear_existing_day_x_events(service, calendar_id: str):
 
         for event in events.get("items", []):
             try:
-                service.events().delete(calendarId=calendar_id, eventId=event["id"]).execute()
+                service.events().delete(
+                    calendarId=calendar_id, eventId=event["id"]
+                ).execute()
             except Exception as e:
                 print(f"Failed to delete event {event['id']}: {e}")
 
@@ -163,9 +165,35 @@ def copy_file_to_folder(drive, file_id: str, folder_id: str) -> dict:
         return {}
 
 
+def move_file_to_folder(drive, file_id: str, folder_id: str) -> dict:
+    try:
+        # Get the file's current parents
+        file = drive.files().get(fileId=file_id, fields="parents").execute()
+        previous_parents = ",".join(file.get("parents", []))
+
+        # Move the file by updating parents
+        return (
+            drive.files()
+            .update(
+                fileId=file_id,
+                addParents=folder_id,
+                removeParents=previous_parents,
+                fields="id, parents",
+            )
+            .execute()
+        )
+    except HttpError as error:
+        print(f"An error occurred: {error}")
+        return {}
+
+
 def create_folder_in_folder(drive, parent_folder_id: str, folder_name: str) -> dict:
     try:
-        body = {"name": folder_name, "mimeType": "application/vnd.google-apps.folder", "parents": [parent_folder_id]}
+        body = {
+            "name": folder_name,
+            "mimeType": "application/vnd.google-apps.folder",
+            "parents": [parent_folder_id],
+        }
         return drive.files().create(body=body).execute()
     except HttpError as error:
         print(f"An error occurred: {error}")
@@ -322,10 +350,18 @@ def delete_user(service, user_email: str):
     service.users().delete(userKey=user_email).execute()
 
 
-def get_all_org_units(customer_id: str = "my_customer", org_unit_path: str = "/", type_: str = "all") -> list[dict]:
+def get_all_org_units(
+    customer_id: str = "my_customer",
+    org_unit_path: str = "/Students",
+    type_: str = "all",
+) -> list[dict]:
     service = get_workspace_directory_service()
     try:
-        response = service.orgunits().list(customerId=customer_id, orgUnitPath=org_unit_path, type=type_).execute()
+        response = (
+            service.orgunits()
+            .list(customerId=customer_id, orgUnitPath=org_unit_path, type=type_)
+            .execute()
+        )
         return response.get("organizationUnits", [])
     except HttpError as error:
         print(f"An error occurred while listing org units: {error}")

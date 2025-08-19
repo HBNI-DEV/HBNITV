@@ -97,9 +97,13 @@ def file_exists_in_folder(drive, parent_folder_id: str, file_name: str) -> bool:
     return len(response.get("files", [])) > 0
 
 
-def transfer_file_between_accounts(user_drive_service, src_file_id, service_worker_drive_credentials, dst_folder_id):
+def transfer_file_between_accounts(
+    user_drive_service, src_file_id, service_worker_drive_credentials, dst_folder_id
+):
     # Step 1 — Download as source account
-    file_metadata = user_drive_service.files().get(fileId=src_file_id, fields="name").execute()
+    file_metadata = (
+        user_drive_service.files().get(fileId=src_file_id, fields="name").execute()
+    )
     file_name = file_metadata["name"]
 
     request = user_drive_service.files().get_media(fileId=src_file_id)
@@ -113,7 +117,9 @@ def transfer_file_between_accounts(user_drive_service, src_file_id, service_work
 
     # Step 2 — Upload as destination account
     media = MediaIoBaseUpload(file_stream, mimetype="video/mp4", resumable=True)
-    service_worker_drive_credentials.files().create(body={"name": file_name, "parents": [dst_folder_id]}, media_body=media).execute()
+    service_worker_drive_credentials.files().create(
+        body={"name": file_name, "parents": [dst_folder_id]}, media_body=media
+    ).execute()
     print(f"Uploaded {file_name} to {dst_folder_id}")
 
 
@@ -130,42 +136,71 @@ def organize_media():
             print("[Organizer] No recordings folder id set")
             return
 
-        folders = get_shared_folders_from_db()
+        if not Environment.HBNITV_RECORDINGS_DELEGATED_ADMIN_EMAIL:
+            print("[Organizer] No delegated admin email set")
+            return
+
+        if not Environment.HBNITV_MEET_RECORDINGS_FOLDER_ID:
+            print("[Organizer] No meet recordings folder id set")
+            return
+
         current_year_range = get_current_and_next_school_year()
 
-        service_worker_drive_credentials = google_api.get_drive_credentials(Environment.HBNITV_RECORDINGS_DELEGATED_ADMIN_EMAIL)
-        for folder_id, folder_name, delegated_email, allowed_accounts in folders:
-            user_drive_service = google_api.get_drive_credentials(delegated_email)
-            mp4_files = google_api.list_mp4_files_in_folder(service_worker_drive_credentials, folder_id)
+        service_worker_drive_credentials = google_api.get_drive_credentials(
+            Environment.HBNITV_RECORDINGS_DELEGATED_ADMIN_EMAIL
+        )
+        mp4_files = google_api.list_mp4_files_in_folder(
+            service_worker_drive_credentials, Environment.HBNITV_MEET_RECORDINGS_FOLDER_ID
+        )
 
-            for file in mp4_files:
-                metadata = google_api.get_file_metadata(service_worker_drive_credentials, file["id"])
+        for file in mp4_files:
+            metadata = google_api.get_file_metadata(
+                service_worker_drive_credentials, file["id"]
+            )
 
-                file_name = parse_file_name(metadata["name"])
-                if not file_name:
-                    print(f"Skipping file with unrecognized format: {metadata['name']}")
-                    continue
+            file_name = parse_file_name(metadata["name"])
+            if not file_name:
+                print(f"Skipping file with unrecognized format: {metadata['name']}")
+                continue
 
-                # Step 1: Year range folder
-                year_folder_id = ensure_folder(service_worker_drive_credentials, Environment.HBNITV_RECORDINGS_FOLDER_ID, current_year_range)
+            # Step 1: Year range folder
+            year_folder_id = ensure_folder(
+                service_worker_drive_credentials,
+                Environment.HBNITV_RECORDINGS_FOLDER_ID,
+                current_year_range,
+            )
 
-                # Step 2: Owner folder
-                owner_folder_id = ensure_folder(service_worker_drive_credentials, year_folder_id, file_name["owner"])
+            # Step 2: Owner folder
+            owner_folder_id = ensure_folder(
+                service_worker_drive_credentials, year_folder_id, file_name["owner"]
+            )
 
-                # Step 3: Class folder
-                class_folder_id = ensure_folder(service_worker_drive_credentials, owner_folder_id, file_name["class_name"])
+            # Step 3: Class folder
+            class_folder_id = ensure_folder(
+                service_worker_drive_credentials,
+                owner_folder_id,
+                file_name["class_name"],
+            )
 
-                # Step 4: Copy file to class folder only if not already there
-                if file_exists_in_folder(service_worker_drive_credentials, class_folder_id, metadata["name"]):
-                    print(f"Skipping {metadata['name']} (already exists in destination)")
-                else:
-                    print(f"Copying {metadata['name']} to {current_year_range}/{file_name['owner']}/{file_name['class_name']}")
-                    transfer_file_between_accounts(
-                        user_drive_service=user_drive_service,
-                        src_file_id=file["id"],
-                        service_worker_drive_credentials=service_worker_drive_credentials,
-                        dst_folder_id=class_folder_id,
-                    )
+            # Step 4: Copy file to class folder only if not already there
+            if file_exists_in_folder(
+                service_worker_drive_credentials, class_folder_id, metadata["name"]
+            ):
+                print(
+                    f"Skipping {metadata['name']} (already exists in destination)"
+                )
+            else:
+                print(
+                    f"Moving {metadata['name']} to {current_year_range}/{file_name['owner']}/{file_name['class_name']}"
+                )
+                google_api.move_file_to_folder(drive=service_worker_drive_credentials, file_id=file["id"], folder_id=class_folder_id)
+
+                # transfer_file_between_accounts(
+                #     user_drive_service=user_drive_service,
+                #     src_file_id=file["id"],
+                #     service_worker_drive_credentials=service_worker_drive_credentials,
+                #     dst_folder_id=class_folder_id,
+                # )
     except Exception as e:
         print(f"[Organizer] Error updating cache: {e}")
     finally:

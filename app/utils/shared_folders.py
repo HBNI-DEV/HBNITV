@@ -7,7 +7,7 @@ from googleapiclient.errors import HttpError
 from tornado.ioloop import PeriodicCallback
 
 from app.config.environments import Environment
-from app.utils.google_api import get_delegated_drive_service, get_users
+from app.utils.google_api import get_delegated_drive_service, get_users, list_folders_in_folder
 
 
 def get_cache_from_db():
@@ -84,7 +84,7 @@ def _insert_shared_folder(folder: dict[str, str], delegated_email: str):
 
 
 def cache_folders_and_users():
-    query = "mimeType = 'application/vnd.google-apps.folder' and name = 'Meet Recordings' and trashed = false"
+    query = f"'{Environment.HBNITV_RECORDINGS_FOLDER_ID}' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false"
     permission = {
         "type": "domain",
         "role": "reader",
@@ -92,51 +92,49 @@ def cache_folders_and_users():
         "allowFileDiscovery": False,
     }
 
-    for user in get_users("hbni.net"):
-        DELEGATED_USER = user["primaryEmail"]
-        service = get_delegated_drive_service(DELEGATED_USER)
+    service = get_delegated_drive_service(Environment.HBNITV_RECORDINGS_DELEGATED_ADMIN_EMAIL)
 
-        results = safe_execute(
-            service.files().list(
-                q=query,
-                fields="files(id, name, parents)",
-                pageSize=1000,
-            )
+    results = safe_execute(
+        service.files().list(
+            q=query,
+            fields="files(id, name, parents)",
+            pageSize=1000,
         )
+    )
 
-        folders = results.get("files", [])
+    # folders = list_folders_in_folder(service, Environment.HBNITV_RECORDINGS_FOLDER_ID)
+    folders = results.get("files", [])
 
-        for folder in folders:
-            print(folder)
-            folder_id = folder["id"]
+    for folder in folders:
+        folder_id = folder["id"]
 
-            try:
-                _insert_shared_folder(folder, DELEGATED_USER)
-                print(f"[CACHE] Folder cached: {folder_id} delegated to {DELEGATED_USER}")
+        try:
+            _insert_shared_folder(folder, Environment.HBNITV_RECORDINGS_DELEGATED_ADMIN_EMAIL)
+            print(f"[CACHE] Folder cached: {folder_id} delegated to {Environment.HBNITV_RECORDINGS_DELEGATED_ADMIN_EMAIL}")
 
+            service.permissions().create(
+                fileId=folder_id,
+                body=permission,
+                supportsAllDrives=True,
+                fields="id",
+            ).execute()
+            print(f"[PERMISSION] Shared {folder_id} with hbni.net (domain)")
+
+            # Recursively find all subfolders
+            subfolders = get_subfolders(service, folder_id)
+            for subfolder in subfolders:
+                print(subfolder)
+                _insert_shared_folder(subfolder, Environment.HBNITV_RECORDINGS_DELEGATED_ADMIN_EMAIL)
+                print(f"[CACHE] Subfolder cached: {subfolder['id']} delegated to {Environment.HBNITV_RECORDINGS_DELEGATED_ADMIN_EMAIL}")
                 service.permissions().create(
-                    fileId=folder_id,
+                    fileId=subfolder["id"],
                     body=permission,
                     supportsAllDrives=True,
                     fields="id",
                 ).execute()
-                print(f"[PERMISSION] Shared {folder_id} with hbni.net (domain)")
-
-                # Recursively find all subfolders
-                subfolders = get_subfolders(service, folder_id)
-                for subfolder in subfolders:
-                    print(subfolder)
-                    _insert_shared_folder(subfolder, DELEGATED_USER)
-                    print(f"[CACHE] Subfolder cached: {subfolder['id']} delegated to {DELEGATED_USER}")
-                    service.permissions().create(
-                        fileId=subfolder["id"],
-                        body=permission,
-                        supportsAllDrives=True,
-                        fields="id",
-                    ).execute()
-                    print(f"[PERMISSION] Shared {subfolder['id']} with hbni.net (domain)")
-            except Exception as api_err:
-                print(f"[ERROR] Failed to cache folder {folder_id}: {api_err}")
+                print(f"[PERMISSION] Shared {subfolder['id']} with hbni.net (domain)")
+        except Exception as api_err:
+            print(f"[ERROR] Failed to cache folder {folder_id}: {api_err}")
 
 
 def get_subfolders(service, folder_id):

@@ -1,119 +1,104 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html lang="en">
-    <head>
-        <title>HBNITV</title>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-        <meta name="author" content="Jared Gross" />
-        <meta name="description" content="HBNITV is a website to find the latest news, classes, and more." />
-        <meta name="keywords" content="hutterite, itv, hbni, classes, news, calendar, contact" />
-        <meta name="msapplication-TileColor" content="#101413">
-        <meta name="msapplication-TileImage" content="/static/icons/ms-icon-144x144.png">
-        <meta name="theme-color" content="#101413">
-        <link rel="apple-touch-icon" sizes="57x57" href="/static/icons/apple-icon-57x57.png">
-        <link rel="apple-touch-icon" sizes="60x60" href="/static/icons/apple-icon-60x60.png">
-        <link rel="apple-touch-icon" sizes="72x72" href="/static/icons/apple-icon-72x72.png">
-        <link rel="apple-touch-icon" sizes="76x76" href="/static/icons/apple-icon-76x76.png">
-        <link rel="apple-touch-icon" sizes="114x114" href="/static/icons/apple-icon-114x114.png">
-        <link rel="apple-touch-icon" sizes="120x120" href="/static/icons/apple-icon-120x120.png">
-        <link rel="apple-touch-icon" sizes="144x144" href="/static/icons/apple-icon-144x144.png">
-        <link rel="apple-touch-icon" sizes="152x152" href="/static/icons/apple-icon-152x152.png">
-        <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-icon-180x180.png">
-        <link rel="icon" type="image/png" sizes="192x192"  href="/static/icons/android-icon-192x192.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="96x96" href="/static/icons/favicon-96x96.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png">
-        <link rel="manifest" href="/manifest.json">
-        {% if not is_logged_in %}
-        <script
-            src="https://accounts.google.com/gsi/client"
-            async
-            defer></script>
-        {% endif %}
-    </head>
-    <body>
-        <nav class="m l left max" id="rail-bar">
-        </nav>
-        <header id="header">
-        </header>
-        <main class="responsive" data-page="recordings">
-            <div id="recordings-container">
-                {% if is_logged_in %}
-                <div class="field label prefix border no-margin round">
-                    <i>search</i>
-                    <input type="text" id="search-input" name="search-input"/>
-                    <label for="search-input">Search</label>
-                </div>
-                {% for folder_id, folder_data in recordings.items() %}
-                <article class="border round transparent" id="recordings-{{ folder_id.lower().replace(' ', '-') }}">
-                    <nav class="row">
-                        <i class="extra">
-                            folder_shared
-                        </i>
-                        <h6 id="recording-label">{{ folder_data[0].folderName }}</h6>
-                    </nav>
-                    <div class="grid">
-                        {% for recording_data in folder_data %}
-                        <article class="recording no-padding s12 m6 l4 border round clickable" onclick="window.location.href='/recordings/watch?id={{ recording_data.id }}'" data-owner-email="{{recording_data.owners[0].emailAddress}}" title="{{recording_data.name}}">
-                            <img loading="lazy" class="responsive small top-round" src="/api/thumbnail?link={{ recording_data.thumbnailLink }}" alt="Thumbnail" />
-                            <div class="padding">
-                                <nav class="row no-marign no-padding top-align" style="min-block-size: 20px">
-                                    <p class="bold max wrap no-line" id="title">{{ recording_data.name }}</p>
-                                    <div class="right-align badge none border">{{recording_data.durationReadable}}</div>
-                                </nav>
-                                <span class="top-margin" style="color: var(--on-surface-variant);" id="created-at">{{recording_data.createdTimeReadable}} <span style="opacity: 0.7;" id="created-at-relative">({{recording_data.createdTimeRelative}})</span></span>
-                                <nav class="row top-padding">
-                                    <img loading="lazy" id="dialog-profile-picture" src="{{recording_data.owners[0].photoLink}}" class="circle" alt="Profile Picture" />
-                                    <div class="max">
-                                        <h6 class="small bold" id="display-name">{{recording_data.owners[0].displayName}}</h6>
-                                        <a href="mailto:{{recording_data.owners[0].emailAddress}}" class="link" id="email">{{recording_data.owners[0].emailAddress}}</a>
-                                    </div>
-                                    <button class="circle transparent menu-button">
-                                        <i>more_vert</i>
-                                        <menu class="left no-wrap">
-                                            <li id="copy-link-button" data-id="{{recording_data.id}}" data-title="{{recording_data.name}}">
-                                                <i>content_copy</i>
-                                                <span>Copy Link</span>
-                                            </li>
-                                            <li id="share-button" data-id="{{recording_data.id}}" data-title="{{recording_data.name}}">
-                                                <i>share</i>
-                                                <span>Share</span>
-                                            </li>
-                                        </menu>
-                                    </button>
-                                </nav>
-                            </div>
-                        </article>
-                        {% endfor %}
-                    </div>
-                </article>
-                {% endfor %}
-                {% else %}
-                <article class="round border">
-                    <h5>Login</h5>
-                    <p>To view recordings, please login first.</p>
-                    <div id="login-page"></div>
-                </article>
-                {% endif %}
-            </div>
-        </main>
-    </body>
-    <div class="snackbar" id="copied-snackbar">Link copied to clipboard</div>
-    {% if is_logged_in %}
-    <script>
-        window.USER = {
-            username: "{{ username }}",
-            email: "{{ email }}",
-            role: "{{ role }}",
-            profile_picture: "{{ profile_picture }}",
-            email_verified: "{{ email_verified }}",
-            hd: "{{ hd }}",
-            given_name: "{{ given_name }}",
-            family_name: "{{ family_name }}",
-            is_logged_in: "{{ is_logged_in }}",
-            user_id: "{{ user_id }}",
-        };
-    </script>
+
+<head>
+    <title>HBNITV</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="author" content="Jared Gross" />
+    <meta name="description" content="HBNITV is a website to find the latest news, classes, and more." />
+    <meta name="keywords" content="hutterite, itv, hbni, classes, news, calendar, contact" />
+    <meta name="msapplication-TileColor" content="#101413">
+    <meta name="msapplication-TileImage" content="/static/icons/ms-icon-144x144.png">
+    <meta name="theme-color" content="#101413">
+    <link rel="apple-touch-icon" sizes="57x57" href="/static/icons/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/static/icons/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/static/icons/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/static/icons/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/static/icons/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/static/icons/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/static/icons/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/static/icons/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/static/icons/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/static/icons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    {% if not is_logged_in %}
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     {% endif %}
+</head>
+
+<body>
+    <nav class="m l left max" id="rail-bar">
+    </nav>
+    <header id="header">
+    </header>
+    <main class="responsive" data-page="recordings">
+        <div id="recordings-container">
+            {% if is_logged_in %}
+            <div class="field label prefix border round top-margin">
+                <i>search</i>
+                <input type="text" id="search-input" name="search-input" />
+                <label for="search-input">Search</label>
+            </div>
+            {% for folder_id, folder_data in recordings.items() %}
+            <article class="border round transparent" id="recordings-{{ folder_id.lower().replace(' ', '-') }}">
+                <nav class="row">
+                    <i class="extra">
+                        folder_shared
+                    </i>
+                    <h6 id="recording-label">{{ folder_data[0].folderName }}</h6>
+                </nav>
+                <div class="grid">
+                    {% for recording_data in folder_data %}
+                    <article class="recording no-padding s12 m6 l4 border round clickable"
+                        onclick="window.location.href='/recordings/watch?id={{ recording_data.id }}'"
+                        data-owner-email="{{recording_data.owners[0].emailAddress}}" title="{{recording_data.name}}">
+                        <img loading="lazy" class="responsive small top-round"
+                            src="/api/thumbnail?link={{ recording_data.thumbnailLink }}" alt="Thumbnail" />
+                        <div class="padding">
+                            <nav class="row no-marign no-padding top-align" style="min-block-size: 20px">
+                                <p class="bold max wrap no-line" id="title">{{ recording_data.name }}</p>
+                                <div class="right-align badge none border">{{recording_data.durationReadable}}</div>
+                            </nav>
+                            <span class="top-margin" style="color: var(--on-surface-variant);"
+                                id="created-at">{{recording_data.createdTimeReadable}} <span style="opacity: 0.7;"
+                                    id="created-at-relative">({{recording_data.createdTimeRelative}})</span></span>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+            </article>
+            {% endfor %}
+            {% else %}
+            <article class="round border">
+                <h5>Login</h5>
+                <p>To view recordings, please login first.</p>
+                <div id="login-page"></div>
+            </article>
+            {% endif %}
+        </div>
+    </main>
+</body>
+<div class="snackbar" id="copied-snackbar">Link copied to clipboard</div>
+{% if is_logged_in %}
+<script>
+    window.USER = {
+        username: "{{ username }}",
+        email: "{{ email }}",
+        role: "{{ role }}",
+        profile_picture: "{{ profile_picture }}",
+        email_verified: "{{ email_verified }}",
+        hd: "{{ hd }}",
+        given_name: "{{ given_name }}",
+        family_name: "{{ family_name }}",
+        is_logged_in: "{{ is_logged_in }}",
+        user_id: "{{ user_id }}",
+    };
+</script>
+{% endif %}
+
 </html>

@@ -6,14 +6,16 @@ from tornado.web import Application
 
 from app.config.environments import Environment
 from app.routes import url_patterns
-from app.utils.organize_media import start_organizer
+from app.utils.organize_media import start_organizer, organize_media
 from app.utils.recordings_cache import (
     start_recordings_cache_updater,
     update_recordings_cache,
 )
 from app.utils.shared_folders import start_folder_cache_updater
 from app.utils.users import start_user_cleanup
-from app.utils.users_cache import start_users_cache_updater
+from app.utils.users_cache import start_organizational_units_updater, update_organizational_units_cache
+from app.utils import google_api
+from rich import print
 
 define("compress_response", default=True, help="Enable Gzip compression")
 
@@ -31,7 +33,8 @@ class TornadoApp(Application):
 async def main():
     print("Starting cache updaters...")
     update_recordings_cache()
-    start_users_cache_updater()
+    update_organizational_units_cache()
+    start_organizational_units_updater()
     start_recordings_cache_updater()
     start_folder_cache_updater()
     start_organizer()

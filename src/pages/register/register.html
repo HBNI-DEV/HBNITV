@@ -1,123 +1,100 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html lang="en">
-    <head>
-        <title>HBNITV</title>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-        <meta name="author" content="Jared Gross" />
-        <meta name="description" content="HBNITV is a website to find the latest news, classes, and more." />
-        <meta name="keywords" content="hutterite, itv, hbni, classes, news, calendar, contact" />
-        <meta name="msapplication-TileColor" content="#101413">
-        <meta name="msapplication-TileImage" content="/static/icons/ms-icon-144x144.png">
-        <meta name="theme-color" content="#101413">
-        <link rel="apple-touch-icon" sizes="57x57" href="/static/icons/apple-icon-57x57.png">
-        <link rel="apple-touch-icon" sizes="60x60" href="/static/icons/apple-icon-60x60.png">
-        <link rel="apple-touch-icon" sizes="72x72" href="/static/icons/apple-icon-72x72.png">
-        <link rel="apple-touch-icon" sizes="76x76" href="/static/icons/apple-icon-76x76.png">
-        <link rel="apple-touch-icon" sizes="114x114" href="/static/icons/apple-icon-114x114.png">
-        <link rel="apple-touch-icon" sizes="120x120" href="/static/icons/apple-icon-120x120.png">
-        <link rel="apple-touch-icon" sizes="144x144" href="/static/icons/apple-icon-144x144.png">
-        <link rel="apple-touch-icon" sizes="152x152" href="/static/icons/apple-icon-152x152.png">
-        <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-icon-180x180.png">
-        <link rel="icon" type="image/png" sizes="192x192"  href="/static/icons/android-icon-192x192.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="96x96" href="/static/icons/favicon-96x96.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png">
-        <link rel="manifest" href="/manifest.json">
-        {% if not is_logged_in %}
-        <script
-            src="https://accounts.google.com/gsi/client"
-            async
-            defer></script>
-        {% endif %}
-    </head>
-    <body>
-        <nav class="m l left max" id="rail-bar">
-        </nav>
-        <header id="header">
-        </header>
-        <main class="responsive" data-page="register">
-            <article
-                class="border round"
-                style="overflow: hidden"
-            >
-                {% if is_logged_in %} {% if "admin" in role %}
-                <h5>Register</h5>
-                <form class="grid small-space" action="/api/register" method="POST">
-                    <div class="s12 m6 l6 small-round field label border">
-                        <input
-                            type="text"
-                            id="first_name"
-                            name="first_name"
-                            autocapitalize="words"
-                            required
-                        />
-                        <label for="first_name">First Name</label>
-                    </div>
-                    <div class="s12 m6 l6 small-round field label border">
-                        <input
-                            type="text"
-                            id="last_name"
-                            name="last_name"
-                            autocapitalize="words"
-                            required
-                        />
-                        <label for="last_name">Last Name</label>
-                    </div>
-                    <div
-                        class="s12 m12 l12 small-round field label suffix border"
-                    >
-                        <select name="colony" id="colony" required>
-                            {% for name, code in colony_names.items() %}
-                            <option value="{{ code }}">{{ name }}</option>
-                            {% endfor %}
-                        </select>
-                        <label for="colony">Colony Name</label>
-                        <i>arrow_drop_down</i>
-                    </div>
-                    <div class="s12 m12 l12 small-round field label border">
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            value="@hbitv.net"
-                            disabled
-                        />
-                        <label for="email">Email</label>
-                        <span class="helper no-line">This will be the email address that will be generated for you.</span>
-                    </div>
-                    <nav class="s12 top-margin right-align">
-                        <button type="submit">
-                            <i>check_circle</i>
-                            <span>Submit</span>
-                        </button>
-                    </nav>
-                </form>
-                {% else %}
-                <h5>Unauthorized</h5>
-                <p>You are not authorized to register.</p>
-                {% endif %} {% else %}
-                <h5>Login</h5>
-                <p>To register, please login first.</p>
-                {% endif %}
-            </article>
-        </main>
-    </body>
-    {% if is_logged_in %}
-    <script>
-        window.USER = {
-            username: "{{ username }}",
-            email: "{{ email }}",
-            role: "{{ role }}",
-            profile_picture: "{{ profile_picture }}",
-            email_verified: "{{ email_verified }}",
-            hd: "{{ hd }}",
-            given_name: "{{ given_name }}",
-            family_name: "{{ family_name }}",
-            is_logged_in: "{{ is_logged_in }}",
-            user_id: "{{ user_id }}",
-        };
-    </script>
+
+<head>
+    <title>HBNITV</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="author" content="Jared Gross" />
+    <meta name="description" content="HBNITV is a website to find the latest news, classes, and more." />
+    <meta name="keywords" content="hutterite, itv, hbni, classes, news, calendar, contact" />
+    <meta name="msapplication-TileColor" content="#101413">
+    <meta name="msapplication-TileImage" content="/static/icons/ms-icon-144x144.png">
+    <meta name="theme-color" content="#101413">
+    <link rel="apple-touch-icon" sizes="57x57" href="/static/icons/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/static/icons/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/static/icons/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/static/icons/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/static/icons/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/static/icons/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/static/icons/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/static/icons/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/static/icons/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/static/icons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    {% if not is_logged_in %}
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     {% endif %}
+</head>
+
+<body>
+    <nav class="m l left max" id="rail-bar">
+    </nav>
+    <header id="header">
+    </header>
+    <main class="responsive" data-page="register">
+        <article class="border round" style="overflow: hidden">
+            {% if is_logged_in %} {% if "admin" in role %}
+            <h5>Register</h5>
+            <form class="grid small-space" action="/api/register" method="POST">
+                <div class="s12 m8 l5 small-round field label border">
+                    <input type="text" id="name" name="name" autocapitalize="words" required />
+                    <label for="name">Name</label>
+                </div>
+                <div class="s12 m4 l3 small-round field label border">
+                    <input type="text" id="colony_initials" name="colony_initials" disabled />
+                    <label for="colony_initials">Colony Initials</label>
+                </div>
+                <div class="s12 m12 l4 small-round field label suffix border">
+                    <select name="organizational_unit" id="organizational_unit" required>
+                        <option value="" disabled selected>Select a Colony</option>
+                        {% for organizational_unit in organizational_units %}
+                        <option value="{{ organizational_unit.orgUnitPath }}">{{ organizational_unit.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="organizational_unit">Colony</label>
+                    <i>arrow_drop_down</i>
+                </div>
+                <div class="s12 m12 l12 small-round field label border">
+                    <input type="email" id="email" name="email" value="@hbitv.net" disabled />
+                    <label for="email">Email</label>
+                    <span class="helper no-line">This will be the email address that will be generated for you.</span>
+                </div>
+                <nav class="s12 top-margin right-align">
+                    <button type="submit">
+                        <i>person_add</i>
+                        <span>Register</span>
+                    </button>
+                </nav>
+            </form>
+            {% else %}
+            <h5>Unauthorized</h5>
+            <p>You are not authorized to register.</p>
+            {% endif %} {% else %}
+            <p>To register, please login first.</p>
+            {% endif %}
+        </article>
+    </main>
+</body>
+{% if is_logged_in %}
+<script>
+    window.USER = {
+        username: "{{ username }}",
+        email: "{{ email }}",
+        role: "{{ role }}",
+        profile_picture: "{{ profile_picture }}",
+        email_verified: "{{ email_verified }}",
+        hd: "{{ hd }}",
+        given_name: "{{ given_name }}",
+        family_name: "{{ family_name }}",
+        is_logged_in: "{{ is_logged_in }}",
+        user_id: "{{ user_id }}",
+    };
+</script>
+{% endif %}
+
 </html>

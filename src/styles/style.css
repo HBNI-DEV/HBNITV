@@ -51,7 +51,7 @@ main {
     cursor: pointer;
 }
 
-#recordings {
+#recordings-container {
     overflow: hidden !important;
 }
 
