@@ -1,4 +1,5 @@
 import asyncio
+from natsort import natsorted
 
 from tornado.ioloop import PeriodicCallback
 
@@ -12,9 +13,9 @@ organizational_units_cache = []
 def update_organizational_units_cache():
     try:
         data = google_api.get_all_org_units()
+        data_sorted = natsorted(data, key=lambda x: x["name"])
         organizational_units_cache.clear()
-        for unit in data:
-            organizational_units_cache.append(unit)
+        organizational_units_cache.extend(data_sorted)
     except Exception as e:
         print(f"[UserCache] ❌ Error updating cache: {e}")
 

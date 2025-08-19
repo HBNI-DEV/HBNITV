@@ -352,7 +352,7 @@ def delete_user(service, user_email: str):
 
 def get_all_org_units(
     customer_id: str = "my_customer",
-    org_unit_path: str = "/Students",
+    org_unit_path: str = "/ITV Students",
     type_: str = "all",
 ) -> list[dict]:
     service = get_workspace_directory_service()
