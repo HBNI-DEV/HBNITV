@@ -45,6 +45,11 @@ api_routes = [
     route(r"/api/thumbnail", ThumbnailProxyHandler, name="api_thumbnail"),
     route(r"/api/update-folders", UpdateFoldersAPIHandler, name="api_update_folders"),
     route(
+        r"/api/shared-folders/delete/(.*)",
+        UpdateFoldersAPIHandler,
+        name="api_delete_shared_folders",
+    ),
+    route(
         r"/api/shared_google_folder_ids",
         SharedGoogleFolderIDsAPIHandler,
         name="api_shared_google_folder_ids",

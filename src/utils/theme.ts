@@ -3,7 +3,7 @@ import '@styles/maintheme.css';
 import '@styles/style.css';
 import "material-dynamic-colors";
 
-export let savedTheme: string = localStorage.getItem("theme") || "#006493";
+export let savedTheme: string = localStorage.getItem("theme") || "#006a60";
 export let savedMode: string = localStorage.getItem("mode") || "auto";
 
 function hexToRgb(hex: string): [number, number, number] {

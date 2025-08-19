@@ -42,16 +42,15 @@
         <div class="grid">
             {% for folder_id, folder in folder_cache.items() %}
             {% if email == folder.delegated_email %}
-            <article class="s12 m6 l4 round border" data-folder-id="{{ folder_id }}">
+            <article class="s12 m6 l4 round border shared-folder" data-folder-id="{{ folder_id }}">
                 <nav class="row">
                     <i>
                         folder_shared
                     </i>
                     <p class="wrap max">{{ folder.name }}</p>
-                    <a class="transparent link circle wave small-padding"
-                        href="https://drive.google.com/drive/u/0/folders/{{folder_id}}" target="_blank">
-                        <i>open_in_new</i>
-                    </a>
+                    <button data-folder-id="{{folder_id}}" class="circle chip small error delete-folder-button">
+                        <i>delete</i>
+                    </button>
                 </nav>
                 <nav class="row wrap no-space allowed-accounts-list">
                     {% for allowed_account in folder.allowed_accounts %}
@@ -66,6 +65,12 @@
 {{ allowed_account }}{% endfor %}</textarea>
                     <label>Allowed Users</label>
                 </div>
+                <nav class="row right-align">
+                    <button onclick="window.open('https://drive.google.com/drive/u/0/folders/{{folder_id}}')">
+                        <i>open_in_new</i>
+                        <span>Open Folder</span>
+                    </button>
+                </nav>
             </article>
             {% endif %}
             {% endfor %}
@@ -84,6 +89,10 @@
     <div class="snackbar green" id="saved">
         <i>check</i>
         <span>Saved</span>
+    </div>
+    <div class="snackbar green" id="deleted">
+        <i>check</i>
+        <span>Deleted shared folder</span>
     </div>
 </body>
 {% if is_logged_in %}

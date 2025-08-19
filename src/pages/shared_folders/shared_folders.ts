@@ -4,9 +4,30 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeCoreUI();
     const editButton = document.querySelector("#edit-button") as HTMLButtonElement;
     const saveButton = document.querySelector("#save-button") as HTMLButtonElement;
-    const allFolders = document.querySelectorAll("[data-folder-id]") as NodeListOf<HTMLElement>;
+    const allFolders = document.querySelectorAll(".shared-folder") as NodeListOf<HTMLElement>;
+    const deleteButtons = document.querySelectorAll(".delete-folder-button") as NodeListOf<HTMLButtonElement>;
     const allTextareaDivs = document.querySelectorAll(".field.textarea") as NodeListOf<HTMLElement>;
     const allAllowedAccountsList = document.querySelectorAll(".allowed-accounts-list") as NodeListOf<HTMLElement>;
+
+    deleteButtons.forEach(deleteButton => {
+        deleteButton.addEventListener("click", () => {
+            const areYouSure = confirm("Are you sure you want to delete this folder? (Note: This does not actually delete the Google Drive folder)");
+            if (!areYouSure) return;
+
+            const folderId = deleteButton.dataset.folderId as string;
+            fetch(`/api/shared-folders/delete/${folderId}`, {
+                method: "DELETE",
+            })
+                .then(response => response.json())
+                .then(data => {
+                    ui("#deleted", 1000);
+                    setTimeout(() => {
+                        document.location.reload();
+                    }, 1000);
+                })
+                .catch(error => console.error(error));
+        });
+    });
 
     editButton.addEventListener("click", () => {
         editButton.classList.add("hidden");

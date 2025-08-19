@@ -1,5 +1,6 @@
 import asyncio
 
+from rich import print
 from tornado.httpserver import HTTPServer
 from tornado.options import define, options
 from tornado.web import Application
@@ -13,8 +14,10 @@ from app.utils.recordings_cache import (
 )
 from app.utils.shared_folders import start_folder_cache_updater
 from app.utils.users import start_user_cleanup
-from app.utils.users_cache import start_organizational_units_updater, update_organizational_units_cache
-from rich import print
+from app.utils.users_cache import (
+    start_organizational_units_updater,
+    update_organizational_units_cache,
+)
 
 define("compress_response", default=True, help="Enable Gzip compression")
 

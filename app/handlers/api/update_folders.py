@@ -65,6 +65,27 @@ class UpdateFoldersAPIHandler(BaseHandler):
             print(e)
             self.write({"status": "error", "message": str(e)})
 
+    @require_role("admin", "super_admin")
+    def delete(self, folder_id: str):
+        try:
+            if not folder_id:
+                self.write_error(400)
+                return
+
+            self.cur.execute(
+                f"DELETE FROM {self._table_name} WHERE folder_id = %s", (folder_id,)
+            )
+
+            if self.cur.rowcount > 0:
+                self.write(
+                    {"status": "success", "message": f"Folder {folder_id} deleted"}
+                )
+            else:
+                self.set_status(404)
+                self.write({"status": "error", "message": "Folder ID not found"})
+        except Exception as e:
+            self.write_error(500, error_message=str(e))
+
     def on_finish(self):
         if hasattr(self, "cur"):
             self.cur.close()

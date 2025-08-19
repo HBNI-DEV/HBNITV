@@ -1,11 +1,11 @@
-import { initializeCoreUI } from "@utils/ui-core";
-import { SettingsManager } from "@managers/settings-manager";
-import { User } from "@models/user";
-import { News } from "@models/news";
-import { NewsAPI } from "@api/news-api";
-import { Snackbar } from "@components/snackbar";
-import { SnackbarError } from "@components/snackbar-error";
-import { PreviewStyle } from "@toast-ui/editor";
+import {initializeCoreUI} from "@utils/ui-core";
+import {SettingsManager} from "@managers/settings-manager";
+import {User} from "@models/user";
+import {News} from "@models/news";
+import {NewsAPI} from "@api/news-api";
+import {Snackbar} from "@components/snackbar";
+import {SnackbarError} from "@components/snackbar-error";
+import {PreviewStyle} from "@toast-ui/editor";
 
 let Editor: typeof import('@toast-ui/editor').Editor;
 let Viewer: typeof import('@toast-ui/editor/dist/toastui-editor-viewer').default;
@@ -35,7 +35,7 @@ async function loadEditorModules() {
 async function initializePage() {
     const newsPage = new ViewNewsPage();
     if (User.role === "admin" || User.role === "super_admin") {
-        const { default: Editor } = await import("@toast-ui/editor");
+        const {default: Editor} = await import("@toast-ui/editor");
         new CreateNewsPostPage(newsPage);
     }
 }
@@ -210,7 +210,7 @@ class ViewNewsPage {
 
     private async openDialogWithArticle(news: News) {
         if (!this.dialogViewer) {
-            const { default: Viewer } = await import("@toast-ui/editor/dist/toastui-editor-viewer");
+            const {default: Viewer} = await import("@toast-ui/editor/dist/toastui-editor-viewer");
             const viewerContainer = this.dialogElement.querySelector("#dialog-viewer") as HTMLElement;
             this.dialogViewer = new Viewer({
                 el: viewerContainer,
@@ -351,6 +351,7 @@ class CreateNewsPostPage {
                 snackbar.show(2000);
             });
     }
+
     private async clearEditor() {
         const areYouSure = confirm("Are you sure you want to clear the editor?");
         if (areYouSure) {

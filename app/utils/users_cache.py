@@ -1,6 +1,6 @@
 import asyncio
-from natsort import natsorted
 
+from natsort import natsorted
 from tornado.ioloop import PeriodicCallback
 
 from app.config.environments import Environment
@@ -19,8 +19,10 @@ def update_organizational_units_cache():
     except Exception as e:
         print(f"[UserCache] ❌ Error updating cache: {e}")
 
+
 def get_organizational_units_cache():
     return organizational_units_cache
+
 
 def start_organizational_units_updater():
     async def run_in_thread():
