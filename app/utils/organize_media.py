@@ -40,9 +40,9 @@ def parse_file_name(file_name: str) -> FileName | None:
     p3 = r"^(.*\(\d{4}-\d{2}-\d{2} .+\))$"
 
     if m := re.match(p1, file_name):
-        return {"owner": m.group(1), "class_name": m.group(2), "date": m.group(3)}
+        return {"class_name": m.group(1), "owner": m.group(2), "date": m.group(3)}
     elif m := re.match(p2, file_name):
-        return {"owner": "No Name", "class_name": m.group(1), "date": m.group(2)}
+        return {"class_name": m.group(1), "owner": "No Name", "date": m.group(2)}
     elif m := re.match(p3, file_name):
         return {"owner": "No Name", "class_name": "No Class", "date": m.group(1)}
     else:
@@ -150,7 +150,8 @@ def organize_media():
             Environment.HBNITV_RECORDINGS_DELEGATED_ADMIN_EMAIL
         )
         mp4_files = google_api.list_mp4_files_in_folder(
-            service_worker_drive_credentials, Environment.HBNITV_MEET_RECORDINGS_FOLDER_ID
+            service_worker_drive_credentials,
+            Environment.HBNITV_MEET_RECORDINGS_FOLDER_ID,
         )
 
         for file in mp4_files:
@@ -186,14 +187,16 @@ def organize_media():
             if file_exists_in_folder(
                 service_worker_drive_credentials, class_folder_id, metadata["name"]
             ):
-                print(
-                    f"Skipping {metadata['name']} (already exists in destination)"
-                )
+                print(f"Skipping {metadata['name']} (already exists in destination)")
             else:
                 print(
                     f"Moving {metadata['name']} to {current_year_range}/{file_name['owner']}/{file_name['class_name']}"
                 )
-                google_api.move_file_to_folder(drive=service_worker_drive_credentials, file_id=file["id"], folder_id=class_folder_id)
+                google_api.move_file_to_folder(
+                    drive=service_worker_drive_credentials,
+                    file_id=file["id"],
+                    folder_id=class_folder_id,
+                )
 
                 # transfer_file_between_accounts(
                 #     user_drive_service=user_drive_service,
