@@ -70,7 +70,7 @@ export class NavigationDialog {
                 ${this.link("recordings", "video_library", "Recordings")}
                 ${this.link("settings", "settings", "Settings")}
                 ${this.link("contact", "contact_mail", "Contact")}
-                ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/shared/folders", "folder_shared", "Shared Folders") : ""}
+                ${User.email === "jared@hbni.net" || User.email === "manager@hbni.net" ? this.link("admin/shared/folders", "folder_shared", "Shared Folders") : ""}
                 ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/assignments", "folder_open", "Assignments") : ""}
                 ${User.role === "admin" || User.role === "super_admin" ? this.link("admin/register", "person_add", "Register") : ""}
                 <a id="install" text="Install">

@@ -20,6 +20,9 @@ function load() {
     const colonyNameInput = document.querySelector("#organizational_unit") as HTMLInputElement;
     const firstNameInput = document.querySelector("#name") as HTMLInputElement;
     const colonyInitialsInput = document.querySelector("#colony_initials") as HTMLInputElement;
+    const registerButton = document.querySelector("#register-button") as HTMLButtonElement;
+    const loadingIndicator = document.querySelector("#loading-indicator") as HTMLDivElement;
+    const registerIcon = document.querySelector("#register-icon") as HTMLDivElement;
 
     firstNameInput.addEventListener("input", () => {
         updateEmailElement(firstNameInput.value, colonyInitialsInput.value, colonyNameInput.value);
@@ -45,6 +48,9 @@ function load() {
     const form = document.querySelector("form") as HTMLFormElement;
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
+        registerButton.disabled = true;
+        loadingIndicator.classList.remove("hidden");
+        registerIcon.classList.add("hidden");
         const formData = new FormData(form);
         await fetch("/api/register", {
             method: "POST",
@@ -66,11 +72,17 @@ function load() {
                     const snackbar = new SnackbarError("register-snackbar-error", data.message);
                     snackbar.show(2000);
                 }
+                registerButton.disabled = false;
+                loadingIndicator.classList.add("hidden");
+                registerIcon.classList.remove("hidden");
             })
             .catch((err) => {
                 const snackbar = new SnackbarError("register-snackbar-error", `Register failed: ${err}`);
                 snackbar.show(2000);
                 console.error("❌ Register failed:", err);
+                registerButton.disabled = false;
+                loadingIndicator.classList.add("hidden");
+                registerIcon.classList.remove("hidden");
             });
     });
 }

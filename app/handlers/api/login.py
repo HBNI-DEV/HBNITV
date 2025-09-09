@@ -41,7 +41,7 @@ class LoginAPIHandler(BaseHandler):
                 #     self.write({"success": False, "message": "Unauthorized domain"})
                 #     return
 
-                role = "student" if hd == "hbnitv.net" else "admin"
+                role = "student" if "hbnitv.net" in email else "admin"
                 if email in ["jared@hbni.net"]:
                     role = "super_admin"
 
