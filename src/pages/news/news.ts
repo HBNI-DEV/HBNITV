@@ -114,7 +114,12 @@ class ViewNewsPage {
                     <h6 class="small bold">${news.user_info.given_name} ${news.user_info.family_name}</h6>
                     <a href="mailto:${news.user_info.email}" class="link" id="dialog-email">${news.user_info.email}</a>
                 </div>
-                ${(User.email === news.user_info.email) ? `<button id="edit-latest-news-btn" class="circle border"><i>edit</i></button><button class="circle border error" id="delete-latest-news-btn"><i>delete</i></button>` : ""}
+                <button id="edit-latest-news-btn" class="circle border">
+                    <i>edit</i>
+                </button>
+                <button class="circle border error" id="delete-latest-news-btn">
+                    <i>delete</i>
+                </button>
             </nav>
             <h5 id="dialog-title">${news.title}</h5>
             <span style="color: var(--on-surface-variant);" id="created-at">${news.createdAtReadable} (${news.createdAtRelative})</span>
@@ -125,6 +130,7 @@ class ViewNewsPage {
 
         const editButton = this.latestNewsElement.querySelector("#edit-latest-news-btn") as HTMLButtonElement;
         const deleteButton = this.latestNewsElement.querySelector("#delete-latest-news-btn") as HTMLButtonElement;
+
         if (User.email === news.user_info.email || User.email === "jared@hbni.net" || User.email === "manager@hbni.net") {
             editButton.classList.remove("hidden");
             deleteButton.classList.remove("hidden");
