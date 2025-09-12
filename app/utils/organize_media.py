@@ -97,13 +97,9 @@ def file_exists_in_folder(drive, parent_folder_id: str, file_name: str) -> bool:
     return len(response.get("files", [])) > 0
 
 
-def transfer_file_between_accounts(
-    user_drive_service, src_file_id, service_worker_drive_credentials, dst_folder_id
-):
+def transfer_file_between_accounts(user_drive_service, src_file_id, service_worker_drive_credentials, dst_folder_id):
     # Step 1 — Download as source account
-    file_metadata = (
-        user_drive_service.files().get(fileId=src_file_id, fields="name").execute()
-    )
+    file_metadata = user_drive_service.files().get(fileId=src_file_id, fields="name").execute()
     file_name = file_metadata["name"]
 
     request = user_drive_service.files().get_media(fileId=src_file_id)
@@ -117,9 +113,7 @@ def transfer_file_between_accounts(
 
     # Step 2 — Upload as destination account
     media = MediaIoBaseUpload(file_stream, mimetype="video/mp4", resumable=True)
-    service_worker_drive_credentials.files().create(
-        body={"name": file_name, "parents": [dst_folder_id]}, media_body=media
-    ).execute()
+    service_worker_drive_credentials.files().create(body={"name": file_name, "parents": [dst_folder_id]}, media_body=media).execute()
     print(f"Uploaded {file_name} to {dst_folder_id}")
 
 
@@ -146,18 +140,14 @@ def organize_media():
 
         current_year_range = get_current_and_next_school_year()
 
-        service_worker_drive_credentials = google_api.get_drive_credentials(
-            Environment.HBNITV_RECORDINGS_DELEGATED_ADMIN_EMAIL
-        )
+        service_worker_drive_credentials = google_api.get_drive_credentials(Environment.HBNITV_RECORDINGS_DELEGATED_ADMIN_EMAIL)
         mp4_files = google_api.list_mp4_files_in_folder(
             service_worker_drive_credentials,
             Environment.HBNITV_MEET_RECORDINGS_FOLDER_ID,
         )
 
         for file in mp4_files:
-            metadata = google_api.get_file_metadata(
-                service_worker_drive_credentials, file["id"]
-            )
+            metadata = google_api.get_file_metadata(service_worker_drive_credentials, file["id"])
 
             file_name = parse_file_name(metadata["name"])
             if not file_name:
@@ -170,11 +160,15 @@ def organize_media():
                 Environment.HBNITV_RECORDINGS_FOLDER_ID,
                 current_year_range,
             )
+            backup_year_folder_id = ensure_folder(
+                service_worker_drive_credentials,
+                Environment.HBNITV_BACKUP_RECORDINGS_FOLDER_ID,
+                current_year_range,
+            )
 
             # Step 2: Owner folder
-            owner_folder_id = ensure_folder(
-                service_worker_drive_credentials, year_folder_id, file_name["owner"]
-            )
+            owner_folder_id = ensure_folder(service_worker_drive_credentials, year_folder_id, file_name["owner"])
+            backup_ownder_folder_id = ensure_folder(service_worker_drive_credentials, backup_year_folder_id, file_name["owner"])
 
             # Step 3: Class folder
             class_folder_id = ensure_folder(
@@ -182,28 +176,32 @@ def organize_media():
                 owner_folder_id,
                 file_name["class_name"],
             )
+            backup_class_folder_id = ensure_folder(
+                service_worker_drive_credentials,
+                backup_ownder_folder_id,
+                file_name["class_name"],
+            )
 
             # Step 4: Copy file to class folder only if not already there
-            if file_exists_in_folder(
-                service_worker_drive_credentials, class_folder_id, metadata["name"]
-            ):
+            if file_exists_in_folder(service_worker_drive_credentials, class_folder_id, metadata["name"]):
                 print(f"Skipping {metadata['name']} (already exists in destination)")
             else:
-                print(
-                    f"Moving {metadata['name']} to {current_year_range}/{file_name['owner']}/{file_name['class_name']}"
-                )
-                google_api.move_file_to_folder(
+                print(f"Moving {metadata['name']} to {current_year_range}/{file_name['owner']}/{file_name['class_name']}")
+                google_api.copy_file_to_folder(
                     drive=service_worker_drive_credentials,
                     file_id=file["id"],
                     folder_id=class_folder_id,
                 )
-
-                # transfer_file_between_accounts(
-                #     user_drive_service=user_drive_service,
-                #     src_file_id=file["id"],
-                #     service_worker_drive_credentials=service_worker_drive_credentials,
-                #     dst_folder_id=class_folder_id,
-                # )
+            # Step 5: Copy file to backup folder only if not already there
+            if file_exists_in_folder(service_worker_drive_credentials, backup_class_folder_id, metadata["name"]):
+                print(f"Skipping {metadata['name']} (already exists in backup destination)")
+            else:
+                print(f"Backing up {metadata['name']} to backup/{current_year_range}/{file_name['owner']}/{file_name['class_name']}")
+                google_api.move_file_to_folder(
+                    drive=service_worker_drive_credentials,
+                    file_id=file["id"],
+                    folder_id=backup_class_folder_id,
+                )
     except Exception as e:
         print(f"[Organizer] Error updating cache: {e}")
     finally:

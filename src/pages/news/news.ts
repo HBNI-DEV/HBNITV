@@ -1,11 +1,11 @@
-import {initializeCoreUI} from "@utils/ui-core";
-import {SettingsManager} from "@managers/settings-manager";
-import {User} from "@models/user";
-import {News} from "@models/news";
-import {NewsAPI} from "@api/news-api";
-import {Snackbar} from "@components/snackbar";
-import {SnackbarError} from "@components/snackbar-error";
-import {PreviewStyle} from "@toast-ui/editor";
+import { initializeCoreUI } from "@utils/ui-core";
+import { SettingsManager } from "@managers/settings-manager";
+import { User } from "@models/user";
+import { News } from "@models/news";
+import { NewsAPI } from "@api/news-api";
+import { Snackbar } from "@components/snackbar";
+import { SnackbarError } from "@components/snackbar-error";
+import { PreviewStyle } from "@toast-ui/editor";
 
 let Editor: typeof import('@toast-ui/editor').Editor;
 let Viewer: typeof import('@toast-ui/editor/dist/toastui-editor-viewer').default;
@@ -35,7 +35,7 @@ async function loadEditorModules() {
 async function initializePage() {
     const newsPage = new ViewNewsPage();
     if (User.role === "admin" || User.role === "super_admin") {
-        const {default: Editor} = await import("@toast-ui/editor");
+        const { default: Editor } = await import("@toast-ui/editor");
         new CreateNewsPostPage(newsPage);
     }
 }
@@ -65,7 +65,7 @@ class ViewNewsPage {
     }
 
     async init() {
-        this.mode = localStorage.getItem("mode") || "dark";
+        this.mode = localStorage.getItem("mode") || "auto";
         if (this.mode === "auto") {
             this.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
         }
@@ -111,6 +111,9 @@ class ViewNewsPage {
                     <h6 class="small bold">${news.user_info.given_name} ${news.user_info.family_name}</h6>
                     <a href="mailto:${news.user_info.email}" class="link" id="dialog-email">${news.user_info.email}</a>
                 </div>
+                ${(User.email === news.user_info.email) ? `<button id="edit-latest-news-btn" class="circle border">
+                    <i>edit</i>
+                </button><button class="circle border error" id="delete-latest-news-btn"><i>delete</i></button>` : ""}
             </nav>
             <h5 id="dialog-title">${news.title}</h5>
             <span style="color: var(--on-surface-variant);" id="created-at">${news.createdAtReadable} (${news.createdAtRelative})</span>
@@ -210,7 +213,7 @@ class ViewNewsPage {
 
     private async openDialogWithArticle(news: News) {
         if (!this.dialogViewer) {
-            const {default: Viewer} = await import("@toast-ui/editor/dist/toastui-editor-viewer");
+            const { default: Viewer } = await import("@toast-ui/editor/dist/toastui-editor-viewer");
             const viewerContainer = this.dialogElement.querySelector("#dialog-viewer") as HTMLElement;
             this.dialogViewer = new Viewer({
                 el: viewerContainer,

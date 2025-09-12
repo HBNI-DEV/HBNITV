@@ -16,7 +16,7 @@ class StudentCalendarElement {
         const spinner = document.getElementById("loading-spinner") as HTMLProgressElement;
         this.iFrame = document.createElement("iframe");
         this.iFrame.className = "absolute center round border fade-in";
-        this.iFrame.src = "https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FWinnipeg&mode=MONTH&title=HBNITV&src=Y180ZThmMTI2Yzc5ZTNmOWY5YWQ1YmVjNjY5OGI4YTI5ZGE0ZDhhNTRiOGNiZjZhZTJiZTM0YjU3MTQ0MjI1ZDQxQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y184MjYzNjA1ZjY2YjBhNzcxMDhjMWNiODA0ODhhMDE5YzYyYWY5ZTA4ZDRkNmI1OGRkNjhiMWIyYmU4NDViOWU4QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=ZW4uY2FuYWRpYW4jaG9saWRheUBncm91cC52LmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23039be5&color=%239e69af&color=%230b8043";
+        this.iFrame.src = "https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FWinnipeg&mode=MONTH&title=HBN%20ITV%20Calendar&src=bWFuYWdlckBoYm5pLm5ldA&color=%239e69af";
         this.iFrame.width = "800";
         this.iFrame.height = "600";
         this.iFrame.setAttribute("frameborder", "1");

@@ -41,7 +41,6 @@
             insensitive.</p>
         <div class="grid">
             {% for folder_id, folder in folder_cache.items() %}
-            {% if email == folder.delegated_email %}
             <article class="s12 m6 l4 round border shared-folder" data-folder-id="{{ folder_id }}">
                 <nav class="row">
                     <i>
@@ -72,7 +71,6 @@
                     </button>
                 </nav>
             </article>
-            {% endif %}
             {% endfor %}
         </div>
     </main>

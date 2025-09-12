@@ -25,23 +25,6 @@ export class LoginDialog {
                 </button>
                 <h5>Login</h5>
             </nav>
-            <form class="grid" id="login-form" method="POST" action="/api/login">
-                <div class="s12 field label border no-margin round">
-                    <input type="text" id="username" name="username"/>
-                    <label for="onload">Email</label>
-                </div>
-                <div class="s12 field label border no-margin round">
-                    <input type="password" id="password" name="password"/>
-                    <label for="password">Password</label>
-                </div>
-                <nav class="s12 right-align">
-                    <button class="button" type="submit">
-                        <i>login</i>
-                        <span>Login</span>
-                    </button>
-                </nav>
-            </form>
-            <br>
             <div id="login-form">
                 <div id="g_id_onload"
                     data-client_id="453511062592-hcnq2v5956hpktbgmi9605o09q007fo6.apps.googleusercontent.com"
