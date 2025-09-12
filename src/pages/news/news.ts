@@ -32,11 +32,14 @@ async function loadEditorModules() {
     initializePage();
 }
 
+let editorPage: CreateNewsPostPage | null = null;
+
 async function initializePage() {
     const newsPage = new ViewNewsPage();
     if (User.role === "admin" || User.role === "super_admin") {
-        const { default: Editor } = await import("@toast-ui/editor");
-        new CreateNewsPostPage(newsPage);
+        await import("@toast-ui/editor");
+        editorPage = new CreateNewsPostPage(newsPage);
+        (window as any).editorPage = editorPage; // optional global access
     }
 }
 
@@ -111,9 +114,7 @@ class ViewNewsPage {
                     <h6 class="small bold">${news.user_info.given_name} ${news.user_info.family_name}</h6>
                     <a href="mailto:${news.user_info.email}" class="link" id="dialog-email">${news.user_info.email}</a>
                 </div>
-                ${(User.email === news.user_info.email) ? `<button id="edit-latest-news-btn" class="circle border">
-                    <i>edit</i>
-                </button><button class="circle border error" id="delete-latest-news-btn"><i>delete</i></button>` : ""}
+                ${(User.email === news.user_info.email) ? `<button id="edit-latest-news-btn" class="circle border"><i>edit</i></button><button class="circle border error" id="delete-latest-news-btn"><i>delete</i></button>` : ""}
             </nav>
             <h5 id="dialog-title">${news.title}</h5>
             <span style="color: var(--on-surface-variant);" id="created-at">${news.createdAtReadable} (${news.createdAtRelative})</span>
@@ -121,6 +122,45 @@ class ViewNewsPage {
         `;
 
         const latestNewsViewer = this.latestNewsElement.querySelector("#latest-news-viewer") as HTMLElement;
+
+        const editButton = this.latestNewsElement.querySelector("#edit-latest-news-btn") as HTMLButtonElement;
+        const deleteButton = this.latestNewsElement.querySelector("#delete-latest-news-btn") as HTMLButtonElement;
+        if (User.email === news.user_info.email || User.email === "jared@hbni.net" || User.email === "manager@hbni.net") {
+            editButton.classList.remove("hidden");
+            deleteButton.classList.remove("hidden");
+        } else {
+            editButton.classList.add("hidden");
+            deleteButton.classList.add("hidden");
+        }
+
+        editButton.onclick = () => {
+            showPage("#create-news-page");
+            this.settings.saveSetting("toast_editor_content", news.content);
+            this.settings.saveSetting("toast_editor_title", news.title);
+
+            const ep = (window as any).editorPage as CreateNewsPostPage;
+            ep.titleElement.value = news.title;
+            ep.editor.setMarkdown(news.content);
+            ep.currentNewsId = news.id;          // <-- reuse existing instance
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        };
+
+        deleteButton.onclick = () => {
+            const areYouSure = confirm("Are you sure you want to delete this news post? This action cannot be undone.");
+            if (areYouSure) {
+                NewsAPI.deleteNews(news.id)
+                    .then(() => {
+                        const snackbar = new Snackbar("delete-snackbar", "News deleted!");
+                        snackbar.show(2000);
+                        setTimeout(() => window.location.reload(), 1000);
+                    })
+                    .catch((error) => {
+                        console.error("Failed to delete news:", error);
+                        const snackbar = new SnackbarError("delete-snackbar-error", "Failed to delete news");
+                        snackbar.show(2000);
+                    });
+            }
+        };
         this.latestNewsViewer = new Viewer({
             el: latestNewsViewer,
             initialValue: news.content,
@@ -197,6 +237,12 @@ class ViewNewsPage {
                     <h6 class="small bold" id="dialog-username"></h6>
                     <a class="link" id="dialog-email"></a>
                 </div>
+                <button id="edit-btn" class="circle border">
+                    <i>edit</i>
+                </button>
+                <button class="circle border error" id="delete-btn">
+                    <i>delete</i>
+                </button>
             </nav>
             <h5 id="dialog-title"></h5>
             <span style="color: var(--on-surface-variant);" id="created-at"></span>
@@ -235,6 +281,47 @@ class ViewNewsPage {
         const email = this.dialogElement.querySelector("#dialog-email") as HTMLAnchorElement;
         email.href = `mailto:${news.user_info.email}`;
         email.innerText = news.user_info.email;
+
+        const editButton = this.dialogElement.querySelector("#edit-btn") as HTMLButtonElement;
+        const deleteButton = this.dialogElement.querySelector("#delete-btn") as HTMLButtonElement;
+        if (User.email === news.user_info.email || User.email === "jared@hbni.net" || User.email === "manager@hbni.net") {
+            editButton.classList.remove("hidden");
+            deleteButton.classList.remove("hidden");
+        } else {
+            editButton.classList.add("hidden");
+            deleteButton.classList.add("hidden");
+        }
+
+        editButton.onclick = () => {
+            ui("#news-dialog");
+            this.settings.saveSetting("toast_editor_content", news.content);
+            this.settings.saveSetting("toast_editor_title", news.title);
+
+            const ep = (window as any).editorPage as CreateNewsPostPage;
+            ep.titleElement.value = news.title;
+            ep.editor.setMarkdown(news.content);
+            ep.currentNewsId = news.id;          // <-- reuse existing instance
+            showPage("#create-news-page");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        };
+
+        deleteButton.onclick = () => {
+            const areYouSure = confirm("Are you sure you want to delete this news post? This action cannot be undone.");
+            if (areYouSure) {
+                NewsAPI.deleteNews(news.id)
+                    .then(() => {
+                        const snackbar = new Snackbar("delete-snackbar", "News deleted!");
+                        snackbar.show(2000);
+                        setTimeout(() => window.location.reload(), 1000);
+                    })
+                    .catch((error) => {
+                        console.error("Failed to delete news:", error);
+                        const snackbar = new SnackbarError("delete-snackbar-error", "Failed to delete news");
+                        snackbar.show(2000);
+                    });
+            }
+        }
+
 
         // const updatedAt = this.dialogElement.querySelector("#updated-at") as HTMLSpanElement;
         // updatedAt.innerText = article.updatedAt;
@@ -283,6 +370,7 @@ class CreateNewsPostPage {
     settings = new SettingsManager();
     editor!: InstanceType<typeof Editor>;
     newsPage: ViewNewsPage;
+    currentNewsId: string | null = null;
     isMobile: boolean = false;
     previewStyle: PreviewStyle = "vertical";
 
@@ -299,11 +387,13 @@ class CreateNewsPostPage {
     }
 
     async init() {
+        document.querySelector("#editor")!.innerHTML = "";
+
         let [savedContent, savedTitle] = await Promise.all([
             this.settings.getSetting("toast_editor_content", "# Hello, World!"),
             this.settings.getSetting("toast_editor_title", "Hello, World!"),
         ]);
-        let editorTheme = localStorage.getItem("mode") || "dark";
+        let editorTheme = localStorage.getItem("mode") || "auto";
 
         if (editorTheme === "auto") {
             editorTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -338,20 +428,26 @@ class CreateNewsPostPage {
     async postNews() {
         const content = this.editor.getMarkdown();
         const news = new News();
-        news.id = Date.now().toString();
+        if (this.currentNewsId) {
+            news.id = this.currentNewsId;
+        } else {
+            news.id = Date.now().toString();
+        }
         news.content = content;
         news.user_info = User;
         news.title = this.titleElement.value;
         NewsAPI.saveNews(news)
             .then(() => {
-                const snackbar = new Snackbar("post-snackbar", "News posted!");
+                const snackbar = new Snackbar("post-snackbar", `News ${this.currentNewsId ? "updated" : "posted"}!`);
                 snackbar.show(2000);
-                setTimeout(() => this.newsPage.updateNewsPage(), 1000);
+                setTimeout(() => window.location.reload(), 1000);
+                // this.currentNewsId = null;
             })
             .catch((error) => {
                 console.error("Failed to save news:", error);
                 const snackbar = new SnackbarError("post-snackbar-error", "Failed to post news");
                 snackbar.show(2000);
+                // this.currentNewsId = null;
             });
     }
 
@@ -362,6 +458,7 @@ class CreateNewsPostPage {
             this.editor.setMarkdown("");
             await this.settings.saveSetting("toast_editor_title", "");
             await this.settings.saveSetting("toast_editor_content", "");
+            this.currentNewsId = null;
         }
     }
 }
@@ -372,6 +469,20 @@ function showPage(pageId: string) {
     });
     const page = document.querySelector(pageId);
     if (page) page.classList.add("active");
+
+    document.querySelectorAll(".tabs a").forEach((tab) => {
+        tab.classList.remove("active");
+        if (tab.getAttribute("data-ui") === pageId) {
+            tab.classList.add("active");
+        }
+    });
+
+    document.querySelectorAll(".tabs a").forEach((tab) => {
+        tab.addEventListener("click", async () => {
+            const pageId = tab.getAttribute("data-ui")!;
+            localStorage.setItem("last_active_news_tab", pageId);
+        });
+    });
 }
 
 function load() {

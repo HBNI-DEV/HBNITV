@@ -34,7 +34,7 @@ export class AccountRegisteredDialog {
                 <button class="transparent link" data-action="close">
                     <span>Close</span>
                 </button>
-                <button class="transparent link" data-action="copy">
+                <button data-action="copy">
                     <span>Copy</span>
                 </button>
             </nav>
