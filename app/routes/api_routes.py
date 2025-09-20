@@ -1,31 +1,31 @@
 from app.handlers.api.assignment import AssignmentAPIHandler
 from app.handlers.api.calendar import CalendarAPIHandler
-from app.handlers.api.curiki.biology import (
-    CurikiBiologyGeneralLearningOutcomesAPIHandler,
-    CurikiBiologyOutcomesAPIHandler,
-    CurikiBiologyUnitsAPIHandler,
-)
-from app.handlers.api.curiki.math import (
-    CurikiMathOutcomesAPIHandler,
-    CurikiMathSkillsAPIHandler,
-    CurikiMathStrandsAPIHandler,
-)
-from app.handlers.api.curiki.science import (
-    CurikiScienceClustersAPIHandler,
-    CurikiScienceGeneralLearningOutcomesAPIHandler,
-    CurikiScienceOutcomesAPIHandler,
-)
-from app.handlers.api.curiki.social_studies import (
-    CurikiSocialStudiesClustersAPIHandler,
-    CurikiSocialStudiesDistinctiveLearningOutcomesAPIHandler,
-    CurikiSocialStudiesGeneralLearningOutcomesAPIHandler,
-    CurikiSocialStudiesGlossaryAPIHandler,
-    CurikiSocialStudiesOutcomesAPIHandler,
-    CurikiSocialStudiesOutcomeTypesAPIHandler,
-    CurikiSocialStudiesSkillsAPIHandler,
-    CurikiSocialStudiesSkillTypesAPIHandler,
-)
 from app.handlers.api.google_share_folder_ids import SharedGoogleFolderIDsAPIHandler
+from app.handlers.api.Kuriki.biology import (
+    KurikiBiologyGeneralLearningOutcomesAPIHandler,
+    KurikiBiologyOutcomesAPIHandler,
+    KurikiBiologyUnitsAPIHandler,
+)
+from app.handlers.api.Kuriki.math import (
+    KurikiMathOutcomesAPIHandler,
+    KurikiMathSkillsAPIHandler,
+    KurikiMathStrandsAPIHandler,
+)
+from app.handlers.api.Kuriki.science import (
+    KurikiScienceClustersAPIHandler,
+    KurikiScienceGeneralLearningOutcomesAPIHandler,
+    KurikiScienceOutcomesAPIHandler,
+)
+from app.handlers.api.Kuriki.social_studies import (
+    KurikiSocialStudiesClustersAPIHandler,
+    KurikiSocialStudiesDistinctiveLearningOutcomesAPIHandler,
+    KurikiSocialStudiesGeneralLearningOutcomesAPIHandler,
+    KurikiSocialStudiesGlossaryAPIHandler,
+    KurikiSocialStudiesOutcomesAPIHandler,
+    KurikiSocialStudiesOutcomeTypesAPIHandler,
+    KurikiSocialStudiesSkillsAPIHandler,
+    KurikiSocialStudiesSkillTypesAPIHandler,
+)
 from app.handlers.api.login import LoginAPIHandler
 from app.handlers.api.logout import LogoutAPIHandler
 from app.handlers.api.news import NewsAPIHandler
@@ -55,89 +55,89 @@ api_routes = [
         name="api_shared_google_folder_ids",
     ),
     route(
-        r"/api/curiki/math/outcomes",
-        CurikiMathOutcomesAPIHandler,
-        name="api_curiki_math_outcomes",
+        r"/api/kuriki/mathematics/2013-2014/outcomes",
+        KurikiMathOutcomesAPIHandler,
+        name="api_kuriki_math_outcomes",
     ),
     route(
-        r"/api/curiki/math/skills",
-        CurikiMathSkillsAPIHandler,
-        name="api_curiki_math_skills",
+        r"/api/kuriki/mathematics/2013-2014/skills",
+        KurikiMathSkillsAPIHandler,
+        name="api_kuriki_math_skills",
     ),
     route(
-        r"/api/curiki/math/strands",
-        CurikiMathStrandsAPIHandler,
-        name="api_curiki_math_strands",
+        r"/api/kuriki/mathematics/2013-2014/strands",
+        KurikiMathStrandsAPIHandler,
+        name="api_kuriki_math_strands",
     ),
     route(
-        r"/api/curiki/science/outcomes",
-        CurikiScienceOutcomesAPIHandler,
-        name="api_curiki_science_outcomes",
+        r"/api/kuriki/science/1999-2000/outcomes",
+        KurikiScienceOutcomesAPIHandler,
+        name="api_kuriki_science_outcomes",
     ),
     route(
-        r"/api/curiki/science/clusters",
-        CurikiScienceClustersAPIHandler,
-        name="api_curiki_science_clusters",
+        r"/api/kuriki/science/1999-2000/clusters",
+        KurikiScienceClustersAPIHandler,
+        name="api_kuriki_science_clusters",
     ),
     route(
-        r"/api/curiki/science/general_learning_outcomes",
-        CurikiScienceGeneralLearningOutcomesAPIHandler,
-        name="api_curiki_science_general_learning_outcomes",
+        r"/api/kuriki/science/1999-2000/general_learning_outcomes",
+        KurikiScienceGeneralLearningOutcomesAPIHandler,
+        name="api_kuriki_science_general_learning_outcomes",
     ),
     route(
-        r"/api/curiki/biology/outcomes",
-        CurikiBiologyOutcomesAPIHandler,
-        name="api_curiki_biology_outcomes",
+        r"/api/kuriki/biology/2010-2011/outcomes",
+        KurikiBiologyOutcomesAPIHandler,
+        name="api_kuriki_biology_outcomes",
     ),
     route(
-        r"/api/curiki/biology/units",
-        CurikiBiologyUnitsAPIHandler,
-        name="api_curiki_biology_units",
+        r"/api/kuriki/biology/2010-2011/units",
+        KurikiBiologyUnitsAPIHandler,
+        name="api_kuriki_biology_units",
     ),
     route(
-        r"/api/curiki/biology/general_learning_outcomes",
-        CurikiBiologyGeneralLearningOutcomesAPIHandler,
-        name="api_curiki_biology_general_learning_outcomes",
+        r"/api/kuriki/biology/2010-2011/general_learning_outcomes",
+        KurikiBiologyGeneralLearningOutcomesAPIHandler,
+        name="api_kuriki_biology_general_learning_outcomes",
     ),
     route(
-        r"/api/curiki/social_studies/clusters",
-        CurikiSocialStudiesClustersAPIHandler,
-        name="api_curiki_social_studies_clusters",
+        r"/api/kuriki/social_studies/2003/clusters",
+        KurikiSocialStudiesClustersAPIHandler,
+        name="api_kuriki_social_studies_clusters",
     ),
     route(
-        r"/api/curiki/social_studies/skill_types",
-        CurikiSocialStudiesSkillTypesAPIHandler,
-        name="api_curiki_social_studies_skill_types",
+        r"/api/kuriki/social_studies/2003/skill_types",
+        KurikiSocialStudiesSkillTypesAPIHandler,
+        name="api_kuriki_social_studies_skill_types",
     ),
     route(
-        r"/api/curiki/social_studies/outcome_types",
-        CurikiSocialStudiesOutcomeTypesAPIHandler,
-        name="api_curiki_social_studies_outcome_types",
+        r"/api/kuriki/social_studies/2003/outcome_types",
+        KurikiSocialStudiesOutcomeTypesAPIHandler,
+        name="api_kuriki_social_studies_outcome_types",
     ),
     route(
-        r"/api/curiki/social_studies/distinctive_learning_outcomes",
-        CurikiSocialStudiesDistinctiveLearningOutcomesAPIHandler,
-        name="api_curiki_social_studies_distinctive_learning_outcomes",
+        r"/api/kuriki/social_studies/2003/distinctive_learning_outcomes",
+        KurikiSocialStudiesDistinctiveLearningOutcomesAPIHandler,
+        name="api_kuriki_social_studies_distinctive_learning_outcomes",
     ),
     route(
-        r"/api/curiki/social_studies/general_learning_outcomes",
-        CurikiSocialStudiesGeneralLearningOutcomesAPIHandler,
-        name="api_curiki_social_studies_general_learning_outcomes",
+        r"/api/kuriki/social_studies/2003/general_learning_outcomes",
+        KurikiSocialStudiesGeneralLearningOutcomesAPIHandler,
+        name="api_kuriki_social_studies_general_learning_outcomes",
     ),
     route(
-        r"/api/curiki/social_studies/skills",
-        CurikiSocialStudiesSkillsAPIHandler,
-        name="api_curiki_social_studies_skills",
+        r"/api/kuriki/social_studies/2003/skills",
+        KurikiSocialStudiesSkillsAPIHandler,
+        name="api_kuriki_social_studies_skills",
     ),
     route(
-        r"/api/curiki/social_studies/outcomes",
-        CurikiSocialStudiesOutcomesAPIHandler,
-        name="api_curiki_social_studies_outcomes",
+        r"/api/kuriki/social_studies/2003/outcomes",
+        KurikiSocialStudiesOutcomesAPIHandler,
+        name="api_kuriki_social_studies_outcomes",
     ),
     route(
-        r"/api/curiki/social_studies/glossary",
-        CurikiSocialStudiesGlossaryAPIHandler,
-        name="api_curiki_social_studies_glossary",
+        r"/api/kuriki/social_studies/2003/glossary",
+        KurikiSocialStudiesGlossaryAPIHandler,
+        name="api_kuriki_social_studies_glossary",
     ),
     route(r"/api/calendar", CalendarAPIHandler, name="api_calendar"),
 ]

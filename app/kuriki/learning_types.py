@@ -1,5 +1,6 @@
-from app.curiki.learning_type import LearningType
 from typing import Iterator
+
+from app.Kuriki.learning_type import LearningType
 
 
 class LearningTypes:
@@ -19,7 +20,4 @@ class LearningTypes:
         return self._learning_types[index]
 
     def to_dict(self) -> dict:
-        return {
-            learning_type.code: learning_type.description
-            for learning_type in self._learning_types
-        }
+        return {learning_type.code: learning_type.description for learning_type in self._learning_types}

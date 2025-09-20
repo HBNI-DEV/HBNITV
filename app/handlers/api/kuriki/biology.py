@@ -1,46 +1,46 @@
-from app.handlers.curiki import CurikiBaseHandler
-from app.utils.curiki.science_cache import ScienceCache
+from app.handlers.kuriki import KurikiBaseHandler
+from app.utils.kuriki.biology_cache import BiologyCache
 
 
-class CurikiScienceAPIHandler(CurikiBaseHandler):
+class KurikiBiologyAPIHandler(KurikiBaseHandler):
     def initialize(self):
         super().initialize()
-        ScienceCache.load(self.cur)
+        BiologyCache.load(self.cur)
 
 
-class CurikiScienceClustersAPIHandler(CurikiScienceAPIHandler):
+class KurikiBiologyUnitsAPIHandler(KurikiBiologyAPIHandler):
     def get(self):
         try:
             self.write(
                 {
                     "status": "success",
-                    "data": ScienceCache.clusters.to_dict(),
+                    "data": BiologyCache.units.to_dict(),
                 }
             )
         except Exception as e:
             self.write_error_response(e)
 
 
-class CurikiScienceGeneralLearningOutcomesAPIHandler(CurikiScienceAPIHandler):
+class KurikiBiologyGeneralLearningOutcomesAPIHandler(KurikiBiologyAPIHandler):
     def get(self):
         try:
             self.write(
                 {
                     "status": "success",
-                    "data": ScienceCache.general_learning_outcomes.to_dict(),
+                    "data": BiologyCache.general_learning_outcomes.to_dict(),
                 }
             )
         except Exception as e:
             self.write_error_response(e)
 
 
-class CurikiScienceOutcomesAPIHandler(CurikiScienceAPIHandler):
+class KurikiBiologyOutcomesAPIHandler(KurikiBiologyAPIHandler):
     def get(self):
         try:
             outcome_id = self.get_argument("id", None)
 
             if outcome_id:
-                if result := ScienceCache.cache.get(outcome_id):
+                if result := BiologyCache.cache.get(outcome_id):
                     self.write({"status": "success", "data": result})
                 else:
                     self.set_status(404)
@@ -49,7 +49,7 @@ class CurikiScienceOutcomesAPIHandler(CurikiScienceAPIHandler):
                 self.write(
                     {
                         "status": "success",
-                        "data": ScienceCache.cache,
+                        "data": BiologyCache.cache,
                     }
                 )
         except Exception as e:
@@ -57,7 +57,7 @@ class CurikiScienceOutcomesAPIHandler(CurikiScienceAPIHandler):
 
     @staticmethod
     def _get_outcome(outcome_id: str):
-        if result := ScienceCache.cache.get(outcome_id):
+        if result := BiologyCache.cache.get(outcome_id):
             return result
         else:
             return None

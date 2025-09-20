@@ -1,8 +1,8 @@
-from app.curiki.math_outcome import MathOutcome
-from app.curiki.skill import Skill
-from app.curiki.skills import Skills
-from app.curiki.strand import Strand
-from app.curiki.strands import Strands
+from app.Kuriki.math_outcome import MathOutcome
+from app.Kuriki.skill import Skill
+from app.Kuriki.skills import Skills
+from app.Kuriki.strand import Strand
+from app.Kuriki.strands import Strands
 
 
 class MathCache:
@@ -23,9 +23,7 @@ class MathCache:
         db_cursor.execute(f"SELECT code, name FROM {table_name}_strands")
         cls.strands._strands = [Strand(*row) for row in db_cursor.fetchall()]
 
-        db_cursor.execute(
-            f"SELECT outcome_id, grade, strand, skills, specific_learning_outcome, general_learning_outcomes FROM {table_name}_curriculum"
-        )
+        db_cursor.execute(f"SELECT outcome_id, grade, strand, skills, specific_learning_outcome, general_learning_outcomes FROM {table_name}_curriculum")
 
         for row in db_cursor.fetchall():
             skills = Skills()

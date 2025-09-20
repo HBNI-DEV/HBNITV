@@ -1,5 +1,6 @@
-from app.curiki.glossary_term import GlossaryTerm
 from typing import Iterator
+
+from app.Kuriki.glossary_term import GlossaryTerm
 
 
 class Glossary:

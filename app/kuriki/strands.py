@@ -1,5 +1,6 @@
-from app.curiki.strand import Strand
 from typing import Iterator
+
+from app.Kuriki.strand import Strand
 
 
 class Strands:

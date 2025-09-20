@@ -1,14 +1,14 @@
-from app.curiki.clusters import Clusters
-from app.curiki.general_learning_outcome import GeneralLearningOutcome
-from app.curiki.general_learning_outcomes import GeneralLearningOutcomes
-from app.curiki.glossary import Glossary
-from app.curiki.glossary_term import GlossaryTerm
-from app.curiki.learning_type import LearningType
-from app.curiki.learning_types import LearningTypes
-from app.curiki.skill import Skill
-from app.curiki.social_studies_outcome import SocialStudiesOutcome
-from app.curiki.cluster import Cluster
-from app.curiki.social_studies_skill import SocialStudiesSkill
+from app.Kuriki.cluster import Cluster
+from app.Kuriki.clusters import Clusters
+from app.Kuriki.general_learning_outcome import GeneralLearningOutcome
+from app.Kuriki.general_learning_outcomes import GeneralLearningOutcomes
+from app.Kuriki.glossary import Glossary
+from app.Kuriki.glossary_term import GlossaryTerm
+from app.Kuriki.learning_type import LearningType
+from app.Kuriki.learning_types import LearningTypes
+from app.Kuriki.skill import Skill
+from app.Kuriki.social_studies_outcome import SocialStudiesOutcome
+from app.Kuriki.social_studies_skill import SocialStudiesSkill
 
 
 class SocialStudiesCache:
@@ -31,29 +31,17 @@ class SocialStudiesCache:
         db_cursor.execute(f"SELECT grade, cluster, title FROM {table_name}_clusters")
         cls.clusters._clusters = [Cluster(*row) for row in db_cursor.fetchall()]
 
-        db_cursor.execute(
-            f"SELECT code, description FROM {table_name}_general_outcomes"
-        )
-        cls.general_learning_outcomes._general_learning_outcomes = [
-            GeneralLearningOutcome(*row) for row in db_cursor.fetchall()
-        ]
+        db_cursor.execute(f"SELECT code, description FROM {table_name}_general_outcomes")
+        cls.general_learning_outcomes._general_learning_outcomes = [GeneralLearningOutcome(*row) for row in db_cursor.fetchall()]
 
         db_cursor.execute(f"SELECT code, description FROM {table_name}_skill_types")
-        cls.skill_types._learning_types = [
-            LearningType(*row) for row in db_cursor.fetchall()
-        ]
+        cls.skill_types._learning_types = [LearningType(*row) for row in db_cursor.fetchall()]
 
         db_cursor.execute(f"SELECT code, description FROM {table_name}_outcome_types")
-        cls.outcome_types._learning_types = [
-            LearningType(*row) for row in db_cursor.fetchall()
-        ]
+        cls.outcome_types._learning_types = [LearningType(*row) for row in db_cursor.fetchall()]
 
-        db_cursor.execute(
-            f"SELECT code, description FROM {table_name}_distinctive_learning_outcomes"
-        )
-        cls.distinctive_learning_outcomes._learning_types = [
-            LearningType(*row) for row in db_cursor.fetchall()
-        ]
+        db_cursor.execute(f"SELECT code, description FROM {table_name}_distinctive_learning_outcomes")
+        cls.distinctive_learning_outcomes._learning_types = [LearningType(*row) for row in db_cursor.fetchall()]
 
         db_cursor.execute(f"SELECT term, definition FROM {table_name}_glossary")
         cls.glossary._terms = [GlossaryTerm(*row) for row in db_cursor.fetchall()]
@@ -63,15 +51,9 @@ class SocialStudiesCache:
         )
 
         for row in db_cursor.fetchall():
-            cluster = next(
-                (c for c in cls.clusters if c.get_id() == f"{row[1]}.{row[2]}"), None
-            )
-            outcome_type = next(
-                (c for c in cls.outcome_types if c.code == row[3]), None
-            )
-            general_learning_outcome = next(
-                (c for c in cls.general_learning_outcomes if c.code == row[4]), None
-            )
+            cluster = next((c for c in cls.clusters if c.get_id() == f"{row[1]}.{row[2]}"), None)
+            outcome_type = next((c for c in cls.outcome_types if c.code == row[3]), None)
+            general_learning_outcome = next((c for c in cls.general_learning_outcomes if c.code == row[4]), None)
             distinctive_learning_outcome = next(
                 (c for c in cls.distinctive_learning_outcomes if c.code == row[5]),
                 LearningType("", ""),
@@ -90,9 +72,7 @@ class SocialStudiesCache:
             cls.outcomes.append(outcome)
             cls.cache[row[0]] = outcome.to_dict()
 
-        db_cursor.execute(
-            f"SELECT skill_id, skill_type, grade, specific_learning_outcome FROM {table_name}_skills"
-        )
+        db_cursor.execute(f"SELECT skill_id, skill_type, grade, specific_learning_outcome FROM {table_name}_skills")
 
         for row in db_cursor.fetchall():
             skill_type = next((c for c in cls.skill_types if c.code == row[1]), None)

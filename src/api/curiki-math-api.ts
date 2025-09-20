@@ -1,10 +1,10 @@
 import { MathOutcome } from "@models/math-outcome";
 
-const API_ENDPOINT = "/api/curiki/math";
+const API_ENDPOINT = "/api/kuriki/math";
 
 
 
-export class CurikiMathAPI {
+export class KurikiMathAPI {
     static async getOutcome(id: string): Promise<MathOutcome | undefined> {
         const response = await fetch(`${API_ENDPOINT}/outcomes?id=${encodeURIComponent(id)}`);
 

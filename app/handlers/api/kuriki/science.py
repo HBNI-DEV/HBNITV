@@ -1,46 +1,46 @@
-from app.handlers.curiki import CurikiBaseHandler
-from app.utils.curiki.math_cache import MathCache
+from app.handlers.kuriki import KurikiBaseHandler
+from app.utils.kuriki.science_cache import ScienceCache
 
 
-class CurikiMathAPIHandler(CurikiBaseHandler):
+class KurikiScienceAPIHandler(KurikiBaseHandler):
     def initialize(self):
         super().initialize()
-        MathCache.load(self.cur)
+        ScienceCache.load(self.cur)
 
 
-class CurikiMathSkillsAPIHandler(CurikiMathAPIHandler):
+class KurikiScienceClustersAPIHandler(KurikiScienceAPIHandler):
     def get(self):
         try:
             self.write(
                 {
                     "status": "success",
-                    "data": MathCache.skills.to_dict(),
+                    "data": ScienceCache.clusters.to_dict(),
                 }
             )
         except Exception as e:
             self.write_error_response(e)
 
 
-class CurikiMathStrandsAPIHandler(CurikiMathAPIHandler):
+class KurikiScienceGeneralLearningOutcomesAPIHandler(KurikiScienceAPIHandler):
     def get(self):
         try:
             self.write(
                 {
                     "status": "success",
-                    "data": MathCache.strands.to_dict(),
+                    "data": ScienceCache.general_learning_outcomes.to_dict(),
                 }
             )
         except Exception as e:
             self.write_error_response(e)
 
 
-class CurikiMathOutcomesAPIHandler(CurikiMathAPIHandler):
+class KurikiScienceOutcomesAPIHandler(KurikiScienceAPIHandler):
     def get(self):
         try:
             outcome_id = self.get_argument("id", None)
 
             if outcome_id:
-                if result := MathCache.cache.get(outcome_id):
+                if result := ScienceCache.cache.get(outcome_id):
                     self.write({"status": "success", "data": result})
                 else:
                     self.set_status(404)
@@ -49,15 +49,15 @@ class CurikiMathOutcomesAPIHandler(CurikiMathAPIHandler):
                 self.write(
                     {
                         "status": "success",
-                        "data": MathCache.cache,
+                        "data": ScienceCache.cache,
                     }
                 )
         except Exception as e:
             self.write_error_response(e)
 
     @staticmethod
-    def _get_outcome(outcome_id):
-        if result := MathCache.cache.get(outcome_id):
+    def _get_outcome(outcome_id: str):
+        if result := ScienceCache.cache.get(outcome_id):
             return result
         else:
             return None

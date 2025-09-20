@@ -1,5 +1,6 @@
-from app.curiki.general_learning_outcome import GeneralLearningOutcome
 from typing import Iterator
+
+from app.Kuriki.general_learning_outcome import GeneralLearningOutcome
 
 
 class GeneralLearningOutcomes:
@@ -19,7 +20,4 @@ class GeneralLearningOutcomes:
         return self._general_learning_outcomes[index]
 
     def to_dict(self) -> dict:
-        return {
-            general_learning_outcome.code: general_learning_outcome.description
-            for general_learning_outcome in self._general_learning_outcomes
-        }
+        return {general_learning_outcome.code: general_learning_outcome.description for general_learning_outcome in self._general_learning_outcomes}

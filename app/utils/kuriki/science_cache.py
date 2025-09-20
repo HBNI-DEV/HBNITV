@@ -1,8 +1,8 @@
-from app.curiki.clusters import Clusters
-from app.curiki.general_learning_outcome import GeneralLearningOutcome
-from app.curiki.general_learning_outcomes import GeneralLearningOutcomes
-from app.curiki.science_outcome import ScienceOutcome
-from app.curiki.cluster import Cluster
+from app.Kuriki.cluster import Cluster
+from app.Kuriki.clusters import Clusters
+from app.Kuriki.general_learning_outcome import GeneralLearningOutcome
+from app.Kuriki.general_learning_outcomes import GeneralLearningOutcomes
+from app.Kuriki.science_outcome import ScienceOutcome
 
 
 class ScienceCache:
@@ -20,21 +20,13 @@ class ScienceCache:
         db_cursor.execute(f"SELECT grade, cluster, title FROM {table_name}_clusters")
         cls.clusters._clusters = [Cluster(*row) for row in db_cursor.fetchall()]
 
-        db_cursor.execute(
-            f"SELECT code, description FROM {table_name}_general_outcomes"
-        )
-        cls.general_learning_outcomes._general_learning_outcomes = [
-            GeneralLearningOutcome(*row) for row in db_cursor.fetchall()
-        ]
+        db_cursor.execute(f"SELECT code, description FROM {table_name}_general_outcomes")
+        cls.general_learning_outcomes._general_learning_outcomes = [GeneralLearningOutcome(*row) for row in db_cursor.fetchall()]
 
-        db_cursor.execute(
-            f"SELECT outcome_id, grade, cluster, general_learning_outcomes, specific_learning_outcome FROM {table_name}_curriculum"
-        )
+        db_cursor.execute(f"SELECT outcome_id, grade, cluster, general_learning_outcomes, specific_learning_outcome FROM {table_name}_curriculum")
 
         for row in db_cursor.fetchall():
-            cluster = next(
-                (c for c in cls.clusters if c.get_id() == f"{row[1]}.{row[2]}"), None
-            )
+            cluster = next((c for c in cls.clusters if c.get_id() == f"{row[1]}.{row[2]}"), None)
             general_learning_outcomes = GeneralLearningOutcomes()
             for code in row[3]:
                 for general_learning_outcome in cls.general_learning_outcomes:

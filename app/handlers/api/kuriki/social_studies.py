@@ -1,14 +1,14 @@
-from app.handlers.curiki import CurikiBaseHandler
-from app.utils.curiki.social_studies_cache import SocialStudiesCache
+from app.handlers.kuriki import KurikiBaseHandler
+from app.utils.kuriki.social_studies_cache import SocialStudiesCache
 
 
-class CurikiSocialStudiesAPIHandler(CurikiBaseHandler):
+class KurikiSocialStudiesAPIHandler(KurikiBaseHandler):
     def initialize(self):
         super().initialize()
         SocialStudiesCache.load(self.cur)
 
 
-class CurikiSocialStudiesClustersAPIHandler(CurikiSocialStudiesAPIHandler):
+class KurikiSocialStudiesClustersAPIHandler(KurikiSocialStudiesAPIHandler):
     def get(self):
         try:
             self.write(
@@ -21,7 +21,7 @@ class CurikiSocialStudiesClustersAPIHandler(CurikiSocialStudiesAPIHandler):
             self.write_error_response(e)
 
 
-class CurikiSocialStudiesSkillTypesAPIHandler(CurikiSocialStudiesAPIHandler):
+class KurikiSocialStudiesSkillTypesAPIHandler(KurikiSocialStudiesAPIHandler):
     def get(self):
         try:
             self.write(
@@ -34,7 +34,7 @@ class CurikiSocialStudiesSkillTypesAPIHandler(CurikiSocialStudiesAPIHandler):
             self.write_error_response(e)
 
 
-class CurikiSocialStudiesOutcomeTypesAPIHandler(CurikiSocialStudiesAPIHandler):
+class KurikiSocialStudiesOutcomeTypesAPIHandler(KurikiSocialStudiesAPIHandler):
     def get(self):
         try:
             self.write(
@@ -47,9 +47,7 @@ class CurikiSocialStudiesOutcomeTypesAPIHandler(CurikiSocialStudiesAPIHandler):
             self.write_error_response(e)
 
 
-class CurikiSocialStudiesDistinctiveLearningOutcomesAPIHandler(
-    CurikiSocialStudiesAPIHandler
-):
+class KurikiSocialStudiesDistinctiveLearningOutcomesAPIHandler(KurikiSocialStudiesAPIHandler):
     def get(self):
         try:
             self.write(
@@ -62,9 +60,7 @@ class CurikiSocialStudiesDistinctiveLearningOutcomesAPIHandler(
             self.write_error_response(e)
 
 
-class CurikiSocialStudiesGeneralLearningOutcomesAPIHandler(
-    CurikiSocialStudiesAPIHandler
-):
+class KurikiSocialStudiesGeneralLearningOutcomesAPIHandler(KurikiSocialStudiesAPIHandler):
     def get(self):
         try:
             self.write(
@@ -77,7 +73,7 @@ class CurikiSocialStudiesGeneralLearningOutcomesAPIHandler(
             self.write_error_response(e)
 
 
-class CurikiSocialStudiesGlossaryAPIHandler(CurikiSocialStudiesAPIHandler):
+class KurikiSocialStudiesGlossaryAPIHandler(KurikiSocialStudiesAPIHandler):
     def get(self):
         try:
             self.write(
@@ -90,7 +86,7 @@ class CurikiSocialStudiesGlossaryAPIHandler(CurikiSocialStudiesAPIHandler):
             self.write_error_response(e)
 
 
-class CurikiSocialStudiesOutcomesAPIHandler(CurikiSocialStudiesAPIHandler):
+class KurikiSocialStudiesOutcomesAPIHandler(KurikiSocialStudiesAPIHandler):
     def get(self):
         try:
             outcome_id = self.get_argument("id", None)
@@ -117,7 +113,7 @@ class CurikiSocialStudiesOutcomesAPIHandler(CurikiSocialStudiesAPIHandler):
             return None
 
 
-class CurikiSocialStudiesSkillsAPIHandler(CurikiSocialStudiesAPIHandler):
+class KurikiSocialStudiesSkillsAPIHandler(KurikiSocialStudiesAPIHandler):
     def get(self):
         try:
             skill_id = self.get_argument("id", None)

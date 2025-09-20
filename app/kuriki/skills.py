@@ -1,5 +1,6 @@
-from app.curiki.skill import Skill
 from typing import Iterator
+
+from app.Kuriki.skill import Skill
 
 
 class Skills:

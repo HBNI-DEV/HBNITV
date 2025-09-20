@@ -1,10 +1,10 @@
-import json
 import psycopg2
+
 from app.config.environments import Environment
 from app.handlers.core.base import BaseHandler
 
 
-class CurikiBaseHandler(BaseHandler):
+class KurikiBaseHandler(BaseHandler):
     def set_default_headers(self):
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Access-Control-Allow-Headers", "Content-Type")
@@ -17,7 +17,7 @@ class CurikiBaseHandler(BaseHandler):
 
     def initialize(self):
         self.conn = psycopg2.connect(
-            dbname="curiki",
+            dbname="Kuriki",
             user=Environment.POSTGRES_USER,
             password=Environment.POSTGRES_PASSWORD,
             host=Environment.POSTGRES_HOST,

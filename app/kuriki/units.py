@@ -1,5 +1,6 @@
-from app.curiki.unit import Unit
 from typing import Iterator
+
+from app.Kuriki.unit import Unit
 
 
 class Units:

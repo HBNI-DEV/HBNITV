@@ -1,8 +1,8 @@
-from app.curiki.unit import Unit
-from app.curiki.units import Units
-from app.curiki.general_learning_outcome import GeneralLearningOutcome
-from app.curiki.general_learning_outcomes import GeneralLearningOutcomes
-from app.curiki.biology_outcome import BiologyOutcome
+from app.Kuriki.biology_outcome import BiologyOutcome
+from app.Kuriki.general_learning_outcome import GeneralLearningOutcome
+from app.Kuriki.general_learning_outcomes import GeneralLearningOutcomes
+from app.Kuriki.unit import Unit
+from app.Kuriki.units import Units
 
 
 class BiologyCache:
@@ -20,21 +20,13 @@ class BiologyCache:
         db_cursor.execute(f"SELECT grade, unit, title FROM {table_name}_units")
         cls.units._untits = [Unit(*row) for row in db_cursor.fetchall()]
 
-        db_cursor.execute(
-            f"SELECT code, description FROM {table_name}_general_outcomes"
-        )
-        cls.general_learning_outcomes._general_learning_outcomes = [
-            GeneralLearningOutcome(*row) for row in db_cursor.fetchall()
-        ]
+        db_cursor.execute(f"SELECT code, description FROM {table_name}_general_outcomes")
+        cls.general_learning_outcomes._general_learning_outcomes = [GeneralLearningOutcome(*row) for row in db_cursor.fetchall()]
 
-        db_cursor.execute(
-            f"SELECT outcome_id, grade, unit, general_learning_outcomes, specific_learning_outcome FROM {table_name}_curriculum"
-        )
+        db_cursor.execute(f"SELECT outcome_id, grade, unit, general_learning_outcomes, specific_learning_outcome FROM {table_name}_curriculum")
 
         for row in db_cursor.fetchall():
-            unit = next(
-                (u for u in cls.units if u.get_id() == f"{row[1]}.{row[2]}"), None
-            )
+            unit = next((u for u in cls.units if u.get_id() == f"{row[1]}.{row[2]}"), None)
             general_learning_outcomes = GeneralLearningOutcomes()
             for code in row[3]:
                 for general_learning_outcome in cls.general_learning_outcomes:

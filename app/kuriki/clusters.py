@@ -1,5 +1,6 @@
-from app.curiki.cluster import Cluster
 from typing import Iterator
+
+from app.Kuriki.cluster import Cluster
 
 
 class Clusters:
