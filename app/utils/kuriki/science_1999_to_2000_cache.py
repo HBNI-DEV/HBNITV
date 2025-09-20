@@ -1,11 +1,11 @@
-from app.Kuriki.cluster import Cluster
-from app.Kuriki.clusters import Clusters
-from app.Kuriki.general_learning_outcome import GeneralLearningOutcome
-from app.Kuriki.general_learning_outcomes import GeneralLearningOutcomes
-from app.Kuriki.science_outcome import ScienceOutcome
+from app.kuriki.cluster import Cluster
+from app.kuriki.clusters import Clusters
+from app.kuriki.general_learning_outcome import GeneralLearningOutcome
+from app.kuriki.general_learning_outcomes import GeneralLearningOutcomes
+from app.kuriki.science_outcome import ScienceOutcome
 
 
-class ScienceCache:
+class Science1999To2000Cache:
     _loaded = False
     clusters: Clusters = Clusters()
     general_learning_outcomes: GeneralLearningOutcomes = GeneralLearningOutcomes()
@@ -13,7 +13,7 @@ class ScienceCache:
     cache: dict[str, dict[str, dict[str, str]]] = {}
 
     @classmethod
-    def load(cls, db_cursor, table_name="science"):
+    def load(cls, db_cursor, table_name="science_1999_to_2000"):
         if cls._loaded:
             return
 

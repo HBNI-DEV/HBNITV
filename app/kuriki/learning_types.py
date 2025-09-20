@@ -1,6 +1,6 @@
 from typing import Iterator
 
-from app.Kuriki.learning_type import LearningType
+from app.kuriki.learning_type import LearningType
 
 
 class LearningTypes:

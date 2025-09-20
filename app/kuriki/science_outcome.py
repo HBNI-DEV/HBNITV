@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
-from app.Kuriki.cluster import Cluster
-from app.Kuriki.general_learning_outcomes import GeneralLearningOutcomes
-from app.Kuriki.outcome import Outcome
+from app.kuriki.cluster import Cluster
+from app.kuriki.general_learning_outcomes import GeneralLearningOutcomes
+from app.kuriki.outcome import Outcome
 
 
 @dataclass(frozen=True)

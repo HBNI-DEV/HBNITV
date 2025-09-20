@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
-from app.Kuriki.general_learning_outcomes import GeneralLearningOutcomes
-from app.Kuriki.outcome import Outcome
-from app.Kuriki.unit import Unit
+from app.kuriki.general_learning_outcomes import GeneralLearningOutcomes
+from app.kuriki.outcome import Outcome
+from app.kuriki.unit import Unit
 
 
 @dataclass(frozen=True)

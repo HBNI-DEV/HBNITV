@@ -1,6 +1,6 @@
 from typing import Iterator
 
-from app.Kuriki.skill import Skill
+from app.kuriki.skill import Skill
 
 
 class Skills:

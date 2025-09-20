@@ -1,17 +1,16 @@
-from app.Kuriki.cluster import Cluster
-from app.Kuriki.clusters import Clusters
-from app.Kuriki.general_learning_outcome import GeneralLearningOutcome
-from app.Kuriki.general_learning_outcomes import GeneralLearningOutcomes
-from app.Kuriki.glossary import Glossary
-from app.Kuriki.glossary_term import GlossaryTerm
-from app.Kuriki.learning_type import LearningType
-from app.Kuriki.learning_types import LearningTypes
-from app.Kuriki.skill import Skill
-from app.Kuriki.social_studies_outcome import SocialStudiesOutcome
-from app.Kuriki.social_studies_skill import SocialStudiesSkill
+from app.kuriki.cluster import Cluster
+from app.kuriki.clusters import Clusters
+from app.kuriki.general_learning_outcome import GeneralLearningOutcome
+from app.kuriki.general_learning_outcomes import GeneralLearningOutcomes
+from app.kuriki.glossary import Glossary
+from app.kuriki.glossary_term import GlossaryTerm
+from app.kuriki.learning_type import LearningType
+from app.kuriki.learning_types import LearningTypes
+from app.kuriki.social_studies_outcome import SocialStudiesOutcome
+from app.kuriki.social_studies_skill import SocialStudiesSkill
 
 
-class SocialStudiesCache:
+class SocialStudies2003Cache:
     _loaded = False
     clusters: Clusters = Clusters()
     glossary: Glossary = Glossary()
@@ -24,7 +23,7 @@ class SocialStudiesCache:
     cache: dict[str, dict[str, dict[str, str]]] = {}
 
     @classmethod
-    def load(cls, db_cursor, table_name="social_studies"):
+    def load(cls, db_cursor, table_name="social_studies_2003"):
         if cls._loaded:
             return
 

@@ -1,11 +1,11 @@
 from app.handlers.kuriki import KurikiBaseHandler
-from app.utils.kuriki.math_cache import MathCache
+from app.utils.kuriki.mathematics_2013_to_2014_cache import Mathematics2013To2014Cache
 
 
 class KurikiMathAPIHandler(KurikiBaseHandler):
     def initialize(self):
         super().initialize()
-        MathCache.load(self.cur)
+        Mathematics2013To2014Cache.load(self.cur)
 
 
 class KurikiMathSkillsAPIHandler(KurikiMathAPIHandler):
@@ -14,7 +14,7 @@ class KurikiMathSkillsAPIHandler(KurikiMathAPIHandler):
             self.write(
                 {
                     "status": "success",
-                    "data": MathCache.skills.to_dict(),
+                    "data": Mathematics2013To2014Cache.skills.to_dict(),
                 }
             )
         except Exception as e:
@@ -27,7 +27,7 @@ class KurikiMathStrandsAPIHandler(KurikiMathAPIHandler):
             self.write(
                 {
                     "status": "success",
-                    "data": MathCache.strands.to_dict(),
+                    "data": Mathematics2013To2014Cache.strands.to_dict(),
                 }
             )
         except Exception as e:
@@ -40,7 +40,7 @@ class KurikiMathOutcomesAPIHandler(KurikiMathAPIHandler):
             outcome_id = self.get_argument("id", None)
 
             if outcome_id:
-                if result := MathCache.cache.get(outcome_id):
+                if result := Mathematics2013To2014Cache.cache.get(outcome_id):
                     self.write({"status": "success", "data": result})
                 else:
                     self.set_status(404)
@@ -49,7 +49,7 @@ class KurikiMathOutcomesAPIHandler(KurikiMathAPIHandler):
                 self.write(
                     {
                         "status": "success",
-                        "data": MathCache.cache,
+                        "data": Mathematics2013To2014Cache.cache,
                     }
                 )
         except Exception as e:
@@ -57,7 +57,7 @@ class KurikiMathOutcomesAPIHandler(KurikiMathAPIHandler):
 
     @staticmethod
     def _get_outcome(outcome_id):
-        if result := MathCache.cache.get(outcome_id):
+        if result := Mathematics2013To2014Cache.cache.get(outcome_id):
             return result
         else:
             return None

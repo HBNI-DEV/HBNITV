@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 
-from app.Kuriki.outcome import Outcome
-from app.Kuriki.skill import Skill
-from app.Kuriki.skills import Skills
-from app.Kuriki.strand import Strand
+from app.kuriki.outcome import Outcome
+from app.kuriki.skill import Skill
+from app.kuriki.skills import Skills
+from app.kuriki.strand import Strand
 
 
 @dataclass(frozen=True)

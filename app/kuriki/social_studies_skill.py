@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from app.Kuriki.learning_type import LearningType
-from app.Kuriki.outcome import Outcome
+from app.kuriki.learning_type import LearningType
+from app.kuriki.outcome import Outcome
 
 
 @dataclass(frozen=True)

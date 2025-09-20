@@ -1,11 +1,11 @@
 from app.handlers.kuriki import KurikiBaseHandler
-from app.utils.kuriki.science_cache import ScienceCache
+from app.utils.kuriki.science_1999_to_2000_cache import Science1999To2000Cache
 
 
 class KurikiScienceAPIHandler(KurikiBaseHandler):
     def initialize(self):
         super().initialize()
-        ScienceCache.load(self.cur)
+        Science1999To2000Cache.load(self.cur)
 
 
 class KurikiScienceClustersAPIHandler(KurikiScienceAPIHandler):
@@ -14,7 +14,7 @@ class KurikiScienceClustersAPIHandler(KurikiScienceAPIHandler):
             self.write(
                 {
                     "status": "success",
-                    "data": ScienceCache.clusters.to_dict(),
+                    "data": Science1999To2000Cache.clusters.to_dict(),
                 }
             )
         except Exception as e:
@@ -27,7 +27,7 @@ class KurikiScienceGeneralLearningOutcomesAPIHandler(KurikiScienceAPIHandler):
             self.write(
                 {
                     "status": "success",
-                    "data": ScienceCache.general_learning_outcomes.to_dict(),
+                    "data": Science1999To2000Cache.general_learning_outcomes.to_dict(),
                 }
             )
         except Exception as e:
@@ -40,7 +40,7 @@ class KurikiScienceOutcomesAPIHandler(KurikiScienceAPIHandler):
             outcome_id = self.get_argument("id", None)
 
             if outcome_id:
-                if result := ScienceCache.cache.get(outcome_id):
+                if result := Science1999To2000Cache.cache.get(outcome_id):
                     self.write({"status": "success", "data": result})
                 else:
                     self.set_status(404)
@@ -49,7 +49,7 @@ class KurikiScienceOutcomesAPIHandler(KurikiScienceAPIHandler):
                 self.write(
                     {
                         "status": "success",
-                        "data": ScienceCache.cache,
+                        "data": Science1999To2000Cache.cache,
                     }
                 )
         except Exception as e:
@@ -57,7 +57,7 @@ class KurikiScienceOutcomesAPIHandler(KurikiScienceAPIHandler):
 
     @staticmethod
     def _get_outcome(outcome_id: str):
-        if result := ScienceCache.cache.get(outcome_id):
+        if result := Science1999To2000Cache.cache.get(outcome_id):
             return result
         else:
             return None

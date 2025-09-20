@@ -1,6 +1,6 @@
 from typing import Iterator
 
-from app.Kuriki.glossary_term import GlossaryTerm
+from app.kuriki.glossary_term import GlossaryTerm
 
 
 class Glossary:

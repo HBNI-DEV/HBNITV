@@ -1,11 +1,11 @@
 from app.handlers.kuriki import KurikiBaseHandler
-from app.utils.kuriki.social_studies_cache import SocialStudiesCache
+from app.utils.kuriki.social_studies_2003_cache import SocialStudies2003Cache
 
 
 class KurikiSocialStudiesAPIHandler(KurikiBaseHandler):
     def initialize(self):
         super().initialize()
-        SocialStudiesCache.load(self.cur)
+        SocialStudies2003Cache.load(self.cur)
 
 
 class KurikiSocialStudiesClustersAPIHandler(KurikiSocialStudiesAPIHandler):
@@ -14,7 +14,7 @@ class KurikiSocialStudiesClustersAPIHandler(KurikiSocialStudiesAPIHandler):
             self.write(
                 {
                     "status": "success",
-                    "data": SocialStudiesCache.clusters.to_dict(),
+                    "data": SocialStudies2003Cache.clusters.to_dict(),
                 }
             )
         except Exception as e:
@@ -27,7 +27,7 @@ class KurikiSocialStudiesSkillTypesAPIHandler(KurikiSocialStudiesAPIHandler):
             self.write(
                 {
                     "status": "success",
-                    "data": SocialStudiesCache.skill_types.to_dict(),
+                    "data": SocialStudies2003Cache.skill_types.to_dict(),
                 }
             )
         except Exception as e:
@@ -40,7 +40,7 @@ class KurikiSocialStudiesOutcomeTypesAPIHandler(KurikiSocialStudiesAPIHandler):
             self.write(
                 {
                     "status": "success",
-                    "data": SocialStudiesCache.outcome_types.to_dict(),
+                    "data": SocialStudies2003Cache.outcome_types.to_dict(),
                 }
             )
         except Exception as e:
@@ -53,7 +53,7 @@ class KurikiSocialStudiesDistinctiveLearningOutcomesAPIHandler(KurikiSocialStudi
             self.write(
                 {
                     "status": "success",
-                    "data": SocialStudiesCache.distinctive_learning_outcomes.to_dict(),
+                    "data": SocialStudies2003Cache.distinctive_learning_outcomes.to_dict(),
                 }
             )
         except Exception as e:
@@ -66,7 +66,7 @@ class KurikiSocialStudiesGeneralLearningOutcomesAPIHandler(KurikiSocialStudiesAP
             self.write(
                 {
                     "status": "success",
-                    "data": SocialStudiesCache.general_learning_outcomes.to_dict(),
+                    "data": SocialStudies2003Cache.general_learning_outcomes.to_dict(),
                 }
             )
         except Exception as e:
@@ -79,7 +79,7 @@ class KurikiSocialStudiesGlossaryAPIHandler(KurikiSocialStudiesAPIHandler):
             self.write(
                 {
                     "status": "success",
-                    "data": SocialStudiesCache.glossary.to_dict(),
+                    "data": SocialStudies2003Cache.glossary.to_dict(),
                 }
             )
         except Exception as e:
@@ -92,14 +92,14 @@ class KurikiSocialStudiesOutcomesAPIHandler(KurikiSocialStudiesAPIHandler):
             outcome_id = self.get_argument("id", None)
 
             if outcome_id:
-                if result := SocialStudiesCache.cache.get(outcome_id):
+                if result := SocialStudies2003Cache.cache.get(outcome_id):
                     self.write({"status": "success", "data": result})
                 else:
                     self.set_status(404)
                     self.write({"status": "error", "message": "Outcome not found"})
             else:
                 all_outcomes = {}
-                for outcome in SocialStudiesCache.outcomes:
+                for outcome in SocialStudies2003Cache.outcomes:
                     all_outcomes[outcome.outcome_id] = outcome.to_dict()
                 self.write({"status": "success", "data": all_outcomes})
         except Exception as e:
@@ -107,7 +107,7 @@ class KurikiSocialStudiesOutcomesAPIHandler(KurikiSocialStudiesAPIHandler):
 
     @staticmethod
     def _get_skill(skill_id: str):
-        if result := SocialStudiesCache.cache.get(skill_id):
+        if result := SocialStudies2003Cache.cache.get(skill_id):
             return result
         else:
             return None
@@ -119,14 +119,14 @@ class KurikiSocialStudiesSkillsAPIHandler(KurikiSocialStudiesAPIHandler):
             skill_id = self.get_argument("id", None)
 
             if skill_id:
-                if result := SocialStudiesCache.cache.get(skill_id):
+                if result := SocialStudies2003Cache.cache.get(skill_id):
                     self.write({"status": "success", "data": result})
                 else:
                     self.set_status(404)
                     self.write({"status": "error", "message": "Outcome not found"})
             else:
                 all_skills = {}
-                for skill in SocialStudiesCache.skills:
+                for skill in SocialStudies2003Cache.skills:
                     all_skills[skill.outcome_id] = skill.to_dict()
                 self.write({"status": "success", "data": all_skills})
         except Exception as e:
@@ -134,7 +134,7 @@ class KurikiSocialStudiesSkillsAPIHandler(KurikiSocialStudiesAPIHandler):
 
     @staticmethod
     def _get_skill(skill_id: str):
-        if result := SocialStudiesCache.cache.get(skill_id):
+        if result := SocialStudies2003Cache.cache.get(skill_id):
             return result
         else:
             return None

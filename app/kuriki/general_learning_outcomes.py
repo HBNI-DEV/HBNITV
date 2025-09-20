@@ -1,6 +1,6 @@
 from typing import Iterator
 
-from app.Kuriki.general_learning_outcome import GeneralLearningOutcome
+from app.kuriki.general_learning_outcome import GeneralLearningOutcome
 
 
 class GeneralLearningOutcomes:

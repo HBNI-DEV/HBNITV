@@ -1,22 +1,22 @@
 from app.handlers.api.assignment import AssignmentAPIHandler
 from app.handlers.api.calendar import CalendarAPIHandler
 from app.handlers.api.google_share_folder_ids import SharedGoogleFolderIDsAPIHandler
-from app.handlers.api.kuriki.biology import (
+from app.handlers.api.kuriki.biology_2010_to_2011 import (
     KurikiBiologyGeneralLearningOutcomesAPIHandler,
     KurikiBiologyOutcomesAPIHandler,
     KurikiBiologyUnitsAPIHandler,
 )
-from app.handlers.api.kuriki.math import (
+from app.handlers.api.kuriki.mathematics_2013_to_2014 import (
     KurikiMathOutcomesAPIHandler,
     KurikiMathSkillsAPIHandler,
     KurikiMathStrandsAPIHandler,
 )
-from app.handlers.api.kuriki.science import (
+from app.handlers.api.kuriki.science_1999_to_2000 import (
     KurikiScienceClustersAPIHandler,
     KurikiScienceGeneralLearningOutcomesAPIHandler,
     KurikiScienceOutcomesAPIHandler,
 )
-from app.handlers.api.kuriki.social_studies import (
+from app.handlers.api.kuriki.social_studies_2003 import (
     KurikiSocialStudiesClustersAPIHandler,
     KurikiSocialStudiesDistinctiveLearningOutcomesAPIHandler,
     KurikiSocialStudiesGeneralLearningOutcomesAPIHandler,

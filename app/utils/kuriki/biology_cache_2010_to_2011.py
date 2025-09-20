@@ -1,11 +1,11 @@
-from app.Kuriki.biology_outcome import BiologyOutcome
-from app.Kuriki.general_learning_outcome import GeneralLearningOutcome
-from app.Kuriki.general_learning_outcomes import GeneralLearningOutcomes
-from app.Kuriki.unit import Unit
-from app.Kuriki.units import Units
+from app.kuriki.biology_outcome import BiologyOutcome
+from app.kuriki.general_learning_outcome import GeneralLearningOutcome
+from app.kuriki.general_learning_outcomes import GeneralLearningOutcomes
+from app.kuriki.unit import Unit
+from app.kuriki.units import Units
 
 
-class BiologyCache:
+class Biology2010To2011Cache:
     _loaded = False
     units: Units = Units()
     general_learning_outcomes: GeneralLearningOutcomes = GeneralLearningOutcomes()
@@ -13,7 +13,7 @@ class BiologyCache:
     cache: dict[str, dict[str, dict[str, str]]] = {}
 
     @classmethod
-    def load(cls, db_cursor, table_name="biology"):
+    def load(cls, db_cursor, table_name="biology_2010_to_2011"):
         if cls._loaded:
             return
 

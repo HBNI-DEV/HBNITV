@@ -1,11 +1,11 @@
-from app.Kuriki.math_outcome import MathOutcome
-from app.Kuriki.skill import Skill
-from app.Kuriki.skills import Skills
-from app.Kuriki.strand import Strand
-from app.Kuriki.strands import Strands
+from app.kuriki.math_outcome import MathOutcome
+from app.kuriki.skill import Skill
+from app.kuriki.skills import Skills
+from app.kuriki.strand import Strand
+from app.kuriki.strands import Strands
 
 
-class MathCache:
+class Mathematics2013To2014Cache:
     _loaded = False
     skills: Skills = Skills()
     strands: Strands = Strands()
@@ -13,7 +13,7 @@ class MathCache:
     cache: dict[str, dict[str, dict[str, str]]] = {}
 
     @classmethod
-    def load(cls, db_cursor, table_name="math"):
+    def load(cls, db_cursor, table_name="mathematics_2013_to_2014"):
         if cls._loaded:
             return
 
