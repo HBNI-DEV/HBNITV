@@ -17,7 +17,7 @@ class KurikiBaseHandler(BaseHandler):
 
     def initialize(self):
         self.conn = psycopg2.connect(
-            dbname="Kuriki",
+            dbname="kuriki",
             user=Environment.POSTGRES_USER,
             password=Environment.POSTGRES_PASSWORD,
             host=Environment.POSTGRES_HOST,
