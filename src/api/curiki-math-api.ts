@@ -4,7 +4,7 @@ const API_ENDPOINT = "/api/kuriki/math";
 
 
 
-export class KurikiMathAPI {
+export class KurikiMathematicsAPI {
     static async getOutcome(id: string): Promise<MathOutcome | undefined> {
         const response = await fetch(`${API_ENDPOINT}/outcomes?id=${encodeURIComponent(id)}`);
 

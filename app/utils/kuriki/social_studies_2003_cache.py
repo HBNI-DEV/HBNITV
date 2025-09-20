@@ -50,9 +50,9 @@ class SocialStudies2003Cache:
         )
 
         for row in db_cursor.fetchall():
-            cluster = next((c for c in cls.clusters if c.get_id() == f"{row[1]}.{row[2]}"), None)
-            outcome_type = next((c for c in cls.outcome_types if c.code == row[3]), None)
-            general_learning_outcome = next((c for c in cls.general_learning_outcomes if c.code == row[4]), None)
+            cluster = next((c for c in cls.clusters if c.get_id() == f"{row[1]}.{row[2]}"))
+            outcome_type = next((c for c in cls.outcome_types if c.code == row[3]))
+            general_learning_outcome = next((c for c in cls.general_learning_outcomes if c.code == row[4]))
             distinctive_learning_outcome = next(
                 (c for c in cls.distinctive_learning_outcomes if c.code == row[5]),
                 LearningType("", ""),
@@ -74,7 +74,7 @@ class SocialStudies2003Cache:
         db_cursor.execute(f"SELECT skill_id, skill_type, grade, specific_learning_outcome FROM {table_name}_skills")
 
         for row in db_cursor.fetchall():
-            skill_type = next((c for c in cls.skill_types if c.code == row[1]), None)
+            skill_type = next((c for c in cls.skill_types if c.code == row[1]))
 
             skill = SocialStudiesSkill(
                 outcome_id=row[0],

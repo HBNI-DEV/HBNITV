@@ -33,7 +33,7 @@ class Mathematics2013To2014Cache:
                         skills.add(skill)
                         break
 
-            strand = next((s for s in cls.strands if s.strand_id == row[2]), None)
+            strand = next((s for s in cls.strands if s.strand_id == row[2]))
 
             outcome = MathOutcome(
                 outcome_id=row[0],

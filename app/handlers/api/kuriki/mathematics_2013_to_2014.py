@@ -2,13 +2,13 @@ from app.handlers.kuriki import KurikiBaseHandler
 from app.utils.kuriki.mathematics_2013_to_2014_cache import Mathematics2013To2014Cache
 
 
-class KurikiMathAPIHandler(KurikiBaseHandler):
+class KurikiMathematicsAPIHandler(KurikiBaseHandler):
     def initialize(self):
         super().initialize()
         Mathematics2013To2014Cache.load(self.cur)
 
 
-class KurikiMathSkillsAPIHandler(KurikiMathAPIHandler):
+class KurikiMathematicsSkillsAPIHandler(KurikiMathematicsAPIHandler):
     def get(self):
         try:
             self.write(
@@ -21,7 +21,7 @@ class KurikiMathSkillsAPIHandler(KurikiMathAPIHandler):
             self.write_error_response(e)
 
 
-class KurikiMathStrandsAPIHandler(KurikiMathAPIHandler):
+class KurikiMathematicsStrandsAPIHandler(KurikiMathematicsAPIHandler):
     def get(self):
         try:
             self.write(
@@ -34,7 +34,7 @@ class KurikiMathStrandsAPIHandler(KurikiMathAPIHandler):
             self.write_error_response(e)
 
 
-class KurikiMathOutcomesAPIHandler(KurikiMathAPIHandler):
+class KurikiMathematicsOutcomesAPIHandler(KurikiMathematicsAPIHandler):
     def get(self):
         try:
             outcome_id = self.get_argument("id", None)

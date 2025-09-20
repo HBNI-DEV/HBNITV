@@ -7,9 +7,9 @@ from app.handlers.api.kuriki.biology_2010_to_2011 import (
     KurikiBiologyUnitsAPIHandler,
 )
 from app.handlers.api.kuriki.mathematics_2013_to_2014 import (
-    KurikiMathOutcomesAPIHandler,
-    KurikiMathSkillsAPIHandler,
-    KurikiMathStrandsAPIHandler,
+    KurikiMathematicsOutcomesAPIHandler,
+    KurikiMathematicsSkillsAPIHandler,
+    KurikiMathematicsStrandsAPIHandler,
 )
 from app.handlers.api.kuriki.science_1999_to_2000 import (
     KurikiScienceClustersAPIHandler,
@@ -56,17 +56,17 @@ api_routes = [
     ),
     route(
         r"/api/kuriki/mathematics/2013-2014/outcomes",
-        KurikiMathOutcomesAPIHandler,
+        KurikiMathematicsOutcomesAPIHandler,
         name="api_kuriki_math_outcomes",
     ),
     route(
         r"/api/kuriki/mathematics/2013-2014/skills",
-        KurikiMathSkillsAPIHandler,
+        KurikiMathematicsSkillsAPIHandler,
         name="api_kuriki_math_skills",
     ),
     route(
         r"/api/kuriki/mathematics/2013-2014/strands",
-        KurikiMathStrandsAPIHandler,
+        KurikiMathematicsStrandsAPIHandler,
         name="api_kuriki_math_strands",
     ),
     route(

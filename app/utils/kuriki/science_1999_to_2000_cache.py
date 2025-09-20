@@ -26,7 +26,7 @@ class Science1999To2000Cache:
         db_cursor.execute(f"SELECT outcome_id, grade, cluster, general_learning_outcomes, specific_learning_outcome FROM {table_name}_curriculum")
 
         for row in db_cursor.fetchall():
-            cluster = next((c for c in cls.clusters if c.get_id() == f"{row[1]}.{row[2]}"), None)
+            cluster = next((c for c in cls.clusters if c.get_id() == f"{row[1]}.{row[2]}"))
             general_learning_outcomes = GeneralLearningOutcomes()
             for code in row[3]:
                 for general_learning_outcome in cls.general_learning_outcomes:
