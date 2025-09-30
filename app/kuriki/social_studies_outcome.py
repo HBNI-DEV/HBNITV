@@ -19,6 +19,7 @@ class SocialStudiesOutcome(Outcome):
             "grade": self.grade,
             "cluster": self.cluster.to_dict(),
             "outcome_type": self.outcome_type.to_dict(),
+            "specific_learning_outcome": self.specific_learning_outcome,
             "general_learning_outcome": self.general_learning_outcome.to_dict(),
             "distinctive_learning_outcome": self.distinctive_learning_outcome.to_dict(),
         }

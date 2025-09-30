@@ -50,18 +50,21 @@ class SocialStudies2003Cache:
         )
 
         for row in db_cursor.fetchall():
-            cluster = next((c for c in cls.clusters if c.get_id() == f"{row[1]}.{row[2]}"))
+            outcome_id = row[0]
+            grade = row[1]
+            cluster = next((c for c in cls.clusters if c.get_id() == f"{grade}.{row[2]}"))
             outcome_type = next((c for c in cls.outcome_types if c.code == row[3]))
             general_learning_outcome = next((c for c in cls.general_learning_outcomes if c.code == row[4]))
             distinctive_learning_outcome = next(
                 (c for c in cls.distinctive_learning_outcomes if c.code == row[5]),
                 LearningType("", ""),
             )
+            specific_learning_outcome = row[6]
 
             outcome = SocialStudiesOutcome(
-                outcome_id=row[0],
-                grade=row[1],
-                specific_learning_outcome=row[5],
+                outcome_id=outcome_id,
+                grade=grade,
+                specific_learning_outcome=specific_learning_outcome,
                 cluster=cluster,
                 outcome_type=outcome_type,
                 general_learning_outcome=general_learning_outcome,
@@ -69,7 +72,7 @@ class SocialStudies2003Cache:
             )
 
             cls.outcomes.append(outcome)
-            cls.cache[row[0]] = outcome.to_dict()
+            cls.cache[outcome_id] = outcome.to_dict()
 
         db_cursor.execute(f"SELECT skill_id, skill_type, grade, specific_learning_outcome FROM {table_name}_skills")
 
