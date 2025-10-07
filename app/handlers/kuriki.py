@@ -9,7 +9,6 @@ class KurikiBaseHandler(BaseHandler):
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Access-Control-Allow-Headers", "Content-Type, Authorization")
         self.set_header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS")
-        self.set_header("Access-Control-Allow-Credentials", "true")
         self.set_header("Content-Type", "application/json")
 
     def options(self):
