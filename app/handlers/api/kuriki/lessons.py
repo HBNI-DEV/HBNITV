@@ -4,7 +4,7 @@ from app.handlers.kuriki import KurikiBaseHandler
 from app.utils.kuriki.lessons_cache import LessonsCache
 
 
-class KurikiLessonAPIHandler(KurikiBaseHandler):
+class KurikiLessonsAPIHandler(KurikiBaseHandler):
     def initialize(self):
         super().initialize()
         LessonsCache.load(self.cur)

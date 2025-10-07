@@ -4,7 +4,7 @@ from app.handlers.kuriki import KurikiBaseHandler
 from app.utils.kuriki.resources_cache import ResourceCache
 
 
-class KurikiResourceAPIHandler(KurikiBaseHandler):
+class KurikiResourcesAPIHandler(KurikiBaseHandler):
     def initialize(self):
         super().initialize()
         ResourceCache.load(self.cur)

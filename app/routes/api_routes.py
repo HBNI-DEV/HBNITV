@@ -6,13 +6,13 @@ from app.handlers.api.kuriki.biology_2010_to_2011 import (
     KurikiBiologyOutcomesAPIHandler,
     KurikiBiologyUnitsAPIHandler,
 )
-from app.handlers.api.kuriki.lesson import KurikiLessonAPIHandler
+from app.handlers.api.kuriki.lessons import KurikiLessonsAPIHandler
 from app.handlers.api.kuriki.mathematics_2013_to_2014 import (
     KurikiMathematicsOutcomesAPIHandler,
     KurikiMathematicsSkillsAPIHandler,
     KurikiMathematicsStrandsAPIHandler,
 )
-from app.handlers.api.kuriki.resource import KurikiResourceAPIHandler
+from app.handlers.api.kuriki.resources import KurikiResourcesAPIHandler
 from app.handlers.api.kuriki.science_1999_to_2000 import (
     KurikiScienceClustersAPIHandler,
     KurikiScienceGeneralLearningOutcomesAPIHandler,
@@ -56,8 +56,8 @@ api_routes = [
         SharedGoogleFolderIDsAPIHandler,
         name="api_shared_google_folder_ids",
     ),
-    (r"/api/kuriki/resource", KurikiResourceAPIHandler),
-    (r"/api/kuriki/lesson", KurikiLessonAPIHandler),
+    (r"/api/kuriki/resources", KurikiResourcesAPIHandler),
+    (r"/api/kuriki/lessons", KurikiLessonsAPIHandler),
     route(
         r"/api/kuriki/mathematics/2013-2014/outcomes",
         KurikiMathematicsOutcomesAPIHandler,
