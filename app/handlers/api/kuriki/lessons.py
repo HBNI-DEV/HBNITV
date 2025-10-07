@@ -15,7 +15,7 @@ class KurikiLessonsAPIHandler(KurikiBaseHandler):
             if lesson_id:
                 if lesson_id.isdigit():
                     lesson_id = int(lesson_id)
-                data = LessonsCache.cache.get(lesson_id)
+                data = LessonsCache.cache.get(int(lesson_id))
                 if data:
                     self.write({"status": "success", "data": data})
                 else:
