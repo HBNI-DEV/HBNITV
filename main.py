@@ -34,13 +34,13 @@ class TornadoApp(Application):
 
 async def main():
     print("Starting cache updaters...")
-    update_recordings_cache()
-    update_organizational_units_cache()
-    start_organizational_units_updater()
-    start_recordings_cache_updater()
-    start_folder_cache_updater()
-    start_organizer()
-    start_user_cleanup()
+    # update_recordings_cache()
+    # update_organizational_units_cache()
+    # start_organizational_units_updater()
+    # start_recordings_cache_updater()
+    # start_folder_cache_updater()
+    # start_organizer()
+    # start_user_cleanup()
 
     print(f"Starting Tornado on port {Environment.PORT}...")
     app = TornadoApp()

@@ -11,21 +11,26 @@ class KurikiLessonsAPIHandler(KurikiBaseHandler):
 
     def get(self):
         try:
-            outcome_id = self.get_argument("outcomeId", None)
+            lesson_id = self.get_argument("id", None)
+            if lesson_id:
+                if lesson_id.isdigit():
+                    lesson_id = int(lesson_id)
+                data = LessonsCache.cache.get(lesson_id)
+                if data:
+                    self.write({"status": "success", "data": data})
+                else:
+                    self.write_error_message(404, "Lesson not found")
+                return
 
-            if outcome_id:
-                # Filter lessons containing the outcome
-                data = {k: v for k, v in LessonsCache.cache.items() if outcome_id in v["outcomes"]}
-                self.write({"status": "success", "data": data})
-            else:
-                self.write({"status": "success", "data": LessonsCache.cache})
+            # fallback: list all
+            self.write({"status": "success", "data": LessonsCache.cache})
         except Exception as e:
             self.write_error_response(e)
 
     def post(self):
         try:
             payload = json.loads(self.request.body.decode("utf-8"))
-            id_key = payload.get("date")
+            id_key = payload.get("idKey")
             data = payload.get("data")
             outcomes = payload.get("outcomes")
 

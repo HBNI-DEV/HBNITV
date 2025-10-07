@@ -1,5 +1,7 @@
 from typing import Any, Dict, List
 
+from psycopg2.extras import Json
+
 
 class LessonsCache:
     _loaded = False
@@ -22,16 +24,20 @@ class LessonsCache:
 
     @classmethod
     def add(cls, db_cursor, id_key: int, data: dict, outcomes: List[str], table_name="lessons"):
-        db_cursor.execute(
-            f"""
-            INSERT INTO {table_name} (id_key, data, outcomes)
-            VALUES (%s, %s, %s)
-            ON CONFLICT (id_key)
-            DO UPDATE SET data = EXCLUDED.data, outcomes = EXCLUDED.outcomes;
-            """,
-            (id_key, data, outcomes),
-        )
-        cls.cache[id_key] = {"data": data, "outcomes": outcomes}
+        try:
+            db_cursor.execute(
+                f"""
+                INSERT INTO {table_name} (id_key, data, outcomes)
+                VALUES (%s, %s, %s)
+                ON CONFLICT (id_key)
+                DO UPDATE SET data = EXCLUDED.data, outcomes = EXCLUDED.outcomes;
+                """,
+                (id_key, Json(data), outcomes),
+            )
+            cls.cache[id_key] = {"data": data, "outcomes": outcomes}
+        except Exception as e:
+            print(f"Error adding lesson to cache: {e}")
+            raise
 
     @classmethod
     def delete(cls, db_cursor, id_key: int, table_name="lessons"):
