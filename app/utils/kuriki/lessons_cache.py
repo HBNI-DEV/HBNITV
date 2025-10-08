@@ -5,7 +5,7 @@ from psycopg2.extras import Json
 
 class LessonsCache:
     _loaded = False
-    cache: Dict[int, Dict[str, Any]] = {}  # id_key -> { "data": {...}, "outcomes": [...] }
+    cache: Dict[int | str, Dict[str, Any]] = {}  # id_key -> { "data": {...}, "outcomes": [...] }
 
     @classmethod
     def load(cls, db_cursor, table_name="lessons"):
@@ -21,6 +21,16 @@ class LessonsCache:
         cls.cache = {id_key: {"data": data, "outcomes": outcomes} for id_key, data, outcomes in rows}
 
         cls._loaded = True
+
+    @classmethod
+    def get_by_outcome(cls, outcome_id: str):
+        """
+        Return all lessons that include the given outcome_id in their outcomes list.
+        """
+        if not cls._loaded:
+            raise RuntimeError("LessonsCache not loaded. Call LessonsCache.load() first.")
+
+        return {id_key: entry for id_key, entry in cls.cache.items() if outcome_id in entry.get("outcomes", [])}
 
     @classmethod
     def add(cls, db_cursor, id_key: int, data: dict, outcomes: List[str], table_name="lessons"):

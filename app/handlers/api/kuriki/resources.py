@@ -12,11 +12,22 @@ class KurikiResourcesAPIHandler(KurikiBaseHandler):
     def get(self):
         try:
             outcome_id = self.get_argument("outcomeId", None)
+            url = self.get_argument("url", None)
+
+            # --- 1. by outcome id ---
             if outcome_id:
-                data = ResourceCache.cache.get(outcome_id, [])
+                data = ResourceCache.get_by_outcome(outcome_id)
                 self.write({"status": "success", "data": data})
-            else:
-                self.write({"status": "success", "data": ResourceCache.cache})
+                return
+
+            # --- 2. by url (reverse lookup) ---
+            if url:
+                data = ResourceCache.get_by_url(url)
+                self.write({"status": "success", "data": data})
+                return
+
+            # --- 3. all resources ---
+            self.write({"status": "success", "data": ResourceCache.cache})
         except Exception as e:
             self.write_error_response(e)
 

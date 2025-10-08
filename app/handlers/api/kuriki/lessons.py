@@ -12,17 +12,26 @@ class KurikiLessonsAPIHandler(KurikiBaseHandler):
     def get(self):
         try:
             lesson_id = self.get_argument("id", None)
+            outcome_id = self.get_argument("outcomeId", None)
+
+            # --- 1. Fetch by lesson id ---
             if lesson_id:
                 if lesson_id.isdigit():
                     lesson_id = int(lesson_id)
-                data = LessonsCache.cache.get(int(lesson_id))
+                data = LessonsCache.cache.get(lesson_id)
                 if data:
                     self.write({"status": "success", "data": data})
                 else:
                     self.write_error_message(404, "Lesson not found")
                 return
 
-            # fallback: list all
+            # --- 2. Fetch all lessons linked to an outcome ---
+            if outcome_id:
+                lessons = LessonsCache.get_by_outcome(outcome_id)
+                self.write({"status": "success", "data": lessons})
+                return
+
+            # --- 3. Default: return everything ---
             self.write({"status": "success", "data": LessonsCache.cache})
         except Exception as e:
             self.write_error_response(e)

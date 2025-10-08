@@ -44,3 +44,15 @@ class ResourceCache:
             cls.cache[outcome_id].remove(url)
             if not cls.cache[outcome_id]:
                 del cls.cache[outcome_id]
+
+    @classmethod
+    def get_by_outcome(cls, outcome_id: str) -> List[str]:
+        if not cls._loaded:
+            raise RuntimeError("ResourceCache not loaded. Call load() first.")
+        return cls.cache.get(outcome_id, [])
+
+    @classmethod
+    def get_by_url(cls, url: str) -> List[str]:
+        if not cls._loaded:
+            raise RuntimeError("ResourceCache not loaded. Call load() first.")
+        return [oid for oid, urls in cls.cache.items() if url in urls]
