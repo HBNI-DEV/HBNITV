@@ -28,6 +28,7 @@ from app.handlers.api.kuriki.social_studies_2003 import (
     KurikiSocialStudiesSkillsAPIHandler,
     KurikiSocialStudiesSkillTypesAPIHandler,
 )
+from app.handlers.api.kuriki.worksheets import KurikiWorksheetsAPIHandler
 from app.handlers.api.login import LoginAPIHandler
 from app.handlers.api.logout import LogoutAPIHandler
 from app.handlers.api.news import NewsAPIHandler
@@ -58,6 +59,7 @@ api_routes = [
     ),
     (r"/api/kuriki/resources", KurikiResourcesAPIHandler),
     (r"/api/kuriki/lessons", KurikiLessonsAPIHandler),
+    (r"/api/kuriki/worksheets", KurikiWorksheetsAPIHandler),
     route(
         r"/api/kuriki/mathematics/2013-2014/outcomes",
         KurikiMathematicsOutcomesAPIHandler,
