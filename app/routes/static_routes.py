@@ -10,7 +10,7 @@ static_routes = [
     route(r"/manifest.json", ManifestHandler),
     # route(r"/service-worker.js", ServiceWorkerHandler),
     route(
-        r"/google1a0dfeb96678ee94.html",
+        r"/google9d968a11b4bf61f7.html",
         GoogleVerificationHandler,
     ),
     route(r"/static/(.*)", CustomStaticFileHandler, path="static"),
