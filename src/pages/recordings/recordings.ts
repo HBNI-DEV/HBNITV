@@ -4,6 +4,7 @@ import { initializeCoreUI } from "@utils/ui-core";
 
 
 let selectedOwners: string[] = [];
+let selectedFolders: string[] = [];
 
 function applyRecordingFilters() {
     const recordings = document.getElementById("recordings-container") as HTMLDivElement;
@@ -19,6 +20,7 @@ function applyRecordingFilters() {
 
     recordingsList.forEach(recording => {
         const recordingOwnerEmail = recording.dataset.ownerEmail || "";
+        const recordingFolderId = recording.dataset.folderId || "";
 
         const title = (recording.querySelector("#title") as HTMLElement)?.innerText || "";
         const createdAt = (recording.querySelector("#created-at") as HTMLElement)?.innerText || "";
@@ -31,12 +33,15 @@ function applyRecordingFilters() {
         const matchesSearch =
             searchTerms.length === 0 ||
             searchTerms.every(term => recordingText.includes(term));
+        const matchesFolder =
+            selectedFolders.length === 0 ||
+            selectedFolders.includes(recordingFolderId);
 
         const matchesOwner =
             selectedOwners.length === 0 ||
             selectedOwners.includes(recordingOwnerEmail);
 
-        if (matchesSearch && matchesOwner) {
+        if (matchesSearch && matchesOwner && matchesFolder) {
             recording.classList.remove("hidden");
         } else {
             recording.classList.add("hidden");
@@ -91,11 +96,33 @@ document.addEventListener("DOMContentLoaded", () => {
         //         applyRecordingFilters();
         //     });
         // });
+        document.querySelectorAll(".class-button").forEach(button => {
+            const folderId = (button as HTMLElement).dataset.folderId!;
+            const icon = button.querySelector("i")!;
+
+            button.addEventListener("click", () => {
+                const active = selectedFolders.includes(folderId);
+
+                if (active) {
+                    selectedFolders = selectedFolders.filter(id => id !== folderId);
+                    icon.textContent = "folder_shared";
+                    button.classList.remove("fill");
+                } else {
+                    selectedFolders.push(folderId);
+                    icon.textContent = "check";
+                    button.classList.add("fill");
+                }
+
+                applyRecordingFilters();
+            });
+        });
+
         document.querySelectorAll(".menu-button").forEach(button => {
             button.addEventListener("click", e => {
                 e.stopPropagation();
             });
         });
+
         document.querySelectorAll("menu").forEach(menu => {
             menu.addEventListener("click", e => {
                 const target = (e.target as HTMLElement).closest("li");
